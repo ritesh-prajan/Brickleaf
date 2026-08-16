@@ -1,0 +1,230 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap');
+
+@import "tailwindcss";
+
+/* ─── Design Tokens — Warm (default) ─────────────────────── */
+@theme {
+  --color-cream:    #E8E0D8;
+  --color-sand:     #C9A882;
+  --color-amber:    #B8956A;
+  --color-ink:      #2C2520;
+  --color-ink-soft: #6B5F57;
+  --color-line:     #D4C9BC;
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+}
+
+/* ─── Theme: Azure (orange · white · blue) ────────────────── */
+[data-theme="azure"] {
+  --color-cream:    #F6F8FF;
+  --color-sand:     #93C5FD;
+  --color-amber:    #EA580C;
+  --color-ink:      #0F2040;
+  --color-ink-soft: #2D5F8F;
+  --color-line:     #BFCFEA;
+}
+
+/* ─── Theme: Carbon (cool grey · slate · blue) ────────────── */
+[data-theme="carbon"] {
+  --color-cream:    #EBEEF4;
+  --color-sand:     #A8B8D0;
+  --color-amber:    #2B63D9;
+  --color-ink:      #1C2233;
+  --color-ink-soft: #4E5E78;
+  --color-line:     #C8D2E4;
+}
+
+/* ─── Theme: Noir (deep black · warm gold) ─────────────────── */
+[data-theme="noir"] {
+  --color-cream:    #0D0B08;   /* near-black warm background        */
+  --color-sand:     #1E1A12;   /* dark warm surface / card bg       */
+  --color-amber:    #C8922A;   /* rich burnished gold — CTAs        */
+  --color-ink:      #F0E6D0;   /* warm off-white text               */
+  --color-ink-soft: #9A8A68;   /* muted antique-gold secondary text */
+  --color-line:     #2C2518;   /* very dark warm border             */
+}
+
+/* ─── Global Base ─────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Smooth theme transition — only when motion is OK */
+@media (prefers-reduced-motion: no-preference) {
+  *, *::before, *::after {
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease,
+      border-color 0.3s ease,
+      outline-color 0.3s ease;
+  }
+  /* Don't slow down deliberate micro-interactions */
+  button, a, input, select, textarea {
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Focus Visible ────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-amber);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ─── Flowing Gradient Background ─────────────────────────── */
+
+/*
+ * Gradient wash — now uses pure theme colours at full saturation.
+ * Opacity on the wrapper element controls overall intensity,
+ * letting us crank up the colour without touching the stops.
+ * background-size 300% + position animation sweeps the bands across.
+ */
+.flow-gradient-wrapper {
+  position: absolute;
+  inset: 0;
+  opacity: 0.65;           /* ← primary intensity knob */
+  mix-blend-mode: multiply; /* blends naturally with the cream base  */
+  pointer-events: none;
+}
+
+/* Noir needs a different blend mode — multiply darkens, not on black */
+[data-theme="noir"] .flow-gradient-wrapper {
+  mix-blend-mode: screen;  /* screen lifts colours on dark bg        */
+  opacity: 0.55;
+}
+
+.flow-gradient-wash {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    -40deg,
+    transparent                0%,
+    var(--color-sand)          20%,
+    transparent                42%,
+    var(--color-amber)         65%,
+    var(--color-sand)          82%,
+    transparent               100%
+  );
+  background-size: 300% 300%;
+}
+
+@keyframes gradient-flow {
+  0%   { background-position:   0%  50%; }
+  20%  { background-position: 100%   0%; }
+  40%  { background-position: 100% 100%; }
+  60%  { background-position:   0% 100%; }
+  80%  { background-position:  50%   0%; }
+  100% { background-position:   0%  50%; }
+}
+
+/*
+ * Radial orbs — pure theme colours, opacity applied directly.
+ * Larger radius + less blur = more defined, more visible pools of colour.
+ */
+.flow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  pointer-events: none;
+}
+
+/* Orb A — top-left quadrant, sand/secondary colour */
+.flow-orb-a {
+  width: 70vw;
+  height: 70vw;
+  top: -20%;
+  left: -15%;
+  background: var(--color-sand);
+  opacity: 0.55;
+}
+
+/* Orb B — bottom-right quadrant, amber/accent colour */
+.flow-orb-b {
+  width: 65vw;
+  height: 65vw;
+  bottom: -20%;
+  right: -15%;
+  background: var(--color-amber);
+  opacity: 0.45;
+}
+
+/* Orb C — centre, ink tone for depth (stays subtle) */
+.flow-orb-c {
+  width: 50vw;
+  height: 70vw;
+  top: 15%;
+  left: 25%;
+  background: var(--color-ink);
+  opacity: 0.07;
+}
+
+/* Orb D — top-right counter-accent, mix of sand and amber feel */
+.flow-orb-d {
+  width: 45vw;
+  height: 45vw;
+  top: -10%;
+  right: 10%;
+  background: var(--color-amber);
+  opacity: 0.28;
+}
+
+@keyframes orb-drift-a {
+  0%, 100% { transform: translate(  0%,    0%) scale(1);    }
+  30%       { transform: translate( 14%,   9%) scale(1.12); }
+  60%       { transform: translate( -9%,  18%) scale(0.91); }
+  80%       { transform: translate(  7%, -11%) scale(1.06); }
+}
+
+@keyframes orb-drift-b {
+  0%, 100% { transform: translate(  0%,    0%) scale(1);    }
+  25%       { transform: translate(-12%,  -7%) scale(1.09); }
+  55%       { transform: translate( 11%, -15%) scale(0.93); }
+  75%       { transform: translate( -5%,   9%) scale(1.11); }
+}
+
+@keyframes orb-drift-c {
+  0%, 100% { transform: translate(  0%,   0%) scale(1);    }
+  40%       { transform: translate( -9%,  11%) scale(1.14);}
+  70%       { transform: translate( 13%,  -9%) scale(0.87);}
+}
+
+@keyframes orb-drift-d {
+  0%, 100% { transform: translate(  0%,   0%) scale(1);    }
+  35%       { transform: translate(-10%, -12%) scale(1.08); }
+  70%       { transform: translate(  8%,  10%) scale(0.94); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .flow-gradient-wash {
+    animation: gradient-flow 20s ease-in-out infinite;
+  }
+  .flow-orb-a { animation: orb-drift-a 22s ease-in-out infinite; }
+  .flow-orb-b { animation: orb-drift-b 28s ease-in-out infinite; }
+  .flow-orb-c { animation: orb-drift-c 18s ease-in-out infinite; }
+  .flow-orb-d { animation: orb-drift-d 25s ease-in-out infinite; }
+}
