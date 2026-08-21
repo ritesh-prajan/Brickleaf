@@ -1,18 +1,17 @@
 /* ==========================================================================
-   SignatureScrollHero — Production Stylesheet
-   Physical room assembly driven by scroll position
+   SignatureScrollHero — Cinematic Crossfade Hero
+   Full-room photographic dissolve controlled by scroll position.
    ========================================================================== */
 
-/* ── Scroll Container (420vh = scroll distance for 8 stages) ─────────── */
+/* ── Tall scroll container ──────────────────────────────────────────────── */
 .ssh {
   position: relative;
   width: 100%;
-  /* Total scroll travel. Increase to slow the sequence down. */
   height: 500vh;
-  background-color: #0d0b08;
+  background: #0d0b08;
 }
 
-/* ── Sticky Viewport ─────────────────────────────────────────────────── */
+/* ── Sticky viewport — stays pinned while user scrolls ─────────────────── */
 .ssh__sticky {
   position: sticky;
   top: 0;
@@ -32,35 +31,31 @@
   }
 }
 
-/* ── Scene Frame (maintains 1024/682 aspect ratio = ~3:2) ───────────── */
+/* ── Scene frame — locked camera, holds all stage images ────────────────── */
 .ssh__scene {
   position: relative;
   width: 100%;
   max-width: 1300px;
-  /* Aspect ratio locked to match room photos */
   aspect-ratio: 1024 / 682;
-  /* Cap height so it fits within viewport minus HUD bars */
-  max-height: calc(100vh - 130px);
+  max-height: calc(100vh - 120px);
   overflow: hidden;
   border-radius: 10px;
   box-shadow:
     0 20px 60px -10px rgba(13, 11, 8, 0.5),
-    0 0 0 1px rgba(212, 201, 188, 0.15);
-  /* GPU composite layer */
-  will-change: transform;
-  transform: translateZ(0);
+    0 0 0 1px rgba(212, 201, 188, 0.12);
+  background: #0d0b08;
 }
 
-/* ── ROOM BASE — The permanent fixed stage ───────────────────────────── */
-.ssh__room-base {
+/* ── Image plate — every stage occupies identical coordinates ────────────── */
+.ssh__plate {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  will-change: opacity;
 }
 
-.ssh__room-base img {
+.ssh__plate img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -70,123 +65,23 @@
   -webkit-user-drag: none;
 }
 
-/* Warm atmosphere overlay — fades in during lighting stage */
-.ssh__warm-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  opacity: 0;
-  will-change: opacity;
+/* The first stage (empty dark) is always visible underneath as fallback */
+.ssh__plate:first-child {
+  opacity: 1;
 }
 
-.ssh__warm-overlay img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-  mix-blend-mode: multiply;
-  /* Blend warm room on top of cold base */
-}
-
-/* ── OBJECT LAYERS — Physical assets that travel into the room ────────── */
-/*
- * Each object uses absolute positioning relative to .ssh__scene.
- * Sizes set via inline style from constants (% of scene width/height).
- * Objects preserve their natural aspect ratio using width + auto height.
- * They do NOT use width:100% height:100% object-fit:cover.
- *
- * initial states (opacity:0, transform:translate) are set by GSAP,
- * not by CSS, to avoid flash-of-content before GSAP initializes.
- */
-
-.ssh__obj {
-  position: absolute;
-  will-change: transform, opacity;
-  transform-origin: center bottom;
-  pointer-events: none;
-  user-select: none;
-  -webkit-user-drag: none;
-}
-
-.ssh__obj img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-/* Z-index hierarchy — explicit per-layer */
-.ssh__obj--rug       { z-index: 2; }
-.ssh__obj--sofa      { z-index: 3; }
-.ssh__obj--armchairs { z-index: 4; }
-.ssh__obj--table     { z-index: 5; }
-.ssh__obj--decor     { z-index: 4; } /* behind table but over armchairs */
-.ssh__obj--pendant   { z-index: 6; }
-.ssh__obj--light-lit { z-index: 7; }
-
-/* ── CONTACT SHADOWS ─────────────────────────────────────────────────── */
-/*
- * Subtle elliptical shadows beneath each piece of furniture.
- * Strengthens as object reaches final position (controlled by GSAP opacity).
- */
-.ssh__shadow {
-  position: absolute;
-  border-radius: 50%;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(44, 37, 32, 0.35) 0%,
-    rgba(44, 37, 32, 0.12) 50%,
-    transparent 100%
-  );
-  pointer-events: none;
-  will-change: opacity, transform;
-  opacity: 0;
-  transform: scaleY(0.3);
-  filter: blur(8px);
-}
-
-/* ── AMBIENT LIGHT BLOOM ─────────────────────────────────────────────── */
-.ssh__light-bloom {
-  position: absolute;
-  inset: 0;
-  z-index: 8;
-  pointer-events: none;
-  opacity: 0;
-  will-change: opacity;
-  /* Multi-layer radial light bloom — localized, not full-screen wash */
-  background:
-    /* Primary fixture glow — tight at ceiling center */
-    radial-gradient(
-      ellipse 30% 20% at 50% 8%,
-      rgba(230, 190, 100, 0.55) 0%,
-      transparent 100%
-    ),
-    /* Secondary spread — wider ceiling zone */
-    radial-gradient(
-      ellipse 65% 35% at 50% 18%,
-      rgba(215, 175, 95, 0.28) 0%,
-      transparent 100%
-    ),
-    /* Ambient floor warmth — very subtle, wide */
-    radial-gradient(
-      ellipse 80% 40% at 50% 85%,
-      rgba(200, 155, 80, 0.10) 0%,
-      transparent 100%
-    );
-}
-
-/* ── HUD HEADER ──────────────────────────────────────────────────────── */
-.ssh__hud-header {
+/* ── HUD Header ─────────────────────────────────────────────────────────── */
+.ssh__hud-top {
   width: 100%;
   max-width: 1300px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
-  z-index: 30;
+  z-index: 20;
 }
 
-.ssh__hud-tag {
+.ssh__tag {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -198,60 +93,61 @@
   font-family: var(--font-body);
 }
 
-.ssh__hud-tag-dot {
+.ssh__tag-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background-color: var(--color-amber);
+  background: var(--color-amber);
   flex-shrink: 0;
-  animation: sshPulse 2.4s ease-in-out infinite;
+  animation: ssh-pulse 2.4s ease-in-out infinite;
 }
 
-@keyframes sshPulse {
+@keyframes ssh-pulse {
   0%, 100% { box-shadow: 0 0 0 0 rgba(184, 149, 106, 0.5); }
-  50%       { box-shadow: 0 0 0 5px transparent; }
+  50%      { box-shadow: 0 0 0 5px transparent; }
 }
 
-.ssh__hud-dots {
+/* Progress dots */
+.ssh__dots {
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
-.ssh__hud-dot {
+.ssh__dot {
   height: 4px;
   border-radius: 9999px;
   background: var(--color-line);
-  opacity: 0.35;
+  opacity: 0.3;
   transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
               background 0.35s ease,
               opacity 0.35s ease;
   width: 7px;
 }
 
-.ssh__hud-dot--active    { width: 22px; background: var(--color-amber); opacity: 1; }
-.ssh__hud-dot--completed { width: 7px;  background: var(--color-sand);  opacity: 0.7; }
+.ssh__dot--active    { width: 22px; background: var(--color-amber); opacity: 1; }
+.ssh__dot--done      { width: 7px;  background: var(--color-sand);  opacity: 0.65; }
 
-/* ── HUD FOOTER ──────────────────────────────────────────────────────── */
-.ssh__hud-footer {
+/* ── HUD Footer ─────────────────────────────────────────────────────────── */
+.ssh__hud-bot {
   width: 100%;
   max-width: 1300px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
-  border-top: 1px solid rgba(212, 201, 188, 0.25);
-  padding-top: 0.65rem;
-  z-index: 30;
+  border-top: 1px solid rgba(212, 201, 188, 0.2);
+  padding-top: 0.6rem;
+  z-index: 20;
 }
 
-.ssh__hud-info {
+.ssh__info {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 
-.ssh__hud-title {
+.ssh__info-title {
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
@@ -260,14 +156,14 @@
   font-family: var(--font-body);
 }
 
-.ssh__hud-desc {
+.ssh__info-desc {
   font-size: 0.68rem;
   color: var(--color-ink-soft);
   font-family: var(--font-body);
 }
 
-/* ── SCROLL HINT ─────────────────────────────────────────────────────── */
-.ssh__scroll-hint {
+/* ── Scroll hint ────────────────────────────────────────────────────────── */
+.ssh__hint {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -277,30 +173,30 @@
   color: var(--color-amber);
   font-weight: 500;
   font-family: var(--font-body);
-  will-change: opacity, transform;
+  will-change: opacity;
 }
 
-.ssh__scroll-hint svg {
-  animation: sshBounce 1.8s ease-in-out infinite;
+.ssh__hint svg {
+  animation: ssh-bounce 1.8s ease-in-out infinite;
 }
 
-@keyframes sshBounce {
+@keyframes ssh-bounce {
   0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(5px); }
+  50%      { transform: translateY(5px); }
 }
 
-/* ── FINAL CTA OVERLAY ───────────────────────────────────────────────── */
+/* ── Final CTA overlay ──────────────────────────────────────────────────── */
 .ssh__cta {
   position: absolute;
   inset: 0;
-  z-index: 20;
+  z-index: 15;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
   padding: 2rem;
-  background: rgba(13, 11, 8, 0.72);
+  background: rgba(13, 11, 8, 0.65);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   opacity: 0;
@@ -308,77 +204,24 @@
   will-change: opacity;
 }
 
-.ssh__cta-content {
-  max-width: 580px;
+.ssh__cta-inner {
+  max-width: 560px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.25rem;
 }
 
-/* ── ASSET PRELOADER ─────────────────────────────────────────────────── */
-.ssh__preloader {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  background: var(--color-cream);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  transition: opacity 0.7s ease-out, visibility 0.7s ease-out;
-}
-
-.ssh__preloader--hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-.ssh__preloader-ring {
-  width: 36px;
-  height: 36px;
-  border: 1.5px solid var(--color-line);
-  border-top-color: var(--color-amber);
-  border-radius: 50%;
-  animation: sshSpin 0.75s linear infinite;
-}
-
-@keyframes sshSpin {
-  to { transform: rotate(360deg); }
-}
-
-.ssh__preloader-text {
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: var(--color-ink-soft);
-  font-family: var(--font-body);
-}
-
-/* ── MOBILE ADJUSTMENTS ──────────────────────────────────────────────── */
+/* ── Mobile ─────────────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
-  .ssh {
-    height: 600vh; /* more scroll travel on mobile for easier control */
-  }
-  .ssh__scene {
-    border-radius: 6px;
-  }
-  .ssh__hud-desc {
-    display: none;
-  }
+  .ssh { height: 600vh; }
+  .ssh__scene { border-radius: 6px; }
+  .ssh__info-desc { display: none; }
 }
 
-/* ── REDUCED MOTION ──────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  .ssh {
-    height: 100vh;
-  }
-  .ssh__obj {
-    will-change: auto;
-  }
-  .ssh__light-bloom {
-    will-change: auto;
-  }
+  .ssh { height: auto; }
+  .ssh__sticky { position: relative; }
+  .ssh__plate { opacity: 0 !important; }
+  .ssh__plate:last-child { opacity: 1 !important; }
 }
