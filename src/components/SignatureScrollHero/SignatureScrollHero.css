@@ -7,8 +7,8 @@
 .ssh {
   position: relative;
   width: 100%;
-  height: 500vh;
-  background: #0d0b08;
+  /* height set via inline style from SCROLL_HEIGHT constant */
+  background: #1a1612;
 }
 
 /* ── Sticky viewport — stays pinned while user scrolls ─────────────────── */
@@ -43,7 +43,7 @@
   box-shadow:
     0 20px 60px -10px rgba(13, 11, 8, 0.5),
     0 0 0 1px rgba(212, 201, 188, 0.12);
-  background: #0d0b08;
+  background: #1a1612;
 }
 
 /* ── Image plate — every stage occupies identical coordinates ────────────── */
@@ -214,14 +214,12 @@
 
 /* ── Mobile ─────────────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
-  .ssh { height: 600vh; }
   .ssh__scene { border-radius: 6px; }
   .ssh__info-desc { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ssh { height: auto; }
-  .ssh__sticky { position: relative; }
+  .ssh__sticky { position: relative; height: auto; }
   .ssh__plate { opacity: 0 !important; }
   .ssh__plate:last-child { opacity: 1 !important; }
 }

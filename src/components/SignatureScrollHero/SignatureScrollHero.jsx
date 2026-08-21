@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-import { STAGES, TIMELINE } from './constants'
+import { STAGES, REVEALS, SCROLL_HEIGHT } from './constants'
 import Button from '../ui/Button'
 import Eyebrow from '../ui/Eyebrow'
 import './SignatureScrollHero.css'
@@ -13,19 +13,24 @@ if (typeof window !== 'undefined') {
 }
 
 /**
- * SignatureScrollHero
+ * SignatureScrollHero — Luxury Crossfade
  *
- * 8 complete full-room images stacked in identical position.
- * Scroll progress drives opacity crossfades between them.
- * The architecture never moves — only the furnishing changes.
+ * ARCHITECTURE:
+ *   8 identical-sized complete-room images stacked at the same position.
+ *   Stage 1 (empty dark) starts at opacity 1 — always visible at the bottom.
+ *   Each subsequent stage fades IN from 0 → 1 on top of the previous.
+ *   No image ever fades OUT. It stays at opacity 1, covered by the next.
  *
- * Implementation:
- *   ONE GSAP ScrollTrigger timeline.
- *   Each image plate gets two tweens: fadeIn and fadeOut.
- *   The last stage stays at opacity 1 (no fadeOut).
- *   No React state updated per scroll frame.
- *   GSAP manipulates DOM opacity directly.
- *   React state only tracks the HUD step index.
+ * GUARANTEE:
+ *   At every scroll position, a fully-opaque room image is visible.
+ *   The page background is NEVER exposed.
+ *   The room NEVER darkens between stages.
+ *   The architecture remains pixel-locked.
+ *
+ * PERFORMANCE:
+ *   One GSAP ScrollTrigger timeline. No React state per scroll frame.
+ *   GSAP sets opacity directly on DOM elements.
+ *   Only the HUD step index uses React state (updated only when it changes).
  */
 export default function SignatureScrollHero() {
   const navigate = useNavigate()
@@ -38,15 +43,14 @@ export default function SignatureScrollHero() {
   const [activeStep, setActiveStep] = useState(0)
   const [isLoaded, setIsLoaded]     = useState(false)
 
-  // ── Preload all stage images ──────────────────────────────────────────
+  // ── Preload images ────────────────────────────────────────────────────
   useEffect(() => {
     let loaded = 0
     const total = STAGES.length
-    const fallback = setTimeout(() => setIsLoaded(true), 4000)
+    const fallback = setTimeout(() => setIsLoaded(true), 5000)
 
     STAGES.forEach((stage, i) => {
       const img = new Image()
-      // Eagerly preload first 3, rest can load normally
       if (i < 3) img.fetchPriority = 'high'
       img.src = stage.src
       img.onload = img.onerror = () => {
@@ -61,7 +65,7 @@ export default function SignatureScrollHero() {
     return () => clearTimeout(fallback)
   }, [])
 
-  // ── GSAP ScrollTrigger Timeline ───────────────────────────────────────
+  // ── GSAP Timeline ────────────────────────────────────────────────────
   useEffect(() => {
     if (!isLoaded) return
 
@@ -70,70 +74,66 @@ export default function SignatureScrollHero() {
     if (!section || plates.length === 0) return
 
     const ctx = gsap.context(() => {
-      // Initial: stage 1 visible, all others hidden
+      // ── Initial state: Stage 1 visible, all others invisible ──────────
       plates.forEach((plate, i) => {
         gsap.set(plate, { opacity: i === 0 ? 1 : 0 })
       })
       gsap.set(ctaRef.current, { opacity: 0, pointerEvents: 'none' })
 
+      // ── Master timeline driven by scroll ──────────────────────────────
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 0.6,
+          scrub: 0.8,  // slight cinematic lag for premium feel
           onUpdate(self) {
             const p = self.progress
-            // Determine which stage is dominant at this progress
+            // Determine dominant stage for HUD display
             let step = 0
-            for (let i = TIMELINE.stages.length - 1; i >= 0; i--) {
-              if (p >= TIMELINE.stages[i].fadeIn) { step = i; break }
+            for (let i = REVEALS.length - 1; i >= 0; i--) {
+              const reveal = REVEALS[i]
+              if (reveal === null) { if (i === 0) step = 0; continue }
+              // Stage is dominant once its reveal is past the midpoint
+              const mid = (reveal[0] + reveal[1]) / 2
+              if (p >= mid) { step = i; break }
             }
             setActiveStep(prev => prev !== step ? step : prev)
           },
         },
       })
 
-      // ── Build crossfade tweens for each stage ─────────────────────────
-      TIMELINE.stages.forEach((timing, i) => {
+      // ── Build reveal tweens ───────────────────────────────────────────
+      // Each image ONLY fades IN. Never fades out. This is the key.
+      REVEALS.forEach((reveal, i) => {
+        if (reveal === null) return  // Stage 1 — always visible
         const plate = plates[i]
         if (!plate) return
 
-        const isFirst = i === 0
-        const isLast  = i === STAGES.length - 1
+        const [start, end] = reveal
+        const duration = end - start
 
-        // FADE IN (skip for first — it starts at 1)
-        if (!isFirst) {
-          tl.to(plate, {
-            opacity: 1,
-            duration: timing.hold - timing.fadeIn,
-            ease: 'power1.inOut',
-          }, timing.fadeIn)
-        }
-
-        // FADE OUT (skip for last — it stays at 1)
-        if (!isLast) {
-          tl.to(plate, {
-            opacity: 0,
-            duration: timing.fadeOut - timing.hold,
-            ease: 'power1.inOut',
-          }, timing.hold)
-        }
+        tl.to(plate, {
+          opacity: 1,
+          duration: duration,
+          ease: 'power2.inOut',   // smooth luxury ease — starts imperceptibly
+        }, start)
       })
 
-      // ── Scroll hint fades out quickly ─────────────────────────────────
+      // ── Scroll hint fades out as user begins scrolling ────────────────
       tl.to(hintRef.current, {
         opacity: 0,
-        duration: 0.06,
-      }, 0.03)
+        duration: 0.04,
+        ease: 'power1.out',
+      }, 0.02)
 
-      // ── CTA overlay fades in at the very end ──────────────────────────
+      // ── CTA fades in at the very end ──────────────────────────────────
       tl.to(ctaRef.current, {
         opacity: 1,
         pointerEvents: 'auto',
         duration: 0.06,
-        ease: 'power1.out',
-      }, 0.95)
+        ease: 'power2.out',
+      }, 0.96)
 
     }, section)
 
@@ -147,11 +147,12 @@ export default function SignatureScrollHero() {
     <section
       ref={sectionRef}
       className="ssh"
-      aria-label="Scroll-driven interior transformation hero"
+      style={{ height: SCROLL_HEIGHT }}
+      aria-label="Scroll-driven interior transformation"
     >
       <div className="ssh__sticky">
 
-        {/* ── HUD Top ──────────────────────────────────────────────────── */}
+        {/* ── HUD Top ─────────────────────────────────────────────────── */}
         <header className="ssh__hud-top">
           <div className="ssh__tag">
             <span className="ssh__tag-dot" />
@@ -171,13 +172,26 @@ export default function SignatureScrollHero() {
           </div>
         </header>
 
-        {/* ── Scene — stacked image plates ─────────────────────────────── */}
+        {/* ── Scene — stacked image plates ────────────────────────────── */}
         <div className="ssh__scene">
+          {/*
+            Image stacking order:
+            Stage 1 at the bottom (z-index 1) — always opacity 1.
+            Stage 2 above it (z-index 2) — fades in over Stage 1.
+            Stage 3 above that (z-index 3) — fades in over Stage 2.
+            ...
+            Stage 8 on top (z-index 8) — fades in last.
+
+            At any point: the highest fully-opaque image is the visible room.
+            Lower images are harmlessly hidden beneath.
+            The dark background is NEVER exposed.
+          */}
           {STAGES.map((stage, i) => (
             <div
               key={stage.id}
               ref={(el) => (plateRefs.current[i] = el)}
               className="ssh__plate"
+              style={{ zIndex: i + 1 }}
             >
               <img
                 src={stage.src}
@@ -188,7 +202,7 @@ export default function SignatureScrollHero() {
             </div>
           ))}
 
-          {/* ── Final CTA ──────────────────────────────────────────────── */}
+          {/* ── CTA overlay — appears at 96%+ scroll ──────────────────── */}
           <div ref={ctaRef} className="ssh__cta">
             <div className="ssh__cta-inner">
               <Eyebrow className="text-sand">[ Brickleaf Interior Studio ]</Eyebrow>
@@ -215,7 +229,7 @@ export default function SignatureScrollHero() {
           </div>
         </div>
 
-        {/* ── HUD Bottom ───────────────────────────────────────────────── */}
+        {/* ── HUD Bottom ──────────────────────────────────────────────── */}
         <footer className="ssh__hud-bot">
           <div className="ssh__info">
             <span className="ssh__info-title">{currentStage.title}</span>
