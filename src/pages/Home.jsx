@@ -1,4 +1,4 @@
-import ScrollHero from '../components/home/ScrollHero'
+import SignatureScrollHero from '../components/SignatureScrollHero/SignatureScrollHero'
 import Button from '../components/ui/Button'
 import Eyebrow from '../components/ui/Eyebrow'
 import SectionDivider from '../components/ui/SectionDivider'
@@ -9,11 +9,11 @@ export default function Home() {
 
   return (
     <div className="w-full">
-      {/* ── FLAGSHIP SCROLL-DRIVEN HERO MOMENT ───────────────────── */}
-      <ScrollHero />
+      {/* ── FLAGSHIP SCROLL-DRIVEN PHOTOREALISTIC INTERIOR TRANSFORMATION ── */}
+      <SignatureScrollHero />
 
       {/* ── BRAND PILLARS STRIP ───────────────────────────────────── */}
-      <section className="py-16 md:py-24 px-6 border-t border-line/40 bg-cream/80">
+      <section className="py-16 md:py-24 px-6 border-t border-line/40 bg-cream/80 relative z-20">
         <div className="max-w-5xl mx-auto space-y-12 text-center">
           <div className="space-y-4 max-w-2xl mx-auto">
             <Eyebrow className="text-sand">[ Architectural Philosophy ]</Eyebrow>
