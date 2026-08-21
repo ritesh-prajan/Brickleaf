@@ -1,18 +1,9 @@
 /**
  * SignatureScrollHero — Constants
  *
- * 8 complete full-room photographs. Each fades IN over the previous.
- * No image ever fades OUT. The stack always has a fully opaque room underneath.
- * This guarantees zero dark frames, zero gaps, zero background bleed.
- *
- * TIMELINE DESIGN:
- *   Each stage has a REVEAL window (when the next image gradually appears)
- *   and an implicit HOLD (the gap between reveals where nothing changes).
- *
- *   HOLD → REVEAL → HOLD → REVEAL → HOLD ...
- *
- *   The holds create the luxury pacing.
- *   The reveals are intentionally slow.
+ * 8 complete full-room photographs.
+ * The entire homepage IS this scroll transformation.
+ * Zero dark gaps. Each image plate fades in over the previous and stays opaque.
  */
 
 export const STAGES = [
@@ -83,40 +74,23 @@ export const STAGES = [
 ]
 
 /**
- * REVEAL TIMELINE
+ * REVEAL TIMELINE (Normalized 0.0 -> 1.0)
  *
- * Each entry defines when that stage's image begins and finishes fading in.
- * Stage 1 is always visible (opacity 1, the permanent base).
- * Stages 2–8 fade from opacity 0 → 1 during their reveal window.
- * NO image ever fades OUT. It stays opaque and gets covered by the next.
- *
- * Format: [revealStart, revealEnd]
- *
- * The gaps between revealEnd of one stage and revealStart of the next
- * are the HOLD periods where nothing changes — the luxury breathing room.
+ * Each stage fades in gently and stays opaque.
+ * Generous holds between reveals create an expansive, luxurious rhythm.
  */
 export const REVEALS = [
-  // Stage 1: always visible — no reveal needed
-  null,
-  // Stage 2: empty bright — first reveal, slow
-  [0.06, 0.18],
-  // Stage 3: rug — hold, then reveal
-  [0.24, 0.36],
-  // Stage 4: sofa
-  [0.40, 0.52],
-  // Stage 5: chairs + table
-  [0.56, 0.66],
-  // Stage 6: decor + plant
-  [0.70, 0.80],
-  // Stage 7: pendant off
-  [0.83, 0.90],
-  // Stage 8: pendant on — the luxury lighting moment, extra slow
-  [0.92, 1.00],
+  null,          // Stage 1: always visible (opacity 1)
+  [0.06, 0.18],  // Stage 2: empty bright
+  [0.24, 0.36],  // Stage 3: rug
+  [0.40, 0.52],  // Stage 4: sofa
+  [0.56, 0.66],  // Stage 5: chairs + table
+  [0.70, 0.80],  // Stage 6: decor + plant
+  [0.83, 0.90],  // Stage 7: pendant off
+  [0.92, 1.00],  // Stage 8: pendant on (warm final payoff)
 ]
 
 /**
- * Total scroll height multiplier.
- * Higher = slower, more luxurious pacing.
- * 600vh gives approximately 5 full viewport heights of scroll travel.
+ * Full page scroll distance for the cinematic experience
  */
-export const SCROLL_HEIGHT = '600vh'
+export const SCROLL_HEIGHT = '750vh'

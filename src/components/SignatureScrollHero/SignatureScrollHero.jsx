@@ -13,24 +13,12 @@ if (typeof window !== 'undefined') {
 }
 
 /**
- * SignatureScrollHero — Luxury Crossfade
+ * SignatureScrollHero — Fullscreen Homepage Experience
  *
- * ARCHITECTURE:
- *   8 identical-sized complete-room images stacked at the same position.
- *   Stage 1 (empty dark) starts at opacity 1 — always visible at the bottom.
- *   Each subsequent stage fades IN from 0 → 1 on top of the previous.
- *   No image ever fades OUT. It stays at opacity 1, covered by the next.
- *
- * GUARANTEE:
- *   At every scroll position, a fully-opaque room image is visible.
- *   The page background is NEVER exposed.
- *   The room NEVER darkens between stages.
- *   The architecture remains pixel-locked.
- *
- * PERFORMANCE:
- *   One GSAP ScrollTrigger timeline. No React state per scroll frame.
- *   GSAP sets opacity directly on DOM elements.
- *   Only the HUD step index uses React state (updated only when it changes).
+ * The ENTIRE homepage is this scroll-driven interior transformation.
+ * 8 full-bleed photorealistic room images stacked edge-to-edge.
+ * Fixed header above, full-screen room filling the viewport.
+ * Zero cards, zero outer borders, zero dark gaps.
  */
 export default function SignatureScrollHero() {
   const navigate = useNavigate()
@@ -47,7 +35,7 @@ export default function SignatureScrollHero() {
   useEffect(() => {
     let loaded = 0
     const total = STAGES.length
-    const fallback = setTimeout(() => setIsLoaded(true), 5000)
+    const fallback = setTimeout(() => setIsLoaded(true), 4000)
 
     STAGES.forEach((stage, i) => {
       const img = new Image()
@@ -74,27 +62,26 @@ export default function SignatureScrollHero() {
     if (!section || plates.length === 0) return
 
     const ctx = gsap.context(() => {
-      // ── Initial state: Stage 1 visible, all others invisible ──────────
+      // ── Initial state: Stage 1 visible (opacity 1), all others invisible
       plates.forEach((plate, i) => {
         gsap.set(plate, { opacity: i === 0 ? 1 : 0 })
       })
       gsap.set(ctaRef.current, { opacity: 0, pointerEvents: 'none' })
 
-      // ── Master timeline driven by scroll ──────────────────────────────
+      // ── Master timeline driven strictly by scroll ─────────────────────
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 0.8,  // slight cinematic lag for premium feel
+          scrub: 0.8, // Smooth cinematic scrub
           onUpdate(self) {
             const p = self.progress
-            // Determine dominant stage for HUD display
+            // Determine active stage for HUD
             let step = 0
             for (let i = REVEALS.length - 1; i >= 0; i--) {
               const reveal = REVEALS[i]
               if (reveal === null) { if (i === 0) step = 0; continue }
-              // Stage is dominant once its reveal is past the midpoint
               const mid = (reveal[0] + reveal[1]) / 2
               if (p >= mid) { step = i; break }
             }
@@ -103,10 +90,9 @@ export default function SignatureScrollHero() {
         },
       })
 
-      // ── Build reveal tweens ───────────────────────────────────────────
-      // Each image ONLY fades IN. Never fades out. This is the key.
+      // ── Build progressive reveal tweens (0 → 1) ───────────────────────
       REVEALS.forEach((reveal, i) => {
-        if (reveal === null) return  // Stage 1 — always visible
+        if (reveal === null) return // Stage 1 is permanent base
         const plate = plates[i]
         if (!plate) return
 
@@ -116,18 +102,18 @@ export default function SignatureScrollHero() {
         tl.to(plate, {
           opacity: 1,
           duration: duration,
-          ease: 'power2.inOut',   // smooth luxury ease — starts imperceptibly
+          ease: 'power2.inOut',
         }, start)
       })
 
-      // ── Scroll hint fades out as user begins scrolling ────────────────
+      // ── Scroll hint fades out early on scroll ─────────────────────────
       tl.to(hintRef.current, {
         opacity: 0,
         duration: 0.04,
         ease: 'power1.out',
       }, 0.02)
 
-      // ── CTA fades in at the very end ──────────────────────────────────
+      // ── Final CTA overlay emerges at the very end ─────────────────────
       tl.to(ctaRef.current, {
         opacity: 1,
         pointerEvents: 'auto',
@@ -140,57 +126,46 @@ export default function SignatureScrollHero() {
     return () => ctx.revert()
   }, [isLoaded])
 
-  // ── Render ────────────────────────────────────────────────────────────
   const currentStage = STAGES[activeStep]
 
   return (
-    <section
+    <div
       ref={sectionRef}
-      className="ssh"
+      className="ssh-page"
       style={{ height: SCROLL_HEIGHT }}
-      aria-label="Scroll-driven interior transformation"
+      aria-label="Immersive full-screen interior transformation"
     >
-      <div className="ssh__sticky">
+      {/* ── Sticky Fullscreen Viewport Beneath Fixed Header ─────────────── */}
+      <div className="ssh-viewport">
 
-        {/* ── HUD Top ─────────────────────────────────────────────────── */}
-        <header className="ssh__hud-top">
-          <div className="ssh__tag">
-            <span className="ssh__tag-dot" />
+        {/* ── Floating HUD Header (Upper Overlay) ───────────────────────── */}
+        <div className="ssh-hud-top">
+          <div className="ssh-tag">
+            <span className="ssh-tag-dot" />
             {currentStage.tag}
           </div>
-          <div className="ssh__dots" aria-label="Transformation progress">
+
+          <div className="ssh-dots" aria-label="Transformation progress">
             {STAGES.map((s, i) => (
               <span
                 key={s.id}
-                className={`ssh__dot ${
-                  i === activeStep ? 'ssh__dot--active' :
-                  i < activeStep  ? 'ssh__dot--done' : ''
+                className={`ssh-dot ${
+                  i === activeStep ? 'ssh-dot--active' :
+                  i < activeStep  ? 'ssh-dot--done' : ''
                 }`}
                 title={s.title}
               />
             ))}
           </div>
-        </header>
+        </div>
 
-        {/* ── Scene — stacked image plates ────────────────────────────── */}
-        <div className="ssh__scene">
-          {/*
-            Image stacking order:
-            Stage 1 at the bottom (z-index 1) — always opacity 1.
-            Stage 2 above it (z-index 2) — fades in over Stage 1.
-            Stage 3 above that (z-index 3) — fades in over Stage 2.
-            ...
-            Stage 8 on top (z-index 8) — fades in last.
-
-            At any point: the highest fully-opaque image is the visible room.
-            Lower images are harmlessly hidden beneath.
-            The dark background is NEVER exposed.
-          */}
+        {/* ── Fullscreen Room Stage ─────────────────────────────────────── */}
+        <div className="ssh-stage">
           {STAGES.map((stage, i) => (
             <div
               key={stage.id}
               ref={(el) => (plateRefs.current[i] = el)}
-              className="ssh__plate"
+              className="ssh-plate"
               style={{ zIndex: i + 1 }}
             >
               <img
@@ -202,18 +177,17 @@ export default function SignatureScrollHero() {
             </div>
           ))}
 
-          {/* ── CTA overlay — appears at 96%+ scroll ──────────────────── */}
-          <div ref={ctaRef} className="ssh__cta">
-            <div className="ssh__cta-inner">
+          {/* ── Final Transformation Call-to-Action Overlay ────────────── */}
+          <div ref={ctaRef} className="ssh-cta-overlay">
+            <div className="ssh-cta-content">
               <Eyebrow className="text-sand">[ Brickleaf Interior Studio ]</Eyebrow>
               <h1 className="font-display text-4xl sm:text-5xl md:text-6xl text-cream font-light leading-tight">
                 Crafting Timeless Architectural Sanctuary
               </h1>
-              <p className="text-cream/75 text-sm sm:text-base max-w-md leading-relaxed font-body">
-                From empty canvas to warm, curated interior.
-                Brickleaf designs spaces that resonate with warmth and purpose.
+              <p className="text-cream/80 text-sm sm:text-base max-w-md leading-relaxed font-body">
+                From empty architectural canvas to bespoke material curation. Brickleaf designs spaces that resonate with warmth and permanence.
               </p>
-              <div className="flex flex-wrap gap-4 justify-center">
+              <div className="flex flex-wrap gap-4 justify-center pt-2">
                 <Button variant="primary" onClick={() => navigate('/services')}>
                   Explore Services
                 </Button>
@@ -229,22 +203,22 @@ export default function SignatureScrollHero() {
           </div>
         </div>
 
-        {/* ── HUD Bottom ──────────────────────────────────────────────── */}
-        <footer className="ssh__hud-bot">
-          <div className="ssh__info">
-            <span className="ssh__info-title">{currentStage.title}</span>
-            <span className="ssh__info-desc">{currentStage.desc}</span>
+        {/* ── Floating HUD Footer (Lower Overlay) ───────────────────────── */}
+        <div className="ssh-hud-bottom">
+          <div className="ssh-info">
+            <span className="ssh-info-title">{currentStage.title}</span>
+            <span className="ssh-info-desc">{currentStage.desc}</span>
           </div>
 
-          <div ref={hintRef} className="ssh__hint">
+          <div ref={hintRef} className="ssh-hint">
             <span>Scroll to design the space</span>
             <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
             </svg>
           </div>
-        </footer>
+        </div>
 
       </div>
-    </section>
+    </div>
   )
 }
