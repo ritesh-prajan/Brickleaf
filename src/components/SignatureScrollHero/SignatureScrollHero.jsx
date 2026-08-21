@@ -1,347 +1,591 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-import EmptyRoom from './scene/EmptyRoom'
-import WallLayer from './scene/WallLayer'
-import RugLayer from './scene/RugLayer'
-import FurnitureLayer from './scene/FurnitureLayer'
-import DecorLayer from './scene/DecorLayer'
-import LightingLayer from './scene/LightingLayer'
-
-import { HERO_ASSETS, SCENE_STAGES, SEQUENCE_STEPS_HUD } from './constants'
+import { ASSETS, STAGES, SCENE_OBJECTS, HUD_STEPS } from './constants'
 import Button from '../ui/Button'
 import Eyebrow from '../ui/Eyebrow'
 import './SignatureScrollHero.css'
 
-// Register ScrollTrigger plugin safely
+// Register GSAP plugin once
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
 }
 
+// ── Helper: Preload all image assets ──────────────────────────────────────
+function preloadAssets(urls) {
+  return Promise.all(
+    urls.map(
+      (src) =>
+        new Promise((resolve) => {
+          const img = new Image()
+          img.src = src
+          img.onload = resolve
+          img.onerror = resolve // don't block on missing assets
+        })
+    )
+  )
+}
+
+// ── Main Component ────────────────────────────────────────────────────────
 export default function SignatureScrollHero() {
   const navigate = useNavigate()
 
-  // Master Container & Scene Refs
-  const sectionRef = useRef(null)
-  const stickyRef  = useRef(null)
-  const stageRef   = useRef(null)
+  // ── Container refs ────────────────────────────────────────────────────
+  const sectionRef    = useRef(null)
+  const sceneRef      = useRef(null)
 
-  // Layer Refs
-  const emptyRoomRef     = useRef(null)
-  const wallLayerRef     = useRef(null)
-  const rugLayerRef      = useRef(null)
-  const furnitureLayerRef= useRef(null)
-  const sofaRef          = useRef(null)
-  const tableRef         = useRef(null)
-  const armchairsRef     = useRef(null)
-  const decorLayerRef    = useRef(null)
-  const lightingLayerRef = useRef(null)
-  const unlitPendantRef  = useRef(null)
-  const litPendantRef    = useRef(null)
-  const warmGlowRef      = useRef(null)
-  const finalRoomRef     = useRef(null)
-  const ctaOverlayRef    = useRef(null)
-  const scrollHintRef    = useRef(null)
+  // ── Object refs — each transparent PNG gets its own ───────────────────
+  const rugRef        = useRef(null)
+  const rugShadowRef  = useRef(null)
+  const sofaRef       = useRef(null)
+  const sofaShadowRef = useRef(null)
+  const chairsRef     = useRef(null)
+  const chairsShadRef = useRef(null)
+  const tableRef      = useRef(null)
+  const tableShadRef  = useRef(null)
+  const decorRef      = useRef(null)
+  const pendantRef    = useRef(null)
+  const pendantLitRef = useRef(null)
+  const warmOverRef   = useRef(null)
+  const lightBloomRef = useRef(null)
+  const ctaRef        = useRef(null)
+  const hintRef       = useRef(null)
 
-  // State Management outside scroll loops
-  const [currentStepIndex, setCurrentStepIndex] = useState(0)
-  const [isLoaded, setIsLoaded] = useState(false)
+  // ── State (minimal — never updated per scroll frame) ──────────────────
+  const [isLoaded, setIsLoaded]         = useState(false)
+  const [activeStep, setActiveStep]     = useState(0)
   const [isReducedMotion, setIsReducedMotion] = useState(false)
 
-  // 1. Asset Preloading
+  // ── Asset Preloading ──────────────────────────────────────────────────
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setIsReducedMotion(mediaQuery.matches)
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setIsReducedMotion(mq.matches)
 
-    const imageUrls = Object.values(HERO_ASSETS)
-    let loadedCount = 0
+    const allUrls = Object.values(ASSETS)
+    const fallback = setTimeout(() => setIsLoaded(true), 3500)
 
-    imageUrls.forEach((url) => {
-      const img = new Image()
-      img.src = url
-      img.onload = img.onerror = () => {
-        loadedCount++
-        if (loadedCount >= imageUrls.length) {
-          setIsLoaded(true)
-        }
-      }
+    preloadAssets(allUrls).then(() => {
+      clearTimeout(fallback)
+      setIsLoaded(true)
     })
 
-    // Timeout fallback in case of slow network
-    const timer = setTimeout(() => setIsLoaded(true), 3000)
-    return () => clearTimeout(timer)
+    return () => clearTimeout(fallback)
   }, [])
 
-  // 2. GSAP ScrollTrigger Master Timeline Setup
+  // ── GSAP ScrollTrigger Master Timeline ───────────────────────────────
   useEffect(() => {
-    if (!isLoaded || isReducedMotion) return
+    if (!isLoaded) return
 
-    const sectionEl = sectionRef.current
-    const stageEl   = stageRef.current
-    if (!sectionEl || !stageEl) return
+    const section = sectionRef.current
+    const scene   = sceneRef.current
+    if (!section || !scene) return
 
-    // Context for easy GSAP cleanup
+    // If reduced motion: snap everything to final state immediately
+    if (isReducedMotion) {
+      gsap.set([
+        rugRef.current, sofaRef.current, chairsRef.current,
+        tableRef.current, decorRef.current,
+        pendantRef.current, pendantLitRef.current,
+        rugShadowRef.current, sofaShadowRef.current,
+        chairsShadRef.current, tableShadRef.current,
+        warmOverRef.current, lightBloomRef.current,
+      ], { opacity: 1, x: 0, y: 0, scaleX: 1, scaleY: 1 })
+      gsap.set(ctaRef.current,  { opacity: 1, pointerEvents: 'auto' })
+      gsap.set(hintRef.current, { opacity: 0 })
+      return
+    }
+
     const ctx = gsap.context(() => {
-      // Master Scroll-Driven Timeline
+
+      // ── INITIAL STATES: place objects at their OFF-SCREEN entry positions
+      // IMPORTANT: opacity starts at 0 for immediate entry objects, small > 0
+      // so they become real before they enter the visible frame.
+
+      // RUG — starts below scene, clips up
+      gsap.set(rugRef.current,       { y: '42%', opacity: 0, scale: 0.96, transformOrigin: 'center bottom' })
+      gsap.set(rugShadowRef.current, { opacity: 0, scaleY: 0.2 })
+
+      // SOFA — starts below, rises
+      gsap.set(sofaRef.current,       { y: '35%', opacity: 0 })
+      gsap.set(sofaShadowRef.current, { opacity: 0, scaleY: 0.2 })
+
+      // ARMCHAIRS — starts below, slightly pushed down
+      gsap.set(chairsRef.current,     { y: '30%', opacity: 0 })
+      gsap.set(chairsShadRef.current, { opacity: 0, scaleY: 0.2 })
+
+      // COFFEE TABLE — starts just below its final position
+      gsap.set(tableRef.current,      { y: '18%', opacity: 0 })
+      gsap.set(tableShadRef.current,  { opacity: 0, scaleY: 0.2 })
+
+      // DECOR — starts from slight left and slightly above
+      gsap.set(decorRef.current,      { x: '-6%', y: '5%', opacity: 0 })
+
+      // PENDANT — starts above frame, descends
+      gsap.set(pendantRef.current,    { y: '-32%', opacity: 0 })
+      gsap.set(pendantLitRef.current, { y: '-32%', opacity: 0 })
+
+      // OVERLAYS — fully transparent
+      gsap.set(warmOverRef.current,   { opacity: 0 })
+      gsap.set(lightBloomRef.current, { opacity: 0 })
+      gsap.set(ctaRef.current,        { opacity: 0, pointerEvents: 'none' })
+
+      // ── MASTER TIMELINE (controlled entirely by scroll position) ──────
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: sectionEl,
+          trigger: section,
           start: 'top top',
-          end: 'bottom bottom',
-          scrub: 0.6, // Smooth progress interpolation
-          onUpdate: (self) => {
-            // Update HUD active step index outside React state loop
-            const progress = self.progress
-            const stepIdx = SEQUENCE_STEPS_HUD.findIndex(
-              (step, idx) =>
-                progress >= step.stage &&
-                (idx === SEQUENCE_STEPS_HUD.length - 1 || progress < SEQUENCE_STEPS_HUD[idx + 1].stage)
-            )
-            if (stepIdx !== -1) {
-              setCurrentStepIndex(stepIdx)
+          end:   'bottom bottom',
+          scrub: 0.8,   // slight lag for cinematic feel; set to true for 1:1
+          pin:   false, // sticky is done via CSS position:sticky on .ssh__sticky
+          onUpdate(self) {
+            // Update HUD step — only setState when step changes (not every frame)
+            const p = self.progress
+            let newStep = 0
+            for (let i = HUD_STEPS.length - 1; i >= 0; i--) {
+              if (p >= HUD_STEPS[i].stage) { newStep = i; break }
             }
+            setActiveStep(prev => prev !== newStep ? newStep : prev)
           },
         },
       })
 
-      // -------------------------------------------------------------------
-      // TIMELINE STAGE SEQUENCE (0.00 -> 1.00)
-      // -------------------------------------------------------------------
+      // ── TIMELINE DEFINITION ──────────────────────────────────────────
+      //    Each stage is expressed as a fraction (0.0–1.0) of total timeline.
+      //    We convert to label positions using addLabel().
 
-      // 1. Initial State Setups
-      gsap.set(wallLayerRef.current,      { opacity: 0 })
-      gsap.set(rugLayerRef.current,       { opacity: 0, scale: 0.92, transformOrigin: 'center bottom' })
-      gsap.set(sofaRef.current,           { opacity: 0, y: 30 })
-      gsap.set(tableRef.current,          { opacity: 0, y: 20 })
-      gsap.set(armchairsRef.current,      { opacity: 0, y: 25 })
-      gsap.set(decorLayerRef.current,     { opacity: 0, y: 15 })
-      gsap.set(unlitPendantRef.current,   { opacity: 0, y: -20 })
-      gsap.set(litPendantRef.current,     { opacity: 0 })
-      gsap.set(warmGlowRef.current,       { opacity: 0 })
-      gsap.set(finalRoomRef.current,      { opacity: 0 })
-      gsap.set(ctaOverlayRef.current,     { opacity: 0, pointerEvents: 'none' })
-
-      // Scroll hint fade out immediately on start
-      tl.to(scrollHintRef.current, { opacity: 0, duration: 0.05 }, 0.02)
-
-      // 2. WALL LAYER (0.00 -> 0.20) — Warm plaster wall texture appears
-      tl.to(wallLayerRef.current, { opacity: 1, duration: 0.18, ease: 'power1.inOut' }, SCENE_STAGES.WALLS)
-
-      // 3. RUG LAYER (0.18 -> 0.35) — Rug enters and unrolls
-      tl.to(
-        rugLayerRef.current,
-        { opacity: 1, scale: 1, duration: 0.18, ease: 'power2.out' },
-        SCENE_STAGES.RUG
+      // 0.00 – 0.10: Room reveal (already visible as base)
+      //   → Hint text fades
+      tl.to(hintRef.current,
+        { opacity: 0, duration: STAGES.EMPTY_END - STAGES.EMPTY_START },
+        STAGES.EMPTY_START
       )
 
-      // 4. SOFA LAYER (0.32 -> 0.50) — Bouclé sofa appears and settles
-      tl.to(
-        sofaRef.current,
-        { opacity: 1, y: 0, duration: 0.18, ease: 'power2.out' },
-        SCENE_STAGES.SOFA
+      // 0.10 – 0.25: RUG slides up and lands ────────────────────────────
+      tl.to(rugRef.current,
+        {
+          y: '0%',
+          opacity: 1,
+          scale: 1,
+          duration: STAGES.RUG_END - STAGES.RUG_START,
+          ease: 'power2.out',
+        },
+        STAGES.RUG_START
+      )
+      // Shadow strengthens as rug lands
+      tl.to(rugShadowRef.current,
+        { opacity: 1, scaleY: 1, duration: (STAGES.RUG_END - STAGES.RUG_START) * 0.7, ease: 'power1.out' },
+        STAGES.RUG_START + (STAGES.RUG_END - STAGES.RUG_START) * 0.4
       )
 
-      // 5. FURNITURE PIECES (0.45 -> 0.65) — Travertine table & armchairs appear
-      tl.to(
-        tableRef.current,
-        { opacity: 1, y: 0, duration: 0.15, ease: 'power2.out' },
-        SCENE_STAGES.FURNITURE
-      ).to(
-        armchairsRef.current,
-        { opacity: 1, y: 0, duration: 0.15, ease: 'power2.out' },
-        SCENE_STAGES.FURNITURE + 0.05
+      // 0.25 – 0.42: SOFA enters from below ────────────────────────────
+      tl.to(sofaRef.current,
+        {
+          y: '0%',
+          opacity: 1,
+          duration: STAGES.SOFA_END - STAGES.SOFA_START,
+          ease: 'power3.out',
+        },
+        STAGES.SOFA_START
+      )
+      tl.to(sofaShadowRef.current,
+        { opacity: 1, scaleY: 1, duration: (STAGES.SOFA_END - STAGES.SOFA_START) * 0.6, ease: 'power1.out' },
+        STAGES.SOFA_START + (STAGES.SOFA_END - STAGES.SOFA_START) * 0.5
       )
 
-      // 6. DECOR & BOTANICALS (0.60 -> 0.78) — Olive tree & table styling accessories appear
-      tl.to(
-        decorLayerRef.current,
-        { opacity: 1, y: 0, duration: 0.18, ease: 'power2.out' },
-        SCENE_STAGES.DECOR
+      // 0.42 – 0.56: ARMCHAIRS rise from below ─────────────────────────
+      tl.to(chairsRef.current,
+        {
+          y: '0%',
+          opacity: 1,
+          duration: STAGES.CHAIRS_END - STAGES.CHAIRS_START,
+          ease: 'power2.out',
+        },
+        STAGES.CHAIRS_START
+      )
+      tl.to(chairsShadRef.current,
+        { opacity: 1, scaleY: 1, duration: (STAGES.CHAIRS_END - STAGES.CHAIRS_START) * 0.6, ease: 'power1.out' },
+        STAGES.CHAIRS_START + (STAGES.CHAIRS_END - STAGES.CHAIRS_START) * 0.5
       )
 
-      // 7. LIGHTING FIXTURE & ILLUMINATION (0.75 -> 0.90)
-      // Unlit pendant lowers -> Lit pendant glows -> Warm ambient lighting fills room
-      tl.to(
-        unlitPendantRef.current,
-        { opacity: 1, y: 0, duration: 0.10, ease: 'power2.out' },
-        SCENE_STAGES.LIGHTING_UNLIT
+      // 0.56 – 0.68: COFFEE TABLE ascends ──────────────────────────────
+      tl.to(tableRef.current,
+        {
+          y: '0%',
+          opacity: 1,
+          duration: STAGES.TABLE_END - STAGES.TABLE_START,
+          ease: 'power2.out',
+        },
+        STAGES.TABLE_START
       )
-      .to(
-        litPendantRef.current,
-        { opacity: 1, duration: 0.10, ease: 'power1.in' },
-        SCENE_STAGES.LIGHTING_ON
-      )
-      .to(
-        warmGlowRef.current,
-        { opacity: 1, duration: 0.12, ease: 'power1.out' },
-        SCENE_STAGES.LIGHTING_ON + 0.02
+      tl.to(tableShadRef.current,
+        { opacity: 1, scaleY: 1, duration: (STAGES.TABLE_END - STAGES.TABLE_START) * 0.6, ease: 'power1.out' },
+        STAGES.TABLE_START + (STAGES.TABLE_END - STAGES.TABLE_START) * 0.5
       )
 
-      // 8. CAMERA SETTLE & FINAL ROOM COMPOSITE (0.88 -> 1.00)
-      // Extremely subtle camera settling scale (1.0 -> 1.025) & blend into final high-res shot
-      tl.to(
-        finalRoomRef.current,
-        { opacity: 1, duration: 0.12, ease: 'power1.inOut' },
-        SCENE_STAGES.CAMERA_SETTLE
-      ).to(
-        stageEl,
-        { scale: 1.025, y: -4, duration: 0.15, ease: 'sine.out' },
-        SCENE_STAGES.CAMERA_SETTLE
+      // 0.68 – 0.82: DECOR slides in (olive tree from left + settle) ───
+      tl.to(decorRef.current,
+        {
+          x: '0%',
+          y: '0%',
+          opacity: 1,
+          duration: STAGES.DECOR_END - STAGES.DECOR_START,
+          ease: 'power2.out',
+        },
+        STAGES.DECOR_START
       )
 
-      // 9. FINAL CTA OVERLAY (0.94 -> 1.00)
-      tl.to(
-        ctaOverlayRef.current,
-        { opacity: 1, pointerEvents: 'auto', duration: 0.08, ease: 'power1.out' },
-        0.94
+      // 0.82 – 0.92: PENDANT descends from ceiling ──────────────────────
+      // Unlit pendant comes down first
+      tl.to(pendantRef.current,
+        {
+          y: '0%',
+          opacity: 1,
+          duration: (STAGES.PENDANT_END - STAGES.PENDANT_START) * 0.85,
+          ease: 'power3.out',
+        },
+        STAGES.PENDANT_START
       )
 
-    }, sectionEl)
+      // 0.92 – 1.00: LIGHTS ON + warm atmosphere ────────────────────────
+      // Swap to lit pendant image
+      tl.to(pendantLitRef.current,
+        {
+          y: '0%',
+          opacity: 1,
+          duration: (STAGES.LIGHT_ON_END - STAGES.LIGHT_ON_START) * 0.4,
+          ease: 'power1.in',
+        },
+        STAGES.LIGHT_ON_START
+      )
+      // Fade out unlit pendant simultaneously
+      tl.to(pendantRef.current,
+        {
+          opacity: 0,
+          duration: (STAGES.LIGHT_ON_END - STAGES.LIGHT_ON_START) * 0.3,
+          ease: 'power1.in',
+        },
+        STAGES.LIGHT_ON_START
+      )
+      // Warm atmosphere overlay (room image blended multiply)
+      tl.to(warmOverRef.current,
+        {
+          opacity: 0.85,
+          duration: (STAGES.LIGHT_ON_END - STAGES.LIGHT_ON_START) * 0.7,
+          ease: 'power1.out',
+        },
+        STAGES.LIGHT_ON_START + 0.04
+      )
+      // Localized light bloom
+      tl.to(lightBloomRef.current,
+        {
+          opacity: 1,
+          duration: (STAGES.LIGHT_ON_END - STAGES.LIGHT_ON_START) * 0.6,
+          ease: 'power2.out',
+        },
+        STAGES.LIGHT_ON_START + 0.05
+      )
+      // CTA overlay appears at the very end
+      tl.to(ctaRef.current,
+        {
+          opacity: 1,
+          pointerEvents: 'auto',
+          duration: (STAGES.LIGHT_ON_END - STAGES.LIGHT_ON_START) * 0.35,
+          ease: 'power1.out',
+        },
+        STAGES.LIGHT_ON_START + 0.07
+      )
+
+    }, section)
 
     return () => ctx.revert()
   }, [isLoaded, isReducedMotion])
 
-  const activeStep = SEQUENCE_STEPS_HUD[currentStepIndex] || SEQUENCE_STEPS_HUD[0]
+  // ── Derived HUD state ─────────────────────────────────────────────────
+  const currentStep = HUD_STEPS[activeStep] || HUD_STEPS[0]
+  const O = SCENE_OBJECTS  // shorthand
 
   return (
-    <section ref={sectionRef} className="signature-scroll" aria-label="Interactive interior transformation hero">
-      {/* ── Asset Preloader ──────────────────────────────────────────────── */}
-      <div className={`hero-preloader ${isLoaded ? 'hero-preloader--hidden' : ''}`}>
-        <div className="hero-preloader__spinner" />
-        <p className="text-xs uppercase tracking-widest text-ink-soft">
-          Loading Architectural Scene…
-        </p>
+    <>
+      {/* ── Preloader ─────────────────────────────────────────────────── */}
+      <div className={`ssh__preloader ${isLoaded ? 'ssh__preloader--hidden' : ''}`}>
+        <div className="ssh__preloader-ring" />
+        <span className="ssh__preloader-text">Preparing the Space…</span>
       </div>
 
-      {/* ── Sticky Viewport Container ───────────────────────────────────── */}
-      <div ref={stickyRef} className="signature-scroll__sticky">
+      {/* ── Main scroll section ───────────────────────────────────────── */}
+      <section
+        ref={sectionRef}
+        className="ssh"
+        aria-label="Scroll-driven interior room assembly hero"
+      >
+        <div className="ssh__sticky">
 
-        {/* ── Top HUD Header ─────────────────────────────────────────────── */}
-        <header className="hero-hud-header">
-          <div className="hero-hud-header__tag">
-            <span className="hero-hud-header__dot" />
-            <Eyebrow className="text-sand">{activeStep.tag}</Eyebrow>
-          </div>
-
-          {/* Progress Step Indicators */}
-          <div className="hero-hud-dots" aria-label="Scene progress">
-            {SEQUENCE_STEPS_HUD.map((step, idx) => {
-              const isActive = idx === currentStepIndex
-              const isCompleted = idx < currentStepIndex
-              return (
+          {/* ── HUD Header ────────────────────────────────────────────── */}
+          <header className="ssh__hud-header">
+            <div className="ssh__hud-tag">
+              <span className="ssh__hud-tag-dot" />
+              {currentStep.tag}
+            </div>
+            <div className="ssh__hud-dots" aria-label="Assembly stage progress">
+              {HUD_STEPS.map((step, idx) => (
                 <span
-                  key={step.id}
-                  className={`hero-hud-dots__item ${
-                    isActive
-                      ? 'hero-hud-dots__item--active'
-                      : isCompleted
-                      ? 'hero-hud-dots__item--completed'
-                      : ''
+                  key={step.tag}
+                  className={`ssh__hud-dot ${
+                    idx === activeStep ? 'ssh__hud-dot--active' :
+                    idx < activeStep  ? 'ssh__hud-dot--completed' : ''
                   }`}
                   title={step.title}
                 />
-              )
-            })}
-          </div>
-        </header>
+              ))}
+            </div>
+          </header>
 
-        {/* ── Master Room Scene ─────────────────────────────────────────── */}
-        <div className="room-scene">
-          <div ref={stageRef} className="room-scene__stage">
+          {/* ── Scene Frame ───────────────────────────────────────────── */}
+          <div ref={sceneRef} className="ssh__scene">
 
-            {/* Layer 1: Dim Base Empty Room */}
-            <EmptyRoom ref={emptyRoomRef} />
-
-            {/* Layer 2: Warm Plaster Wall Texture */}
-            <WallLayer ref={wallLayerRef} />
-
-            {/* Layer 3: Woven Textured Rug */}
-            <RugLayer ref={rugLayerRef} />
-
-            {/* Layer 4: Bouclé Sofa, Travertine Table & Armchairs */}
-            <FurnitureLayer
-              ref={furnitureLayerRef}
-              sofaRef={sofaRef}
-              tableRef={tableRef}
-              armchairsRef={armchairsRef}
-            />
-
-            {/* Layer 5: Botanicals & Decor */}
-            <DecorLayer ref={decorLayerRef} />
-
-            {/* Layer 6: Chandelier & Ambient Lighting Flare */}
-            <LightingLayer
-              ref={lightingLayerRef}
-              unlitPendantRef={unlitPendantRef}
-              litPendantRef={litPendantRef}
-              warmGlowRef={warmGlowRef}
-            />
-
-            {/* Layer 7: Final Master Composite Room Photograph */}
-            <div ref={finalRoomRef} className="scene-layer scene-layer--final">
+            {/* === LAYER 1: ROOM BASE — the permanent fixed stage ========= */}
+            <div className="ssh__room-base">
               <img
-                src={HERO_ASSETS.finalRoom}
-                alt="Finished luxury interior architectural photography"
-                className="scene-image"
+                src={ASSETS.emptyRoom}
+                alt="Empty architectural living room — bare stage before furnishing"
                 loading="eager"
+                decoding="async"
+                fetchpriority="high"
               />
             </div>
 
-          </div>
+            {/* Warm room overlay (blends in during lighting phase) */}
+            <div ref={warmOverRef} className="ssh__warm-overlay ssh__obj">
+              <img
+                src={ASSETS.warmRoom}
+                alt=""
+                aria-hidden="true"
+                loading="eager"
+                decoding="async"
+              />
+            </div>
 
-          {/* ── Final Transformation CTA Content Overlay ──────────────── */}
-          <div
-            ref={ctaOverlayRef}
-            className={`hero-final-overlay ${isReducedMotion ? 'hero-final-overlay--visible' : ''}`}
-          >
-            <div className="hero-final-overlay__content space-y-6">
-              <Eyebrow className="text-sand">[ Brickleaf Interior Studio ]</Eyebrow>
+            {/* === LAYER 2: RUG — slides up from bottom =================== */}
+            {/* Shadow beneath rug */}
+            <div
+              ref={rugShadowRef}
+              className="ssh__shadow"
+              style={{
+                bottom: '33%',
+                left: '18%',
+                width: '64%',
+                height: '2%',
+                transformOrigin: 'center center',
+              }}
+            />
+            <div
+              ref={rugRef}
+              className="ssh__obj ssh__obj--rug"
+              style={{
+                left: O.rug.finalLeft,
+                top:  O.rug.finalTop,
+                width: O.rug.finalWidth,
+              }}
+            >
+              <img
+                src={ASSETS.rug}
+                alt="Textured neutral area rug placed on the oak floor"
+                loading="eager"
+                decoding="async"
+              />
+            </div>
 
-              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl text-cream font-light leading-tight">
-                Crafting Timeless Architectural Sanctuary
-              </h1>
+            {/* === LAYER 3: SOFA — rises from below ======================= */}
+            <div
+              ref={sofaShadowRef}
+              className="ssh__shadow"
+              style={{
+                bottom: '38%',
+                left: '22%',
+                width: '56%',
+                height: '1.5%',
+                transformOrigin: 'center center',
+              }}
+            />
+            <div
+              ref={sofaRef}
+              className="ssh__obj ssh__obj--sofa"
+              style={{
+                left:  O.sofa.finalLeft,
+                top:   O.sofa.finalTop,
+                width: O.sofa.finalWidth,
+              }}
+            >
+              <img
+                src={ASSETS.sofa}
+                alt="Modular bouclé sectional sofa against the back wall"
+                loading="eager"
+                decoding="async"
+              />
+            </div>
 
-              <p className="text-cream/80 text-sm sm:text-base max-w-md mx-auto leading-relaxed font-body">
-                From raw spatial blueprints to bespoke material curation, we design refined interiors that resonate with warmth and purpose.
-              </p>
+            {/* === LAYER 4: ARMCHAIRS — rise from below =================== */}
+            <div
+              ref={chairsShadRef}
+              className="ssh__shadow"
+              style={{
+                bottom: '28%',
+                left: '1%',
+                width: '55%',
+                height: '1.5%',
+                transformOrigin: 'center center',
+              }}
+            />
+            <div
+              ref={chairsRef}
+              className="ssh__obj ssh__obj--armchairs"
+              style={{
+                left:  O.armchairs.finalLeft,
+                top:   O.armchairs.finalTop,
+                width: O.armchairs.finalWidth,
+              }}
+            >
+              <img
+                src={ASSETS.armchairs}
+                alt="Pair of rounded bouclé armchairs with walnut wood frames"
+                loading="eager"
+                decoding="async"
+              />
+            </div>
 
-              <div className="flex flex-wrap gap-4 justify-center pt-2">
-                <Button variant="primary" onClick={() => navigate('/services')}>
-                  Explore Services
-                </Button>
-                <Button
-                  variant="outline"
-                  className="border-cream/60 text-cream hover:bg-cream hover:text-ink"
-                  onClick={() => navigate('/contact')}
-                >
-                  Start Project Brief
-                </Button>
+            {/* === LAYER 5: COFFEE TABLE — ascends into position ========== */}
+            <div
+              ref={tableShadRef}
+              className="ssh__shadow"
+              style={{
+                bottom: '24%',
+                left: '33%',
+                width: '34%',
+                height: '1.5%',
+                transformOrigin: 'center center',
+              }}
+            />
+            <div
+              ref={tableRef}
+              className="ssh__obj ssh__obj--table"
+              style={{
+                left:  O.table.finalLeft,
+                top:   O.table.finalTop,
+                width: O.table.finalWidth,
+              }}
+            >
+              <img
+                src={ASSETS.table}
+                alt="Travertine stone oval coffee table"
+                loading="eager"
+                decoding="async"
+              />
+            </div>
+
+            {/* === LAYER 6: DECOR — olive tree + table objects ============ */}
+            <div
+              ref={decorRef}
+              className="ssh__obj ssh__obj--decor"
+              style={{
+                left:  O.decor.finalLeft,
+                top:   O.decor.finalTop,
+                width: O.decor.finalWidth,
+              }}
+            >
+              <img
+                src={ASSETS.decor}
+                alt="Potted olive tree beside window, stone sculpture, ceramic vases and dried botanicals on coffee table"
+                loading="eager"
+                decoding="async"
+              />
+            </div>
+
+            {/* === LAYER 7: PENDANT UNLIT — descends from above =========== */}
+            <div
+              ref={pendantRef}
+              className="ssh__obj ssh__obj--pendant"
+              style={{
+                left:  O.pendant.finalLeft,
+                top:   O.pendant.finalTop,
+                width: O.pendant.finalWidth,
+              }}
+            >
+              <img
+                src={ASSETS.pendantUnlit}
+                alt="Brass and alabaster chandelier descending to mounting position"
+                loading="eager"
+                decoding="async"
+              />
+            </div>
+
+            {/* === LAYER 7b: PENDANT LIT — swapped in when light turns on = */}
+            <div
+              ref={pendantLitRef}
+              className="ssh__obj ssh__obj--light-lit"
+              style={{
+                left:  O.pendant.finalLeft,
+                top:   O.pendant.finalTop,
+                width: O.pendant.finalWidth,
+              }}
+            >
+              <img
+                src={ASSETS.pendantLit}
+                alt="Illuminated brass and alabaster chandelier radiating warm light"
+                loading="eager"
+                decoding="async"
+              />
+            </div>
+
+            {/* === LAYER 8: AMBIENT LIGHT BLOOM ============================ */}
+            <div ref={lightBloomRef} className="ssh__light-bloom" aria-hidden="true" />
+
+            {/* === LAYER 9: FINAL CTA OVERLAY ============================== */}
+            <div ref={ctaRef} className="ssh__cta">
+              <div className="ssh__cta-content">
+                <Eyebrow className="text-sand">[ Brickleaf Interior Studio ]</Eyebrow>
+                <h1 className="font-display text-4xl sm:text-5xl md:text-6xl text-cream font-light leading-tight">
+                  Crafting Timeless Architectural Sanctuary
+                </h1>
+                <p className="text-cream/75 text-sm sm:text-base max-w-md leading-relaxed font-body">
+                  From empty canvas to curated spatial poetry. Brickleaf designs spaces that are warm, considered, and built to endure.
+                </p>
+                <div className="flex flex-wrap gap-4 justify-center">
+                  <Button variant="primary" onClick={() => navigate('/services')}>
+                    Explore Services
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="border-cream/50 text-cream hover:bg-cream hover:text-ink"
+                    onClick={() => navigate('/contact')}
+                  >
+                    Start Your Brief
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* ── Bottom HUD Footer & Scroll Hint ───────────────────────────── */}
-        <footer className="hero-hud-footer">
-          <div className="hero-hud-footer__info">
-            <span className="hero-hud-footer__title">{activeStep.title}</span>
-            <span className="hero-hud-footer__desc">{activeStep.desc}</span>
-          </div>
+          </div>{/* end .ssh__scene */}
 
-          {/* Scroll Hint (Fades out when scrolling begins) */}
-          {!isReducedMotion && (
-            <div ref={scrollHintRef} className="hero-scroll-hint">
+          {/* ── HUD Footer ────────────────────────────────────────────── */}
+          <footer className="ssh__hud-footer">
+            <div className="ssh__hud-info">
+              <span className="ssh__hud-title">{currentStep.title}</span>
+              <span className="ssh__hud-desc">{currentStep.desc}</span>
+            </div>
+
+            {/* Scroll hint — fades immediately when user starts scrolling */}
+            <div ref={hintRef} className="ssh__scroll-hint">
               <span>Scroll to design the space</span>
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+              <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
               </svg>
             </div>
-          )}
-        </footer>
+          </footer>
 
-      </div>
-    </section>
+        </div>{/* end .ssh__sticky */}
+      </section>
+    </>
   )
 }
