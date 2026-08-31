@@ -22,8 +22,8 @@ function AppContent() {
           <Route path="/contact" element={<Contact />} />
         </Routes>
       </main>
-      {/* Footer rendered on sub-pages only — homepage is the pure immersive room experience */}
-      {!isHome && <Footer />}
+      {/* Footer rendered at the bottom of the page */}
+      <Footer />
     </div>
   )
 }
