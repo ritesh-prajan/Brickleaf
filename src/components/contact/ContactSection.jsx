@@ -1,21 +1,20 @@
 /**
  * ContactSection — layout orchestrator for the project intake form.
  *
- * Owns the form state via useContactForm and passes props down to
- * LeftPanel and RightPanel. Renders the PanelDivider between them.
- *
- * Props:
- *   onSubmit — optional external handler called with form data on valid submit
- *              defaults to a console.log placeholder
+ * Reads initial values from location.state if redirected from Chatbot or Gallery.
  */
-import LeftPanel     from './LeftPanel'
-import RightPanel    from './RightPanel'
-import PanelDivider  from './PanelDivider'
+import { useLocation } from 'react-router-dom'
+import LeftPanel from './LeftPanel'
+import RightPanel from './RightPanel'
+import PanelDivider from './PanelDivider'
 import { useContactForm } from '../../hooks/useContactForm'
 
 export default function ContactSection({ onSubmit }) {
+  const location = useLocation()
+  const initialValues = location.state || null
+
   const { form, errors, handleField, toggleType, handleSubmit } =
-    useContactForm(onSubmit)
+    useContactForm(onSubmit, initialValues)
 
   return (
     <section

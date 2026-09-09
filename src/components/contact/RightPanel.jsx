@@ -1,16 +1,9 @@
 /**
  * RightPanel — cream-background form side of the contact split.
- *
- * Receives all form state and handlers from ContactSection (no local state).
- *
- * Props:
- *   form         — { name, email, message, projectTypes }
- *   errors       — { name?, email?, message? }
- *   handleField  — onChange for text inputs / textarea
- *   toggleType   — toggles a project type in the array
- *   handleSubmit — form onSubmit handler
+ * Includes direct WhatsApp automation dispatch and phone field.
  */
 import ProjectCheckbox from './ProjectCheckbox'
+import { sendViaWhatsApp } from '../../utils/whatsapp'
 
 const PROJECT_TYPES = [
   { id: 'pt-new-build',    label: 'New Build' },
@@ -52,6 +45,17 @@ function FieldLabel({ htmlFor, children }) {
 }
 
 export default function RightPanel({ form, errors, handleField, toggleType, handleSubmit }) {
+  const handleDirectWhatsApp = () => {
+    sendViaWhatsApp({
+      source: 'Contact Form',
+      name: form.name,
+      email: form.email,
+      phone: form.phone,
+      projectTypes: form.projectTypes,
+      message: form.message,
+    })
+  }
+
   return (
     <div className="flex flex-col bg-cream/60 backdrop-blur-md w-full lg:w-[58%] px-8 py-12 md:px-12 lg:px-16 xl:px-20 lg:py-16">
 
@@ -61,7 +65,7 @@ export default function RightPanel({ form, errors, handleField, toggleType, hand
           [ Project Intake ]
         </p>
         <h2 className="font-display text-3xl md:text-4xl text-ink font-light leading-snug">
-          [Tell us about your project]
+          Tell us about your project
         </h2>
       </header>
 
@@ -71,19 +75,19 @@ export default function RightPanel({ form, errors, handleField, toggleType, hand
         aria-label="Project intake form"
         onSubmit={handleSubmit}
         noValidate
-        className="flex flex-col gap-8"
+        className="flex flex-col gap-6"
       >
 
-        {/* ── Row 1: Name + Email (2-col on md+) ─────────── */}
+        {/* ── Row 1: Name, Email & Phone ─────────── */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
-            <FieldLabel htmlFor="if-name">Name</FieldLabel>
+            <FieldLabel htmlFor="if-name">Name *</FieldLabel>
             <input
               id="if-name"
               name="name"
               type="text"
               autoComplete="name"
-              placeholder="[ Your full name ]"
+              placeholder="Your full name"
               value={form.name}
               onChange={handleField}
               aria-describedby={errors.name ? 'if-name-err' : undefined}
@@ -94,13 +98,13 @@ export default function RightPanel({ form, errors, handleField, toggleType, hand
           </div>
 
           <div>
-            <FieldLabel htmlFor="if-email">Email</FieldLabel>
+            <FieldLabel htmlFor="if-email">Email *</FieldLabel>
             <input
               id="if-email"
               name="email"
               type="email"
               autoComplete="email"
-              placeholder="[ your@email.com ]"
+              placeholder="your@email.com"
               value={form.email}
               onChange={handleField}
               aria-describedby={errors.email ? 'if-email-err' : undefined}
@@ -111,14 +115,28 @@ export default function RightPanel({ form, errors, handleField, toggleType, hand
           </div>
         </div>
 
+        <div>
+          <FieldLabel htmlFor="if-phone">Phone / WhatsApp (Optional)</FieldLabel>
+          <input
+            id="if-phone"
+            name="phone"
+            type="tel"
+            autoComplete="tel"
+            placeholder="+91 98765 43210"
+            value={form.phone || ''}
+            onChange={handleField}
+            className={inputClass}
+          />
+        </div>
+
         {/* ── Textarea ─────────────────────────────────────── */}
         <div>
-          <FieldLabel htmlFor="if-message">Describe your space / project</FieldLabel>
+          <FieldLabel htmlFor="if-message">Describe your space / project *</FieldLabel>
           <textarea
             id="if-message"
             name="message"
-            rows={5}
-            placeholder="[ Describe the space — size, style aspirations, budget range, timeline… ]"
+            rows={4}
+            placeholder="Describe the space — square footage, aesthetic aspirations, architectural scope, timeline…"
             value={form.message}
             onChange={handleField}
             aria-describedby={errors.message ? 'if-message-err' : undefined}
@@ -138,42 +156,61 @@ export default function RightPanel({ form, errors, handleField, toggleType, hand
             aria-label="Project type selection"
             className="grid grid-cols-2 md:grid-cols-3 gap-2.5"
           >
-            {PROJECT_TYPES.map(({ id, label }) => (
-              <ProjectCheckbox
-                key={id}
-                id={id}
-                label={label}
-                checked={form.projectTypes.includes(label)}
-                onChange={() => toggleType(label)}
-              />
-            ))}
+            {PROJECT_TYPES.map(({ id, label }) => {
+              const isChecked = form.projectTypes.includes(label) || form.projectTypes.includes(id)
+              return (
+                <ProjectCheckbox
+                  key={id}
+                  id={id}
+                  label={label}
+                  checked={isChecked}
+                  onChange={() => toggleType(label)}
+                />
+              )
+            })}
           </div>
         </fieldset>
 
         {/* ── Divider before submit ─────────────────────────── */}
-        <hr className="border-0 border-t border-line" aria-hidden="true" />
+        <hr className="border-0 border-t border-line my-2" aria-hidden="true" />
 
-        {/* ── Submit ───────────────────────────────────────── */}
-        <button
-          id="intake-submit"
-          type="submit"
-          className="
-            w-full py-4 px-6
-            bg-amber text-cream
-            text-xs tracking-[0.22em] uppercase font-semibold
-            border border-amber
-            transition-colors duration-200
-            hover:bg-ink hover:border-ink
-            focus-visible:outline-none focus-visible:ring-2
-            focus-visible:ring-amber focus-visible:ring-offset-2
-            focus-visible:ring-offset-cream
-          "
-        >
-          [ Submit Project Brief ]
-        </button>
+        {/* ── Submit Options ───────────────────────────────── */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          <button
+            id="intake-submit"
+            type="submit"
+            className="
+              flex-1 py-4 px-6
+              bg-amber text-cream
+              text-xs tracking-[0.2em] uppercase font-semibold
+              border border-amber
+              transition-colors duration-200
+              hover:bg-ink hover:border-ink
+              focus-visible:outline-none focus-visible:ring-2
+              focus-visible:ring-amber
+            "
+          >
+            Submit Project Brief
+          </button>
 
-        <p className="text-center text-xs text-ink-soft/50 -mt-4">
-          [ Response time disclaimer placeholder — e.g. we reply within 48 hours. ]
+          <button
+            type="button"
+            onClick={handleDirectWhatsApp}
+            className="
+              flex-1 py-4 px-6
+              bg-cream border border-sand text-ink
+              text-xs tracking-[0.2em] uppercase font-semibold
+              transition-all duration-200
+              hover:bg-emerald-700 hover:text-white hover:border-emerald-700
+              flex items-center justify-center gap-2
+            "
+          >
+            <span>💬 Send via WhatsApp</span>
+          </button>
+        </div>
+
+        <p className="text-center text-xs text-ink-soft/70">
+          We review project scopes and respond with tailored concept notes within 24 hours.
         </p>
 
       </form>
