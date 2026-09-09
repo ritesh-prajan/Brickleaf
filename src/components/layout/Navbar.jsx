@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import Button from '../ui/Button'
 import ThemeSwitcher from '../ui/ThemeSwitcher'
+import VelocityLogo from '../ui/VelocityLogo'
 import { useTheme } from '../../hooks/useTheme'
 
 const NAV_LINKS = [
@@ -27,16 +28,13 @@ export default function Navbar() {
         className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-4"
         aria-label="Main navigation"
       >
-        {/* ── Logo ─────────────────────────────────────── */}
+        {/* ── Logo with Scroll-Reactive Velocity Mark ── */}
         <NavLink
           to="/"
           aria-label="Brickleaf — go to home"
           className="flex items-center gap-2 group flex-shrink-0"
         >
-          <span className="font-display text-xl font-medium text-ink tracking-tight group-hover:text-amber transition-colors duration-200">
-            Brickleaf
-          </span>
-          <span aria-hidden="true" className="w-2 h-2 rounded-full bg-amber inline-block" />
+          <VelocityLogo />
         </NavLink>
 
         {/* ── Desktop nav links ─────────────────────────── */}

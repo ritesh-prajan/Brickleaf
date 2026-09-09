@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 import FlowBackground from './components/ui/FlowBackground'
+import ArchPreloader from './components/ui/ArchPreloader'
 import ConciergeChatbot from './components/chatbot/ConciergeChatbot'
 import Home from './pages/Home'
 import Services from './pages/Services'
@@ -16,6 +17,9 @@ function AppContent() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      {/* Editorial Gated Arch Preloader */}
+      <ArchPreloader />
+
       {/* Single global background layer */}
       <FlowBackground />
       <Navbar />

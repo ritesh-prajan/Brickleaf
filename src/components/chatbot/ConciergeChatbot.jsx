@@ -14,18 +14,24 @@ const CONCIERGE_STEPS = {
 }
 
 const INTEREST_OPTIONS = [
-  { id: 'pt-new-build', label: 'New Build Architectural Interior' },
-  { id: 'pt-renovation', label: 'Complete Structural Renovation' },
-  { id: 'pt-living-revamp', label: 'Living & Dining Room Revamp' },
-  { id: 'pt-commercial', label: 'Commercial & Executive Studio' },
-  { id: 'pt-styling', label: 'Furniture & Art Styling Only' },
+  { id: 'pt-home', label: 'Home Interiors & Luxury Residences' },
+  { id: 'pt-office', label: 'Office Interiors & Executive Suites' },
+  { id: 'pt-it-parks', label: 'IT Parks & Tech Campuses' },
+  { id: 'pt-restaurants', label: 'Restaurants & Hospitality' },
+  { id: 'pt-apparel', label: 'Apparel Showrooms & Boutiques' },
+  { id: 'pt-hospitals', label: 'Hospitals & Healthcare Clinics' },
+  { id: 'pt-warehouses', label: 'Warehouses & Industrial Spaces' },
+  { id: 'pt-refurbish', label: 'Refurbishments & Structural Overhauls' },
 ]
 
 const SERVICE_OPTIONS = [
-  'Turnkey Architecture & Custom Millwork',
-  'Lighting Architecture & 2700K Coves',
-  'Spatial Re-planning & 3D Blueprints',
-  'Material Palette & Stone Procurement',
+  'Space Planning & Architectural Blueprints',
+  'Lighting Solutions & 2700K Coves',
+  'Home Automation & Smart IoT Integration',
+  'Bespoke Furniture & Joinery Craft',
+  'Curtain Solutions & Motorized Sheers',
+  'Wallpapers & Hand-Troweled Wall Decor',
+  'Landscaping & Biophilic Design',
 ]
 
 const TIMELINE_OPTIONS = [

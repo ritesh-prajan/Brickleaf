@@ -6,11 +6,21 @@ import ProjectCheckbox from './ProjectCheckbox'
 import { sendViaWhatsApp } from '../../utils/whatsapp'
 
 const PROJECT_TYPES = [
-  { id: 'pt-new-build',    label: 'New Build' },
-  { id: 'pt-renovation',   label: 'Renovation' },
-  { id: 'pt-consult',      label: 'Consultation Only' },
-  { id: 'pt-commercial',   label: 'Commercial' },
-  { id: 'pt-styling',      label: 'Styling Only' },
+  { id: 'pt-home',           label: 'Home Interiors' },
+  { id: 'pt-office',         label: 'Office Interiors' },
+  { id: 'pt-warehouses',     label: 'Warehouses' },
+  { id: 'pt-hospitals',      label: 'Hospitals' },
+  { id: 'pt-it-parks',       label: 'IT Parks' },
+  { id: 'pt-restaurants',    label: 'Restaurants' },
+  { id: 'pt-apparel',        label: 'Apparel Showrooms' },
+  { id: 'pt-landscaping',    label: 'Landscaping' },
+  { id: 'pt-refurbish',      label: 'Refurbishments' },
+  { id: 'pt-automation',     label: 'Home Automation' },
+  { id: 'pt-lighting',       label: 'Lighting Solutions' },
+  { id: 'pt-space-planning', label: 'Space Planning' },
+  { id: 'pt-curtains',       label: 'Curtain Solutions' },
+  { id: 'pt-wallpapers',     label: 'Wallpapers & Wall Decor' },
+  { id: 'pt-furniture',      label: 'Furniture' },
 ]
 
 /* ── Shared input class ─────────────────────────────────── */
