@@ -10,10 +10,29 @@ export function useScrollTheme(navRef) {
   useEffect(() => {
     const nav = navRef?.current
     if (!nav) return
+
+    const evaluateSectionTheme = () => {
+      const sections = document.querySelectorAll('[data-bg]')
+      if (!sections.length) return
+
+      let activeBg = 'light'
+      sections.forEach((section) => {
+        const rect = section.getBoundingClientRect()
+        if (rect.top <= 64 && rect.bottom >= 0) {
+          activeBg = section.getAttribute('data-bg') || 'light'
+        }
+      })
+      applyNavTheme(nav, activeBg)
+    }
+
+    // Evaluate immediately on mount
+    evaluateSectionTheme()
+
     const timer = setTimeout(() => {
       const sections = document.querySelectorAll('[data-bg]')
       if (!sections.length) return
       const triggers = []
+
       sections.forEach((section) => {
         const bg = section.getAttribute('data-bg')
         const trigger = ScrollTrigger.create({
@@ -27,8 +46,18 @@ export function useScrollTheme(navRef) {
         })
         triggers.push(trigger)
       })
-    }, 300)
-    return () => clearTimeout(timer)
+
+      evaluateSectionTheme()
+
+      return () => triggers.forEach((t) => t.kill())
+    }, 150)
+
+    window.addEventListener('scroll', evaluateSectionTheme, { passive: true })
+
+    return () => {
+      clearTimeout(timer)
+      window.removeEventListener('scroll', evaluateSectionTheme)
+    }
   }, [navRef])
 }
 

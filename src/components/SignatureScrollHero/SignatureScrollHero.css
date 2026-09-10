@@ -13,11 +13,11 @@
   background: #14120f;
 }
 
-/* ── Sticky Fullscreen Viewport ─────────────────────────────────────────── */
+/* ── Sticky Fullscreen Viewport Beneath Translucent Header ──────────────── */
 .ssh-viewport {
   position: sticky;
-  top: 4rem; /* Exactly below fixed header (h-16) */
-  height: calc(100vh - 4rem);
+  top: 0;
+  height: 100vh;
   width: 100vw;
   max-width: 100%;
   overflow: hidden;
@@ -52,10 +52,10 @@
   -webkit-user-drag: none;
 }
 
-/* ── HUD Top Overlay (Floating over upper scene) ────────────────────────── */
+/* ── HUD Top Overlay (Floating below fixed translucent header) ──────────── */
 .ssh-hud-top {
   position: absolute;
-  top: 1.5rem;
+  top: 5rem;
   left: 2rem;
   right: 2rem;
   display: flex;
@@ -75,7 +75,7 @@
   font-weight: 600;
   color: var(--color-sand);
   font-family: var(--font-body);
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
 }
 
 .ssh-tag-dot {
@@ -125,7 +125,7 @@
 /* ── HUD Bottom Overlay (Floating over lower scene) ─────────────────────── */
 .ssh-hud-bottom {
   position: absolute;
-  bottom: 1.5rem;
+  bottom: 2rem;
   left: 2rem;
   right: 2rem;
   display: flex;
@@ -139,7 +139,7 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
 }
 
 .ssh-info-title {
@@ -169,7 +169,7 @@
   color: var(--color-amber);
   font-weight: 500;
   font-family: var(--font-body);
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
   will-change: opacity;
 }
 
@@ -212,12 +212,12 @@
 /* ── Mobile Viewport Refinements ────────────────────────────────────────── */
 @media (max-width: 640px) {
   .ssh-hud-top {
-    top: 1rem;
+    top: 4.5rem;
     left: 1rem;
     right: 1rem;
   }
   .ssh-hud-bottom {
-    bottom: 1rem;
+    bottom: 1.25rem;
     left: 1rem;
     right: 1rem;
   }
@@ -233,7 +233,7 @@
   }
   .ssh-viewport {
     position: relative;
-    height: calc(100vh - 4rem);
+    height: 100vh;
   }
   .ssh-plate {
     opacity: 0 !important;
