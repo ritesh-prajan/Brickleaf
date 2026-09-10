@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
@@ -11,6 +12,19 @@ import Gallery from './pages/Gallery'
 import Faq from './pages/Faq'
 import Contact from './pages/Contact'
 import Terms from './pages/Terms'
+
+/**
+ * ScrollToTop — Automatically scrolls window to top (0,0) on any route change.
+ */
+function ScrollToTop() {
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  }, [pathname])
+
+  return null
+}
 
 function AppContent() {
   const location = useLocation()
@@ -53,6 +67,7 @@ function AppContent() {
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <AppContent />
     </BrowserRouter>
   )

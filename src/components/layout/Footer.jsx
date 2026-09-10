@@ -6,6 +6,7 @@
  * - Direct email and telephone links with warm amber hover accents.
  * - Clean SVG social buttons.
  * - Legal, copyright, and policy links.
+ * - Instant scroll-to-top on navigation.
  */
 import { NavLink } from 'react-router-dom'
 import SectionDivider from '../ui/SectionDivider'
@@ -68,10 +69,14 @@ const SOCIAL_LINKS = [
 export default function Footer() {
   const year = new Date().getFullYear()
 
+  const handleNavClick = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  }
+
   return (
     <footer
       data-bg="dark"
-      className="bg-ink text-cream/75 pt-16 pb-10 px-6 sm:px-10 lg:px-16 border-t border-sand/20 relative z-20 font-body select-none"
+      className="bg-ink text-cream/75 pt-16 pb-10 px-6 sm:px-10 lg:px-16 border-t border-sand/20 relative z-30 font-body select-none mt-auto"
     >
       <div className="max-w-7xl mx-auto">
         {/* ── Top 3-Column Grid ──────────────────────────────────────── */}
@@ -101,6 +106,7 @@ export default function Footer() {
                   <NavLink
                     to={to}
                     end={to === '/'}
+                    onClick={handleNavClick}
                     className="text-xs sm:text-sm text-cream/70 hover:text-amber transition-colors duration-200 tracking-wide inline-block py-0.5"
                   >
                     {label}
@@ -156,7 +162,7 @@ export default function Footer() {
         <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-cream/40 tracking-wider">
           <p>© {year} Brickleaf Interior Studio. All rights reserved.</p>
           <div className="flex items-center gap-6">
-            <NavLink to="/terms" className="hover:text-cream transition-colors">
+            <NavLink to="/terms" onClick={handleNavClick} className="hover:text-cream transition-colors">
               Terms &amp; Privacy
             </NavLink>
             <span className="hidden sm:inline">✦</span>

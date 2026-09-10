@@ -6,8 +6,16 @@
  *   Present on ALL pages with scroll-to-top interaction.
  * - Social icons floating pill (Instagram, LinkedIn, Pinterest) + vertical indicator:
  *   Displayed ONLY on the Contact page.
+ * - Automatically fades out when scrolling into the footer so footer links are never obstructed.
  */
+import { useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger)
+}
 
 const SOCIAL_LINKS = [
   {
@@ -48,15 +56,39 @@ const SOCIAL_LINKS = [
 export default function LeftRail() {
   const location = useLocation()
   const isContactPage = location.pathname === '/contact'
+  const railRef = useRef(null)
 
   const handleScrollTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  // Fade out left rail when footer enters viewport to prevent any overlap
+  useEffect(() => {
+    const rail = railRef.current
+    if (!rail) return
+
+    const timer = setTimeout(() => {
+      const footer = document.querySelector('footer')
+      if (!footer) return
+
+      const trigger = ScrollTrigger.create({
+        trigger: footer,
+        start: 'top 85%',
+        onEnter: () => gsap.to(rail, { opacity: 0, duration: 0.25, pointerEvents: 'none' }),
+        onLeaveBack: () => gsap.to(rail, { opacity: 1, duration: 0.25, pointerEvents: 'auto' }),
+      })
+
+      return () => trigger.kill()
+    }, 200)
+
+    return () => clearTimeout(timer)
+  }, [location.pathname])
+
   return (
     <aside
+      ref={railRef}
       aria-label="Studio brand seal"
-      className="hidden lg:flex flex-col justify-between fixed left-6 xl:left-8 top-24 bottom-10 z-30 pointer-events-none select-none transition-all duration-300"
+      className="hidden lg:flex flex-col justify-between fixed left-6 xl:left-8 top-24 bottom-10 z-20 pointer-events-none select-none transition-opacity duration-300"
     >
       {/* ── 1. Circular Rotating Seal (On ALL Pages) ── */}
       <div className="pointer-events-auto">
