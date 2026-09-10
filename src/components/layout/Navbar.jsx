@@ -1,12 +1,13 @@
 /**
- * Navbar — Fixed luxury header.
+ * Navbar — Translucent luxury glass header.
  *
  * Features:
- * - Static, elegant architectural leaf brand mark + "Brickleaf" typography (non-spinning).
+ * - Translucent backdrop-blur glass effect allowing page texture and gradient to breathe through.
+ * - Static architectural botanical leaf brand mark + "Brickleaf" typography.
  * - Clean editorial navigation links with active state indicators.
  * - Primary "Get in Touch" CTA button.
- * - Adaptive scroll theme transitions over dark/light sections.
- * - Responsive mobile drawer menu.
+ * - Scroll-adaptive dark/light glass transitions over sections.
+ * - Mobile slide-down drawer.
  */
 import { useRef, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
@@ -26,20 +27,20 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const headerRef = useRef(null)
 
-  // Adapts navbar background / text color as user scrolls past dark/light sections
+  // Adapts navbar translucent glass color as user scrolls past dark/light sections
   useScrollTheme(headerRef)
 
   return (
     <header
       id="site-navbar"
       ref={headerRef}
-      className="site-navbar fixed top-0 left-0 right-0 z-50 bg-cream/90 backdrop-blur-md border-b border-line transition-all duration-500"
+      className="site-navbar fixed top-0 left-0 right-0 z-50 backdrop-blur-lg transition-all duration-500"
     >
       <nav
         className="max-w-7xl mx-auto px-6 sm:px-8 h-16 flex items-center justify-between gap-6"
         aria-label="Main navigation"
       >
-        {/* ── Static Brand Logo (Clean, non-spinning) ── */}
+        {/* ── Static Brand Logo ── */}
         <NavLink
           to="/"
           aria-label="Brickleaf Studio — Home"
@@ -88,7 +89,7 @@ export default function Navbar() {
           <Button
             variant="primary"
             onClick={() => navigate('/contact')}
-            className="text-xs py-2 px-5 tracking-wider uppercase"
+            className="text-xs py-2 px-5 tracking-wider uppercase shadow-sm"
           >
             Get in Touch
           </Button>
@@ -123,7 +124,7 @@ export default function Navbar() {
 
       {/* ── Mobile Dropdown Menu ──────────────────────────────── */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-cream border-b border-line px-6 py-6 space-y-5 shadow-2xl animate-in slide-in-from-top duration-300">
+        <div className="md:hidden bg-cream/90 backdrop-blur-xl border-b border-line/60 px-6 py-6 space-y-5 shadow-2xl animate-in slide-in-from-top duration-300">
           <ul className="space-y-3.5 list-none p-0 m-0">
             {NAV_LINKS.map(({ label, to }) => (
               <li key={to}>

@@ -185,13 +185,15 @@ body {
   .flow-orb-d { animation: orb-drift-d 25s ease-in-out infinite; }
 }
 
-/* ─── Scroll-Adaptive Navbar (Explicitly scoped to .site-navbar) ─── */
+/* ─── Translucent Glass Navbar (.site-navbar) ────────────────────── */
 
-/* Light section behind nav (default) */
+/* Light section behind nav: airy translucent warm glass */
 .site-navbar.nav-light,
 .site-navbar:not(.nav-dark) {
-  background-color: rgb(236 228 218 / 0.90);
-  border-bottom-color: var(--color-line);
+  background-color: rgba(236, 228, 218, 0.40);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(216, 205, 188, 0.35);
 }
 
 .site-navbar.nav-light .nav-brand-text,
@@ -214,12 +216,12 @@ body {
   color: var(--color-amber);
 }
 
-/* Dark section behind nav */
+/* Dark section behind nav: moody translucent smoked glass */
 .site-navbar.nav-dark {
-  background-color: rgb(34 27 22 / 0.65);
-  border-bottom-color: transparent;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background-color: rgba(34, 27, 22, 0.40);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .site-navbar.nav-dark .nav-brand-text {
@@ -227,7 +229,7 @@ body {
 }
 
 .site-navbar.nav-dark .nav-link {
-  color: rgb(236 228 218 / 0.75);
+  color: rgba(236, 228, 218, 0.75);
 }
 
 .site-navbar.nav-dark .nav-link:hover {
