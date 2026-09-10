@@ -31,8 +31,9 @@ export default function Navbar() {
 
   return (
     <header
+      id="site-navbar"
       ref={headerRef}
-      className="fixed top-0 left-0 right-0 z-50 bg-cream/90 backdrop-blur-md border-b border-line transition-all duration-500"
+      className="site-navbar fixed top-0 left-0 right-0 z-50 bg-cream/90 backdrop-blur-md border-b border-line transition-all duration-500"
     >
       <nav
         className="max-w-7xl mx-auto px-6 sm:px-8 h-16 flex items-center justify-between gap-6"

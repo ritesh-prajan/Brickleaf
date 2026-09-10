@@ -185,60 +185,60 @@ body {
   .flow-orb-d { animation: orb-drift-d 25s ease-in-out infinite; }
 }
 
-/* ─── Scroll-Adaptive Navbar Themes ────────────────────────── */
+/* ─── Scroll-Adaptive Navbar (Explicitly scoped to .site-navbar) ─── */
 
 /* Light section behind nav (default) */
-header.nav-light,
-header:not(.nav-dark) {
+.site-navbar.nav-light,
+.site-navbar:not(.nav-dark) {
   background-color: rgb(236 228 218 / 0.90);
   border-bottom-color: var(--color-line);
 }
 
-header.nav-light .nav-brand-text,
-header:not(.nav-dark) .nav-brand-text {
+.site-navbar.nav-light .nav-brand-text,
+.site-navbar:not(.nav-dark) .nav-brand-text {
   color: var(--color-ink);
 }
 
-header.nav-light .nav-link,
-header:not(.nav-dark) .nav-link {
+.site-navbar.nav-light .nav-link,
+.site-navbar:not(.nav-dark) .nav-link {
   color: var(--color-ink-soft);
 }
 
-header.nav-light .nav-link:hover,
-header:not(.nav-dark) .nav-link:hover {
+.site-navbar.nav-light .nav-link:hover,
+.site-navbar:not(.nav-dark) .nav-link:hover {
   color: var(--color-ink);
 }
 
-header.nav-light .nav-link.active,
-header:not(.nav-dark) .nav-link.active {
+.site-navbar.nav-light .nav-link.active,
+.site-navbar:not(.nav-dark) .nav-link.active {
   color: var(--color-amber);
 }
 
 /* Dark section behind nav */
-header.nav-dark {
+.site-navbar.nav-dark {
   background-color: rgb(34 27 22 / 0.65);
   border-bottom-color: transparent;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
 }
 
-header.nav-dark .nav-brand-text {
+.site-navbar.nav-dark .nav-brand-text {
   color: #ECE4DA;
 }
 
-header.nav-dark .nav-link {
+.site-navbar.nav-dark .nav-link {
   color: rgb(236 228 218 / 0.75);
 }
 
-header.nav-dark .nav-link:hover {
+.site-navbar.nav-dark .nav-link:hover {
   color: #ECE4DA;
 }
 
-header.nav-dark .nav-link.active {
+.site-navbar.nav-dark .nav-link.active {
   color: var(--color-amber);
   border-bottom-color: var(--color-amber);
 }
 
-header.nav-dark .nav-dot {
+.site-navbar.nav-dark .nav-dot {
   background-color: var(--color-amber);
 }
