@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { sendViaWhatsApp } from '../../utils/whatsapp'
@@ -90,83 +90,9 @@ export default function EditorialContact({ onSubmit }) {
   }, [])
 
   return (
-    <div className="relative w-full min-h-screen bg-cream text-ink overflow-x-hidden font-body selection:bg-sand selection:text-ink">
-      {/* Vertical Left Rail */}
-      <aside aria-label="Page links and socials" className="hidden lg:flex flex-col justify-between fixed left-8 top-28 bottom-12 z-30 pointer-events-none">
-        <div className="pointer-events-auto">
-          <div
-            className="relative w-24 h-24 flex items-center justify-center group cursor-pointer"
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            title="Brickleaf Studio"
-          >
-            <svg viewBox="0 0 100 100" className="w-full h-full animate-[spin_24s_linear_infinite] group-hover:animate-[spin_10s_linear_infinite]">
-              <path
-                id="leafTextPath"
-                d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0"
-                fill="none"
-              />
-              <text className="text-[8px] uppercase tracking-[0.24em] fill-ink-soft group-hover:fill-amber transition-colors font-semibold">
-                <textPath href="#leafTextPath" startOffset="0%">
-                  • BRICKLEAF • BRICKLEAF • BRICKLEAF
-                </textPath>
-              </text>
-            </svg>
-
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <svg
-                viewBox="0 0 24 24"
-                className="w-7 h-7 text-amber fill-amber/15 stroke-amber transition-transform duration-500 group-hover:scale-110"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M12 2C8.5 7 7.5 12 10.5 16.5C12 18.8 14 20.5 15.5 22C16.5 20.5 17.5 18 17.5 14.5C17.5 9 15 4 12 2Z" />
-                <path d="M12 2C13 8 14 14 15.5 22" strokeWidth="1.2" />
-                <path d="M12.5 7.5L15 9" strokeWidth="1.2" />
-                <path d="M13 11.5L16 13" strokeWidth="1.2" />
-                <path d="M10.8 11.5L13.2 13.5" strokeWidth="1.2" />
-                <path d="M11.5 15L14 16.8" strokeWidth="1.2" />
-              </svg>
-            </div>
-          </div>
-        </div>
-
-        <div className="pointer-events-auto flex flex-col items-center gap-4 py-4 px-3 bg-cream/80 backdrop-blur-md border border-line/70 rounded-full text-ink-soft shadow-md">
-          <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram"
-            className="p-1 text-ink-soft hover:text-amber hover:scale-110 transition-all duration-200" title="Instagram">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-              <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-              <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-            </svg>
-          </a>
-          <a href="https://linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn"
-            className="p-1 text-ink-soft hover:text-amber hover:scale-110 transition-all duration-200" title="LinkedIn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-              <rect width="4" height="12" x="2" y="9" />
-              <circle cx="4" cy="4" r="2" />
-            </svg>
-          </a>
-          <a href="https://pinterest.com" target="_blank" rel="noreferrer" aria-label="Pinterest"
-            className="p-1 text-ink-soft hover:text-amber hover:scale-110 transition-all duration-200" title="Pinterest">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-              <line x1="12" y1="9" x2="12" y2="21" />
-              <path d="M8 12a4 4 0 1 0 8 0 4 4 0 0 0-8 0" />
-              <path d="M10.7 15.7A6 6 0 1 1 18 10.4c-.1 2.4-1.2 4.4-3.4 5.1-1.3.4-2.8-.2-3.3-1.4" />
-            </svg>
-          </a>
-        </div>
-
-        <div className="pointer-events-auto -rotate-90 origin-bottom-left translate-y-6 text-[10px] tracking-[0.3em] uppercase text-ink-soft/70 font-semibold">
-          <Link to="/" className="hover:text-ink transition-colors">HOME</Link>
-          <span className="mx-2 text-sand">/</span>
-          <span className="text-ink">CONTACT</span>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <div className="w-full max-w-7xl mx-auto px-6 sm:px-10 lg:pl-36 lg:pr-12 pt-8 sm:pt-14 pb-20 space-y-12 sm:space-y-16">
+    <div className="relative w-full min-h-screen text-ink overflow-x-hidden font-body selection:bg-sand selection:text-ink">
+      {/* ── Main Editorial Content ────────────────────────────────────── */}
+      <div className="w-full max-w-7xl mx-auto px-6 sm:px-10 lg:pl-32 lg:pr-12 pt-8 sm:pt-14 pb-20 space-y-12 sm:space-y-16">
         <header className="relative w-full flex flex-col items-center text-center space-y-6">
           <div className="w-full flex items-center justify-between text-xs tracking-[0.2em] uppercase font-medium text-ink-soft border-b border-line/40 pb-4">
             <span className="text-sand text-[10px] sm:text-xs">
@@ -258,7 +184,7 @@ export default function EditorialContact({ onSubmit }) {
         <section
           ref={mapRef}
           aria-label="Studio Location Map"
-          className="relative w-full aspect-[16/11] sm:aspect-[16/9] lg:aspect-[21/10] overflow-hidden border border-line/60 bg-cream shadow-2xl group"
+          className="relative w-full aspect-[16/11] sm:aspect-[16/9] lg:aspect-[21/10] overflow-hidden border border-line/60 bg-cream/60 shadow-2xl group"
         >
           <img
             src="/images/studio-map.jpg"

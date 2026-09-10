@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
+import LeftRail from './components/layout/LeftRail'
 import FlowBackground from './components/ui/FlowBackground'
 import ArchPreloader from './components/ui/ArchPreloader'
 import ConciergeChatbot from './components/chatbot/ConciergeChatbot'
@@ -16,13 +17,19 @@ function AppContent() {
   const isHome = location.pathname === '/'
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col relative selection:bg-sand selection:text-ink">
       {/* Editorial Gated Arch Preloader */}
       <ArchPreloader />
 
-      {/* Single global background layer */}
+      {/* Single global animated gradient background layer */}
       <FlowBackground />
+
+      {/* Global Brand Emblem & Left Rail Navigation (desktop) */}
+      <LeftRail />
+
+      {/* Fixed Header Navbar */}
       <Navbar />
+
       <main className={`flex-1 w-full ${!isHome ? 'pt-16' : ''}`}>
         <Routes>
           <Route path="/" element={<Home />} />

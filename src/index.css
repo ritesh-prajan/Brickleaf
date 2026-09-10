@@ -2,47 +2,17 @@
 
 @import "tailwindcss";
 
-/* ─── Design Tokens — Warm (default) ─────────────────────── */
+/* ─── Design Tokens — Warm Mediterranean (Single Unified Palette) ─── */
 @theme {
-  --color-cream:    #E8E0D8;
-  --color-sand:     #C9A882;
-  --color-amber:    #B8956A;
-  --color-ink:      #2C2520;
-  --color-ink-soft: #6B5F57;
-  --color-line:     #D4C9BC;
+  --color-cream:    #ECE4DA;   /* Crisp sun-bleached linen/stone base (Lighter shade) */
+  --color-sand:     #D6BFA5;   /* Soft sunlit warm sandstone (Light mid-tone)         */
+  --color-amber:    #985F2C;   /* Deep roasted terracotta-amber (Rich darker shade)   */
+  --color-ink:      #221B16;   /* Deep espresso charcoal for monumental typography     */
+  --color-ink-soft: #5C4D42;   /* Muted warm umber for body copy                      */
+  --color-line:     #D8CDBC;   /* Subtle masonry divider line                          */
 
   --font-display: 'Fraunces', Georgia, serif;
   --font-body:    'Inter', system-ui, sans-serif;
-}
-
-/* ─── Theme: Azure (orange · white · blue) ────────────────── */
-[data-theme="azure"] {
-  --color-cream:    #F6F8FF;
-  --color-sand:     #93C5FD;
-  --color-amber:    #EA580C;
-  --color-ink:      #0F2040;
-  --color-ink-soft: #2D5F8F;
-  --color-line:     #BFCFEA;
-}
-
-/* ─── Theme: Carbon (cool grey · slate · blue) ────────────── */
-[data-theme="carbon"] {
-  --color-cream:    #EBEEF4;
-  --color-sand:     #A8B8D0;
-  --color-amber:    #2B63D9;
-  --color-ink:      #1C2233;
-  --color-ink-soft: #4E5E78;
-  --color-line:     #C8D2E4;
-}
-
-/* ─── Theme: Noir (deep black · warm gold) ─────────────────── */
-[data-theme="noir"] {
-  --color-cream:    #0D0B08;   /* near-black warm background        */
-  --color-sand:     #1E1A12;   /* dark warm surface / card bg       */
-  --color-amber:    #C8922A;   /* rich burnished gold — CTAs        */
-  --color-ink:      #F0E6D0;   /* warm off-white text               */
-  --color-ink-soft: #9A8A68;   /* muted antique-gold secondary text */
-  --color-line:     #2C2518;   /* very dark warm border             */
 }
 
 /* ─── Global Base ─────────────────────────────────────────── */
@@ -50,22 +20,15 @@
   box-sizing: border-box;
 }
 
-/* Smooth theme transition — only when motion is OK */
+/* Smooth micro-interaction transitions */
 @media (prefers-reduced-motion: no-preference) {
-  *, *::before, *::after {
-    transition:
-      background-color 0.3s ease,
-      color 0.3s ease,
-      border-color 0.3s ease,
-      outline-color 0.3s ease;
-  }
-  /* Don't slow down deliberate micro-interactions */
   button, a, input, select, textarea {
     transition:
       background-color 0.2s ease,
       color 0.2s ease,
       border-color 0.2s ease,
-      box-shadow 0.2s ease;
+      box-shadow 0.2s ease,
+      transform 0.2s ease;
   }
 }
 
@@ -87,6 +50,7 @@ body {
   color: var(--color-ink);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 /* ─── Focus Visible ────────────────────────────────────────── */
@@ -99,23 +63,15 @@ body {
 /* ─── Flowing Gradient Background ─────────────────────────── */
 
 /*
- * Gradient wash — now uses pure theme colours at full saturation.
- * Opacity on the wrapper element controls overall intensity,
- * letting us crank up the colour without touching the stops.
- * background-size 300% + position animation sweeps the bands across.
+ * Gradient wash — creates continuous interplay between the
+ * lighter sunlit sand (#D6BFA5) and deep roasted terracotta (#985F2C).
  */
 .flow-gradient-wrapper {
   position: absolute;
   inset: 0;
-  opacity: 0.65;           /* ← primary intensity knob */
-  mix-blend-mode: multiply; /* blends naturally with the cream base  */
+  opacity: 0.75;
+  mix-blend-mode: multiply;
   pointer-events: none;
-}
-
-/* Noir needs a different blend mode — multiply darkens, not on black */
-[data-theme="noir"] .flow-gradient-wrapper {
-  mix-blend-mode: screen;  /* screen lifts colours on dark bg        */
-  opacity: 0.55;
 }
 
 .flow-gradient-wash {
@@ -124,9 +80,9 @@ body {
   background: linear-gradient(
     -40deg,
     transparent                0%,
-    var(--color-sand)          20%,
-    transparent                42%,
-    var(--color-amber)         65%,
+    var(--color-sand)          18%,
+    transparent                38%,
+    var(--color-amber)         62%,
     var(--color-sand)          82%,
     transparent               100%
   );
@@ -143,54 +99,54 @@ body {
 }
 
 /*
- * Radial orbs — pure theme colours, opacity applied directly.
- * Larger radius + less blur = more defined, more visible pools of colour.
+ * Radial orbs — strong contrast between lighter sand pools
+ * and deeper rich terracotta pools for authentic atmospheric depth.
  */
 .flow-orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(70px);
+  filter: blur(80px);
   pointer-events: none;
 }
 
-/* Orb A — top-left quadrant, sand/secondary colour */
+/* Orb A — top-left quadrant: lighter glowing sand */
 .flow-orb-a {
-  width: 70vw;
-  height: 70vw;
+  width: 72vw;
+  height: 72vw;
   top: -20%;
   left: -15%;
   background: var(--color-sand);
-  opacity: 0.55;
+  opacity: 0.65;
 }
 
-/* Orb B — bottom-right quadrant, amber/accent colour */
+/* Orb B — bottom-right quadrant: rich deep terracotta amber */
 .flow-orb-b {
-  width: 65vw;
-  height: 65vw;
+  width: 68vw;
+  height: 68vw;
   bottom: -20%;
   right: -15%;
   background: var(--color-amber);
-  opacity: 0.45;
+  opacity: 0.55;
 }
 
-/* Orb C — centre, ink tone for depth (stays subtle) */
+/* Orb C — centre: grounding deep umber ink tone for depth */
 .flow-orb-c {
-  width: 50vw;
-  height: 70vw;
+  width: 52vw;
+  height: 72vw;
   top: 15%;
   left: 25%;
   background: var(--color-ink);
-  opacity: 0.07;
+  opacity: 0.08;
 }
 
-/* Orb D — top-right counter-accent, mix of sand and amber feel */
+/* Orb D — top-right counter-accent: rich warm amber */
 .flow-orb-d {
-  width: 45vw;
-  height: 45vw;
+  width: 48vw;
+  height: 48vw;
   top: -10%;
   right: 10%;
   background: var(--color-amber);
-  opacity: 0.28;
+  opacity: 0.40;
 }
 
 @keyframes orb-drift-a {
@@ -230,27 +186,59 @@ body {
 }
 
 /* ─── Scroll-Adaptive Navbar Themes ────────────────────────── */
-/*
- * Applied by useScrollTheme() as user scrolls past data-bg sections.
- */
+
+/* Light section behind nav (default) */
+header.nav-light,
+header:not(.nav-dark) {
+  background-color: rgb(236 228 218 / 0.90);
+  border-bottom-color: var(--color-line);
+}
+
+header.nav-light .nav-brand-text,
+header:not(.nav-dark) .nav-brand-text {
+  color: var(--color-ink);
+}
+
+header.nav-light .nav-link,
+header:not(.nav-dark) .nav-link {
+  color: var(--color-ink-soft);
+}
+
+header.nav-light .nav-link:hover,
+header:not(.nav-dark) .nav-link:hover {
+  color: var(--color-ink);
+}
+
+header.nav-light .nav-link.active,
+header:not(.nav-dark) .nav-link.active {
+  color: var(--color-amber);
+}
 
 /* Dark section behind nav */
 header.nav-dark {
-  background-color: rgb(44 37 32 / 0.6);
+  background-color: rgb(34 27 22 / 0.65);
   border-bottom-color: transparent;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
 }
 
 header.nav-dark .nav-brand-text {
-  color: var(--color-cream);
+  color: #ECE4DA;
+}
+
+header.nav-dark .nav-link {
+  color: rgb(236 228 218 / 0.75);
+}
+
+header.nav-dark .nav-link:hover {
+  color: #ECE4DA;
+}
+
+header.nav-dark .nav-link.active {
+  color: var(--color-amber);
+  border-bottom-color: var(--color-amber);
 }
 
 header.nav-dark .nav-dot {
   background-color: var(--color-amber);
 }
-
-header.nav-dark .nav-separator {
-  background-color: rgb(255 255 255 / 0.15);
-}
-
