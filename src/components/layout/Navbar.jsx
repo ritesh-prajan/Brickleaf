@@ -1,13 +1,10 @@
-/**
- * Navbar — fixed top bar with logo, nav links, theme switcher, and CTA.
- * Active link state via NavLink. ThemeSwitcher sits between nav links and CTA.
- */
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import Button from '../ui/Button'
 import ThemeSwitcher from '../ui/ThemeSwitcher'
 import VelocityLogo from '../ui/VelocityLogo'
 import { useTheme } from '../../hooks/useTheme'
+import { useScrollTheme } from '../../hooks/useScrollTheme'
 
 const NAV_LINKS = [
   { label: 'Home',     to: '/' },
@@ -21,23 +18,27 @@ export default function Navbar() {
   const navigate = useNavigate()
   const { theme, themes, setTheme } = useTheme()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const headerRef = useRef(null)
+
+  useScrollTheme(headerRef)
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-cream/90 backdrop-blur-md border-b border-line">
+    <header
+      ref={headerRef}
+      className="fixed top-0 left-0 right-0 z-50 bg-cream/90 backdrop-blur-md border-b border-line transition-all duration-500"
+    >
       <nav
         className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-4"
         aria-label="Main navigation"
       >
-        {/* ── Logo with Scroll-Reactive Velocity Mark ── */}
-        <NavLink
-          to="/"
-          aria-label="Brickleaf — go to home"
-          className="flex items-center gap-2 group flex-shrink-0"
-        >
+        <NavLink to="/" aria-label="Brickleaf home" className="flex items-center gap-2 group flex-shrink-0">
           <VelocityLogo />
+          <span className="nav-brand-text font-display text-lg font-medium text-ink tracking-tight transition-colors duration-500">
+            Brickleaf
+            <span className="nav-dot inline-block w-1.5 h-1.5 rounded-full bg-amber ml-1 mb-1 transition-colors duration-500" />
+          </span>
         </NavLink>
 
-        {/* ── Desktop nav links ─────────────────────────── */}
         <ul className="hidden md:flex items-center gap-7 list-none m-0 p-0">
           {NAV_LINKS.map(({ label, to }) => (
             <li key={to}>
@@ -45,10 +46,8 @@ export default function Navbar() {
                 to={to}
                 end={to === '/'}
                 className={({ isActive }) =>
-                  `text-xs tracking-[0.15em] uppercase font-medium transition-colors duration-200 ${
-                    isActive
-                      ? 'text-amber border-b border-amber pb-0.5'
-                      : 'text-ink-soft hover:text-ink'
+                  `nav-link text-xs tracking-[0.15em] uppercase font-medium transition-colors duration-300 ${
+                    isActive ? 'active text-amber border-b border-amber pb-0.5' : 'text-ink-soft hover:text-ink'
                   }`
                 }
               >
@@ -58,36 +57,24 @@ export default function Navbar() {
           ))}
         </ul>
 
-        {/* ── Right cluster: ThemeSwitcher + CTA ───────── */}
         <div className="hidden md:flex items-center gap-4">
-          {/* Vertical separator */}
-          <span aria-hidden="true" className="h-4 w-px bg-line" />
-
-          <ThemeSwitcher
-            theme={theme}
-            themes={themes}
-            setTheme={setTheme}
-          />
-
-          {/* Vertical separator */}
-          <span aria-hidden="true" className="h-4 w-px bg-line" />
-
+          <span aria-hidden="true" className="nav-separator h-4 w-px bg-line transition-colors duration-500" />
+          <ThemeSwitcher theme={theme} themes={themes} setTheme={setTheme} />
+          <span aria-hidden="true" className="nav-separator h-4 w-px bg-line transition-colors duration-500" />
           <Button variant="primary" onClick={() => navigate('/contact')} className="text-xs py-2 px-4">
             Get in Touch
           </Button>
         </div>
 
-        {/* ── Mobile: theme cycle + hamburger ──────────── */}
         <div className="flex md:hidden items-center gap-3">
-          {/* Compact single-button cycle for mobile */}
           <button
             type="button"
-            aria-label={`Current theme: ${theme}. Tap to cycle themes.`}
+            aria-label="cycle themes"
             onClick={() => {
               const idx = themes.findIndex(t => t.key === theme)
               setTheme(themes[(idx + 1) % themes.length].key)
             }}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 border border-line text-ink-soft text-[10px] tracking-widest uppercase focus-visible:outline-none focus-visible:border-amber"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 border border-line text-ink-soft text-[10px] tracking-widest uppercase"
           >
             <span
               aria-hidden="true"
@@ -96,7 +83,6 @@ export default function Navbar() {
             />
             Theme
           </button>
-
           <button
             type="button"
             aria-label="Open menu"
@@ -110,7 +96,6 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* ── Mobile Dropdown Menu ──────────────────────── */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-cream border-b border-line px-6 py-6 space-y-4 shadow-xl">
           <ul className="space-y-3 list-none p-0 m-0">

@@ -1,10 +1,11 @@
 import Eyebrow from '../ui/Eyebrow'
 import BeforeAfterComparison from './BeforeAfterComparison'
+import { HeadlineReveal, LineMaskRise, WordSpacingStretch } from '../ui/MotionText'
 
 /**
  * BeforeAfterSection — Editorial Before/After Transformation Section.
  *
- * Showcases the physical metamorphosis of spaces transformed by Brickleaf.
+ * Implements "Type as terrain" character reveals and reversible scroll transitions.
  */
 export default function BeforeAfterSection() {
   return (
@@ -15,21 +16,25 @@ export default function BeforeAfterSection() {
     >
       <div className="max-w-6xl mx-auto space-y-10 sm:space-y-14">
 
-        {/* ── Editorial Header ───────────────────────────────────── */}
+        {/* ── Editorial Header with Symmetrical Type Motion ───────── */}
         <header className="space-y-4 max-w-2xl text-left">
           <div className="flex items-center gap-3">
             <span className="w-1.5 h-1.5 rounded-full bg-amber" />
             <Eyebrow className="text-sand">01 / Transformations</Eyebrow>
           </div>
 
-          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-light text-ink leading-tight tracking-tight">
-            From existing space <br className="hidden sm:inline" />
-            to considered living.
-          </h2>
+          {/* Type as terrain: Character Rotation & Symmetrical Exit */}
+          <HeadlineReveal
+            as="h2"
+            className="font-display text-3xl sm:text-4xl md:text-5xl font-light text-ink leading-tight tracking-tight"
+          >
+            From existing space to considered living.
+          </HeadlineReveal>
 
-          <p className="text-ink-soft text-sm sm:text-base leading-relaxed max-w-xl font-body">
+          {/* Line mask blind lift */}
+          <LineMaskRise className="text-ink-soft text-sm sm:text-base leading-relaxed max-w-xl font-body">
             Every transformation begins with revealing a space’s inherent geometry. We strip away dated ornamentation to introduce bespoke architectural millwork, layered ambient lighting, and organic material warmth.
-          </p>
+          </LineMaskRise>
         </header>
 
         {/* ── Interactive Comparison Slider ──────────────────────── */}
@@ -59,6 +64,13 @@ export default function BeforeAfterSection() {
               <span>Architectural Coving, Custom Media Joinery, Furnishing &amp; Finishes</span>
             </div>
           </footer>
+        </div>
+
+        {/* ── Word Spacing Pull Parallax Detail ─────────────────────── */}
+        <div className="pt-4 text-center">
+          <WordSpacingStretch className="font-display text-sm sm:text-base uppercase tracking-[0.2em] text-sand/80 font-light">
+            Crafted to Endure • Light &amp; Flow • Your Private Sanctuary
+          </WordSpacingStretch>
         </div>
 
       </div>

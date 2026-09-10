@@ -228,3 +228,29 @@ body {
   .flow-orb-c { animation: orb-drift-c 18s ease-in-out infinite; }
   .flow-orb-d { animation: orb-drift-d 25s ease-in-out infinite; }
 }
+
+/* ─── Scroll-Adaptive Navbar Themes ────────────────────────── */
+/*
+ * Applied by useScrollTheme() as user scrolls past data-bg sections.
+ */
+
+/* Dark section behind nav */
+header.nav-dark {
+  background-color: rgb(44 37 32 / 0.6);
+  border-bottom-color: transparent;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+header.nav-dark .nav-brand-text {
+  color: var(--color-cream);
+}
+
+header.nav-dark .nav-dot {
+  background-color: var(--color-amber);
+}
+
+header.nav-dark .nav-separator {
+  background-color: rgb(255 255 255 / 0.15);
+}
+

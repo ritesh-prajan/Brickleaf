@@ -1,13 +1,22 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { sendViaWhatsApp } from '../../utils/whatsapp'
 import RightPanel from './RightPanel'
 import { useContactForm } from '../../hooks/useContactForm'
+import { HeadlineReveal } from '../ui/MotionText'
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger)
+}
 
 export default function EditorialContact({ onSubmit }) {
   const location = useLocation()
   const initialValues = location.state || null
   const formRef = useRef(null)
+  const mapRef = useRef(null)
+  const infoGridRef = useRef(null)
   const [formOpen, setFormOpen] = useState(!!initialValues)
 
   const { form, errors, handleField, toggleType, handleSubmit } =
@@ -27,19 +36,69 @@ export default function EditorialContact({ onSubmit }) {
     })
   }
 
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map) return
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        map,
+        { clipPath: 'inset(0% 0% 100% 0%)' },
+        {
+          clipPath: 'inset(0% 0% 0% 0%)',
+          duration: 1.2,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: map,
+            start: 'top 80%',
+            end: 'bottom 20%',
+            toggleActions: 'play reverse play reverse',
+          },
+        }
+      )
+    }, map)
+
+    return () => ctx.revert()
+  }, [])
+
+  useEffect(() => {
+    const grid = infoGridRef.current
+    if (!grid) return
+
+    const ctx = gsap.context(() => {
+      const cols = grid.querySelectorAll('.info-col')
+      gsap.fromTo(
+        cols,
+        { opacity: 0, y: '1.5rem' },
+        {
+          opacity: 1,
+          y: '0rem',
+          stagger: 0.14,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: grid,
+            start: 'top 85%',
+            end: 'bottom 10%',
+            toggleActions: 'play reverse play reverse',
+          },
+        }
+      )
+    }, grid)
+
+    return () => ctx.revert()
+  }, [])
+
   return (
     <div className="relative w-full min-h-screen bg-cream text-ink overflow-x-hidden font-body selection:bg-sand selection:text-ink">
-
-      {/* ── Vertical Left Rail ────────────────────────────────────────── */}
+      {/* Vertical Left Rail */}
       <aside aria-label="Page links and socials" className="hidden lg:flex flex-col justify-between fixed left-8 top-28 bottom-12 z-30 pointer-events-none">
-        {/* Circular Emblem Seal with Leaf Logo in Center */}
         <div className="pointer-events-auto">
           <div
             className="relative w-24 h-24 flex items-center justify-center group cursor-pointer"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             title="Brickleaf Studio"
           >
-            {/* SVG Circular Rotating Text Path */}
             <svg viewBox="0 0 100 100" className="w-full h-full animate-[spin_24s_linear_infinite] group-hover:animate-[spin_10s_linear_infinite]">
               <path
                 id="leafTextPath"
@@ -53,7 +112,6 @@ export default function EditorialContact({ onSubmit }) {
               </text>
             </svg>
 
-            {/* Center Architectural Leaf Emblem Logo */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <svg
                 viewBox="0 0 24 24"
@@ -62,9 +120,7 @@ export default function EditorialContact({ onSubmit }) {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
-                {/* Organic Botanical Leaf Silhouette */}
                 <path d="M12 2C8.5 7 7.5 12 10.5 16.5C12 18.8 14 20.5 15.5 22C16.5 20.5 17.5 18 17.5 14.5C17.5 9 15 4 12 2Z" />
-                {/* Internal Leaf Veins */}
                 <path d="M12 2C13 8 14 14 15.5 22" strokeWidth="1.2" />
                 <path d="M12.5 7.5L15 9" strokeWidth="1.2" />
                 <path d="M13 11.5L16 13" strokeWidth="1.2" />
@@ -75,74 +131,26 @@ export default function EditorialContact({ onSubmit }) {
           </div>
         </div>
 
-        {/* Vertical Social Icons Pill with Clean Vector SVGs */}
         <div className="pointer-events-auto flex flex-col items-center gap-4 py-4 px-3 bg-cream/80 backdrop-blur-md border border-line/70 rounded-full text-ink-soft shadow-md">
-          {/* Instagram SVG */}
-          <a
-            href="https://instagram.com"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Instagram"
-            className="p-1 text-ink-soft hover:text-amber hover:scale-110 transition-all duration-200"
-            title="Instagram"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="w-4 h-4"
-            >
+          <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram"
+            className="p-1 text-ink-soft hover:text-amber hover:scale-110 transition-all duration-200" title="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
               <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
               <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
               <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
             </svg>
           </a>
-
-          {/* LinkedIn SVG */}
-          <a
-            href="https://linkedin.com"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="LinkedIn"
-            className="p-1 text-ink-soft hover:text-amber hover:scale-110 transition-all duration-200"
-            title="LinkedIn"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="w-4 h-4"
-            >
+          <a href="https://linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn"
+            className="p-1 text-ink-soft hover:text-amber hover:scale-110 transition-all duration-200" title="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
               <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
               <rect width="4" height="12" x="2" y="9" />
               <circle cx="4" cy="4" r="2" />
             </svg>
           </a>
-
-          {/* Pinterest SVG */}
-          <a
-            href="https://pinterest.com"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Pinterest"
-            className="p-1 text-ink-soft hover:text-amber hover:scale-110 transition-all duration-200"
-            title="Pinterest"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="w-4 h-4"
-            >
+          <a href="https://pinterest.com" target="_blank" rel="noreferrer" aria-label="Pinterest"
+            className="p-1 text-ink-soft hover:text-amber hover:scale-110 transition-all duration-200" title="Pinterest">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
               <line x1="12" y1="9" x2="12" y2="21" />
               <path d="M8 12a4 4 0 1 0 8 0 4 4 0 0 0-8 0" />
               <path d="M10.7 15.7A6 6 0 1 1 18 10.4c-.1 2.4-1.2 4.4-3.4 5.1-1.3.4-2.8-.2-3.3-1.4" />
@@ -150,7 +158,6 @@ export default function EditorialContact({ onSubmit }) {
           </a>
         </div>
 
-        {/* Vertical Breadcrumb Label */}
         <div className="pointer-events-auto -rotate-90 origin-bottom-left translate-y-6 text-[10px] tracking-[0.3em] uppercase text-ink-soft/70 font-semibold">
           <Link to="/" className="hover:text-ink transition-colors">HOME</Link>
           <span className="mx-2 text-sand">/</span>
@@ -158,18 +165,13 @@ export default function EditorialContact({ onSubmit }) {
         </div>
       </aside>
 
-      {/* ── Main Editorial Content ────────────────────────────────────── */}
+      {/* Main Content */}
       <div className="w-full max-w-7xl mx-auto px-6 sm:px-10 lg:pl-36 lg:pr-12 pt-8 sm:pt-14 pb-20 space-y-12 sm:space-y-16">
-
-        {/* ── Top Header Section ──────────────────────────────────────── */}
         <header className="relative w-full flex flex-col items-center text-center space-y-6">
-
-          {/* Top Quick Actions */}
           <div className="w-full flex items-center justify-between text-xs tracking-[0.2em] uppercase font-medium text-ink-soft border-b border-line/40 pb-4">
             <span className="text-sand text-[10px] sm:text-xs">
               01 / Studio Engagement
             </span>
-
             <div className="flex items-center gap-6 text-[10px] sm:text-xs">
               <button
                 type="button"
@@ -189,17 +191,20 @@ export default function EditorialContact({ onSubmit }) {
             </div>
           </div>
 
-          {/* Monumental Condensed Serif Headline */}
-          <h1 className="font-display text-6xl sm:text-8xl md:text-9xl lg:text-[10.5rem] tracking-tight font-light text-ink uppercase leading-none select-none py-2">
+          <HeadlineReveal
+            as="h1"
+            className="font-display text-6xl sm:text-8xl md:text-9xl lg:text-[10.5rem] tracking-tight font-light text-ink uppercase leading-none select-none py-2"
+          >
             Contact Us
-          </h1>
+          </HeadlineReveal>
         </header>
 
-        {/* ── 3-Column Editorial Information Grid ──────────────────────── */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 py-8 border-y border-line/60 text-center md:text-left font-body">
-
-          {/* Column 1: Write Us */}
-          <div className="space-y-2">
+        {/* 3-Column Info Grid */}
+        <div
+          ref={infoGridRef}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 py-8 border-y border-line/60 text-center md:text-left font-body"
+        >
+          <div className="info-col space-y-2">
             <p className="text-[11px] uppercase tracking-[0.22em] text-sand font-semibold">
               Write Us
             </p>
@@ -215,8 +220,7 @@ export default function EditorialContact({ onSubmit }) {
             </p>
           </div>
 
-          {/* Column 2: Studio Headquarters & Location */}
-          <div className="space-y-2 text-center md:text-center">
+          <div className="info-col space-y-2 text-center md:text-center">
             <p className="text-[11px] uppercase tracking-[0.22em] text-sand font-semibold">
               Studio Headquarters
             </p>
@@ -229,8 +233,7 @@ export default function EditorialContact({ onSubmit }) {
             </p>
           </div>
 
-          {/* Column 3: Talk to Us & WhatsApp */}
-          <div className="space-y-2 text-center md:text-right">
+          <div className="info-col space-y-2 text-center md:text-right">
             <p className="text-[11px] uppercase tracking-[0.22em] text-sand font-semibold">
               Talk to Us
             </p>
@@ -249,19 +252,20 @@ export default function EditorialContact({ onSubmit }) {
               </button>
             </p>
           </div>
-
         </div>
 
-        {/* ── Architectural Studio Map Section ─────────────────────────── */}
-        <section aria-label="Studio Location Map" className="relative w-full aspect-[16/11] sm:aspect-[16/9] lg:aspect-[21/10] overflow-hidden border border-line/60 bg-cream shadow-2xl group">
-          {/* Custom Architectural Map Photo */}
+        {/* Studio Map Section */}
+        <section
+          ref={mapRef}
+          aria-label="Studio Location Map"
+          className="relative w-full aspect-[16/11] sm:aspect-[16/9] lg:aspect-[21/10] overflow-hidden border border-line/60 bg-cream shadow-2xl group"
+        >
           <img
             src="/images/studio-map.jpg"
             alt="Brickleaf Studio architectural location map near Kelambakkam Bypass"
             className="w-full h-full object-cover object-center filter contrast-[1.02] brightness-[0.98] transition-transform duration-700 ease-out group-hover:scale-[1.01]"
           />
 
-          {/* Floating Studio Location Badge */}
           <div className="absolute top-[42%] left-[58%] -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none">
             <div className="flex items-center gap-2.5 px-4 py-2 bg-ink text-cream border border-sand/40 shadow-2xl rounded-sm backdrop-blur-md">
               <span className="w-2 h-2 rounded-full bg-amber animate-ping" />
@@ -277,14 +281,12 @@ export default function EditorialContact({ onSubmit }) {
             </div>
           </div>
 
-          {/* Interactive Floating Circular CTA Button */}
           <div className="absolute right-6 sm:right-12 bottom-6 sm:bottom-12 z-20">
             <button
               type="button"
               onClick={scrollToForm}
               className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-cream/90 backdrop-blur-md border border-line/80 shadow-2xl flex flex-col items-center justify-center p-3 text-center transition-all duration-300 hover:scale-105 hover:border-amber group/btn"
             >
-              {/* Perimeter Orbital Ring */}
               <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none">
                 <circle
                   cx="50%"
@@ -297,7 +299,6 @@ export default function EditorialContact({ onSubmit }) {
                   className="group-hover/btn:stroke-amber transition-colors"
                 />
               </svg>
-
               <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.22em] font-semibold text-ink group-hover/btn:text-amber transition-colors">
                 Book a Call
               </span>
@@ -308,7 +309,7 @@ export default function EditorialContact({ onSubmit }) {
           </div>
         </section>
 
-        {/* ── Project Intake Brief Form Section ─────────────────────────── */}
+        {/* Project Intake Brief Form Section */}
         <div ref={formRef} className="pt-8">
           <div className="border border-line/60 overflow-hidden bg-cream/40 shadow-xl">
             <div className="p-6 sm:p-8 border-b border-line bg-cream/80 flex items-center justify-between flex-wrap gap-4">
@@ -320,7 +321,6 @@ export default function EditorialContact({ onSubmit }) {
                   Project Discovery &amp; Consultation Form
                 </h2>
               </div>
-
               <button
                 type="button"
                 onClick={() => setFormOpen(!formOpen)}
@@ -343,7 +343,6 @@ export default function EditorialContact({ onSubmit }) {
             )}
           </div>
         </div>
-
       </div>
     </div>
   )

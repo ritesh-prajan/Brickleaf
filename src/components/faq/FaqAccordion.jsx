@@ -1,28 +1,66 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { FAQ_ITEMS, FAQ_CATEGORIES } from '../../data/faqData'
 import Eyebrow from '../ui/Eyebrow'
 import Button from '../ui/Button'
 import { useNavigate } from 'react-router-dom'
 
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger)
+}
+
 export default function FaqAccordion() {
   const navigate = useNavigate()
   const [activeCategory, setActiveCategory] = useState('All')
-  const [openItems, setOpenItems] = useState({ 'faq-1': true }) // first item open by default
+  const [openItems, setOpenItems] = useState({ 'faq-1': true })
+  const listRef = useRef(null)
 
   const toggleItem = (id) => {
-    setOpenItems((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }))
+    setOpenItems((prev) => ({ ...prev, [id]: !prev[id] }))
   }
 
   const filteredItems = activeCategory === 'All'
     ? FAQ_ITEMS
     : FAQ_ITEMS.filter((item) => item.category === activeCategory)
 
+  useEffect(() => {
+    const list = listRef.current
+    if (!list) return
+
+    const ctx = gsap.context(() => {
+      const items = list.querySelectorAll('.faq-item')
+      if (!items.length) return
+
+      ScrollTrigger.getAll()
+        .filter(t => t.vars?.id?.startsWith('faq-item'))
+        .forEach(t => t.kill())
+
+      gsap.set(items, { x: '-3rem', opacity: 0 })
+
+      items.forEach((item, i) => {
+        gsap.to(item, {
+          x: '0rem',
+          opacity: 1,
+          duration: 0.75,
+          ease: 'power3.out',
+          delay: i * 0.06,
+          scrollTrigger: {
+            id: 'faq-item-' + i,
+            trigger: item,
+            start: 'top 90%',
+            end: 'bottom 10%',
+            toggleActions: 'play reverse play reverse',
+          },
+        })
+      })
+    }, list)
+
+    return () => ctx.revert()
+  }, [filteredItems])
+
   return (
     <div className="w-full space-y-12">
-      {/* ── Category Filter Tabs ──────────────────────────────────── */}
       <div className="flex flex-wrap items-center justify-center gap-2" role="tablist">
         {FAQ_CATEGORIES.map((cat) => {
           const isActive = activeCategory === cat
@@ -33,14 +71,11 @@ export default function FaqAccordion() {
               aria-selected={isActive}
               type="button"
               onClick={() => setActiveCategory(cat)}
-              className={`
-                px-4 py-2 text-xs uppercase tracking-[0.16em] transition-all duration-200 border
-                ${
-                  isActive
-                    ? 'bg-ink text-cream border-ink font-semibold'
-                    : 'bg-cream/50 text-ink-soft border-line/60 hover:border-sand hover:text-ink'
-                }
-              `}
+              className={`px-4 py-2 text-xs uppercase tracking-[0.16em] transition-all duration-200 border ${
+                isActive
+                  ? 'bg-ink text-cream border-ink font-semibold'
+                  : 'bg-cream/50 text-ink-soft border-line/60 hover:border-sand hover:text-ink'
+              }`}
             >
               {cat}
             </button>
@@ -48,14 +83,13 @@ export default function FaqAccordion() {
         })}
       </div>
 
-      {/* ── Accordion List ────────────────────────────────────────── */}
-      <div className="space-y-4 max-w-4xl mx-auto">
+      <div ref={listRef} className="space-y-4 max-w-4xl mx-auto">
         {filteredItems.map((item) => {
           const isOpen = !!openItems[item.id]
           return (
             <div
               key={item.id}
-              className="border border-line/60 bg-cream/40 transition-colors duration-200 hover:border-sand"
+              className="faq-item border border-line/60 bg-cream/40 transition-colors duration-200 hover:border-sand will-change-transform"
             >
               <button
                 type="button"
@@ -65,20 +99,12 @@ export default function FaqAccordion() {
                 className="w-full px-6 py-5 flex items-center justify-between gap-4 text-left font-display text-lg sm:text-xl text-ink font-normal"
               >
                 <span>{item.question}</span>
-                <span
-                  className={`text-sand text-lg transition-transform duration-300 flex-shrink-0 ${
-                    isOpen ? 'rotate-45' : 'rotate-0'
-                  }`}
-                >
+                <span className={`text-sand text-lg transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-45' : 'rotate-0'}`}>
                   +
                 </span>
               </button>
-
               {isOpen && (
-                <div
-                  id={`faq-answer-${item.id}`}
-                  className="px-6 pb-6 pt-1 text-sm text-ink-soft leading-relaxed border-t border-line/30 font-body"
-                >
+                <div id={`faq-answer-${item.id}`} className="px-6 pb-6 pt-1 text-sm text-ink-soft leading-relaxed border-t border-line/30 font-body">
                   <p>{item.answer}</p>
                 </div>
               )}
@@ -87,7 +113,6 @@ export default function FaqAccordion() {
         })}
       </div>
 
-      {/* ── Need More Information Card ────────────────────────────── */}
       <div className="max-w-4xl mx-auto p-8 bg-ink text-cream border border-sand/30 flex flex-col sm:flex-row items-center justify-between gap-6">
         <div className="space-y-1 text-center sm:text-left">
           <Eyebrow className="text-sand">Have a unique inquiry?</Eyebrow>
@@ -98,7 +123,6 @@ export default function FaqAccordion() {
             Our team reviews blueprints, spatial parameters, and aesthetic direction.
           </p>
         </div>
-
         <Button variant="primary" onClick={() => navigate('/contact')} className="flex-shrink-0 text-xs">
           Start Project Brief →
         </Button>

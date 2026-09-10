@@ -4,6 +4,7 @@ import { SERVICES_LIST, SERVICE_CATEGORIES } from '../data/servicesData'
 import Eyebrow from '../components/ui/Eyebrow'
 import Button from '../components/ui/Button'
 import SectionDivider from '../components/ui/SectionDivider'
+import { HeadlineReveal, LineMaskRise, WordSpacingStretch } from '../components/ui/MotionText'
 import { sendViaWhatsApp } from '../utils/whatsapp'
 
 export default function Services() {
@@ -34,15 +35,27 @@ export default function Services() {
   return (
     <div className="w-full py-12 md:py-20 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto space-y-16 text-ink font-body">
 
-      {/* ── Page Header ───────────────────────────────────────────── */}
+      {/* ── Page Header with Split Character Reveal ───────────────── */}
       <header className="text-center max-w-3xl mx-auto space-y-4">
         <Eyebrow className="text-sand">[ Comprehensive Studio Practice ]</Eyebrow>
-        <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-ink font-light leading-none tracking-tight">
+
+        {/* Type as terrain headline */}
+        <HeadlineReveal
+          as="h1"
+          className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-ink font-light leading-none tracking-tight"
+        >
           Services
-        </h1>
-        <p className="text-ink-soft text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
+        </HeadlineReveal>
+
+        {/* Word spacing expansion on scroll */}
+        <WordSpacingStretch className="text-xs uppercase tracking-[0.25em] text-sand font-mono pt-1">
+          15 Disciplines • Turnkey Execution • Bespoke Craft
+        </WordSpacingStretch>
+
+        <LineMaskRise className="text-ink-soft text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
           From full-scale residential estate architecture to executive workspaces, smart automation, and bespoke furniture curation — exploring our 15 specialized architectural disciplines.
-        </p>
+        </LineMaskRise>
+
         <SectionDivider className="w-20 mx-auto border-sand" />
       </header>
 
@@ -148,12 +161,12 @@ export default function Services() {
       <section className="p-8 sm:p-12 bg-ink text-cream border border-sand/30 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
         <div className="space-y-2 max-w-xl text-center md:text-left">
           <Eyebrow className="text-sand">Bespoke Engagements</Eyebrow>
-          <h2 className="font-display text-3xl sm:text-4xl font-light text-cream">
+          <HeadlineReveal as="h2" className="font-display text-3xl sm:text-4xl font-light text-cream">
             Have a Multi-Disciplinary Architectural Scope?
-          </h2>
-          <p className="text-cream/75 text-xs sm:text-sm leading-relaxed">
+          </HeadlineReveal>
+          <LineMaskRise className="text-cream/75 text-xs sm:text-sm leading-relaxed">
             Our architectural team integrates space planning, custom millwork, lighting architecture, and landscaping into a cohesive, turnkey execution.
-          </p>
+          </LineMaskRise>
         </div>
 
         <div className="flex flex-wrap gap-4 flex-shrink-0 justify-center">
