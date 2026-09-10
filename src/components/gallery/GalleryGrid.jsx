@@ -83,8 +83,8 @@ export default function GalleryGrid() {
               onClick={() => setActiveCategory(cat)}
               className={`px-4 py-2 text-xs uppercase tracking-[0.18em] transition-all duration-200 border ${
                 isActive
-                  ? 'bg-ink text-cream border-ink font-semibold'
-                  : 'bg-cream/50 text-ink-soft border-line/60 hover:border-sand hover:text-ink'
+                  ? 'bg-ink text-cream border-ink font-semibold shadow-md'
+                  : 'bg-cream/40 text-ink-soft border-line/70 hover:border-amber hover:text-ink'
               }`}
             >
               {cat}
@@ -98,7 +98,7 @@ export default function GalleryGrid() {
           <article
             key={project.id}
             onClick={() => setSelectedProject(project)}
-            className="gallery-card group cursor-pointer border border-line/50 bg-cream/40 overflow-hidden flex flex-col transition-all duration-300 hover:border-sand hover:shadow-xl"
+            className="gallery-card group cursor-pointer border border-line/70 bg-cream/30 backdrop-blur-[2px] overflow-hidden flex flex-col transition-all duration-300 hover:border-amber hover:bg-cream/60 hover:shadow-xl"
           >
             <div className="relative aspect-[16/10] w-full overflow-hidden bg-ink/10">
               <img
@@ -132,7 +132,7 @@ export default function GalleryGrid() {
               </div>
               <div className="pt-2 border-t border-line/40 flex flex-wrap gap-2 text-[11px] text-ink-soft">
                 {project.materials?.slice(0, 3).map((mat, i) => (
-                  <span key={i} className="px-2 py-0.5 bg-cream border border-line/50">
+                  <span key={i} className="px-2.5 py-0.5 border border-line/60 rounded-[2px]">
                     {mat.name}
                   </span>
                 ))}

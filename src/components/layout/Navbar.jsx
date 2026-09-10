@@ -2,17 +2,15 @@
  * Navbar — Fixed luxury header.
  *
  * Features:
- * - Velocity-reactive spinning botanical leaf logo + brand mark.
- * - Clean editorial navigation links with active state indicator.
+ * - Static, elegant architectural leaf brand mark + "Brickleaf" typography (non-spinning).
+ * - Clean editorial navigation links with active state indicators.
  * - Primary "Get in Touch" CTA button.
- * - Adaptive scroll theme (cream/dark transitions based on section data-bg).
+ * - Adaptive scroll theme transitions over dark/light sections.
  * - Responsive mobile drawer menu.
- * (Theme modes removed — dedicated to bespoke Warm Mediterranean palette).
  */
 import { useRef, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import Button from '../ui/Button'
-import VelocityLogo from '../ui/VelocityLogo'
 import { useScrollTheme } from '../../hooks/useScrollTheme'
 
 const NAV_LINKS = [
@@ -40,13 +38,23 @@ export default function Navbar() {
         className="max-w-7xl mx-auto px-6 sm:px-8 h-16 flex items-center justify-between gap-6"
         aria-label="Main navigation"
       >
-        {/* ── Brand Logo with Velocity-Reactive Leaf ── */}
+        {/* ── Static Brand Logo (Clean, non-spinning) ── */}
         <NavLink
           to="/"
           aria-label="Brickleaf Studio — Home"
           className="flex items-center gap-2.5 group flex-shrink-0"
         >
-          <VelocityLogo />
+          <svg
+            viewBox="0 0 24 24"
+            className="w-5 h-5 text-amber fill-amber/20 stroke-amber transition-transform duration-300 group-hover:scale-105"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M12 2C8.5 7 7.5 12 10.5 16.5C12 18.8 14 20.5 15.5 22C16.5 20.5 17.5 18 17.5 14.5C17.5 9 15 4 12 2Z" />
+            <path d="M12 2C13 8 14 14 15.5 22" strokeWidth="1.2" />
+          </svg>
+
           <span className="nav-brand-text font-display text-xl font-medium text-ink tracking-tight transition-colors duration-500 flex items-center">
             Brickleaf
             <span className="nav-dot inline-block w-1.5 h-1.5 rounded-full bg-amber ml-1 mb-0.5 transition-colors duration-500" />

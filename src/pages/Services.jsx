@@ -39,7 +39,6 @@ export default function Services() {
       <header className="text-center max-w-3xl mx-auto space-y-4">
         <Eyebrow className="text-sand">[ Comprehensive Studio Practice ]</Eyebrow>
 
-        {/* Type as terrain headline */}
         <HeadlineReveal
           as="h1"
           className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-ink font-light leading-none tracking-tight"
@@ -47,7 +46,6 @@ export default function Services() {
           Services
         </HeadlineReveal>
 
-        {/* Word spacing expansion on scroll */}
         <WordSpacingStretch className="text-xs uppercase tracking-[0.25em] text-sand font-mono pt-1">
           15 Disciplines • Turnkey Execution • Bespoke Craft
         </WordSpacingStretch>
@@ -71,11 +69,11 @@ export default function Services() {
               type="button"
               onClick={() => setActiveCategory(cat)}
               className={`
-                px-4 py-2.5 text-xs uppercase tracking-[0.16em] transition-all duration-200 border
+                px-4 py-2 text-xs uppercase tracking-[0.16em] transition-all duration-200 border
                 ${
                   isActive
                     ? 'bg-ink text-cream border-ink font-semibold shadow-md'
-                    : 'bg-cream/60 text-ink-soft border-line/60 hover:border-sand hover:text-ink'
+                    : 'bg-cream/40 text-ink-soft border-line/70 hover:border-amber hover:text-ink'
                 }
               `}
             >
@@ -90,7 +88,7 @@ export default function Services() {
         {filteredServices.map((service) => (
           <article
             key={service.id}
-            className="group relative flex flex-col justify-between p-6 sm:p-8 bg-cream/40 border border-line/60 transition-all duration-300 hover:border-sand hover:shadow-xl hover:bg-cream/80"
+            className="group relative flex flex-col justify-between p-6 sm:p-8 bg-cream/30 border border-line/70 backdrop-blur-[2px] transition-all duration-300 hover:border-amber hover:bg-cream/60 hover:shadow-xl"
           >
             {/* Top Index & Category */}
             <div className="space-y-4">
@@ -98,7 +96,7 @@ export default function Services() {
                 <span className="font-display text-2xl font-light text-sand group-hover:text-amber transition-colors">
                   {service.number}
                 </span>
-                <span className="text-[10px] uppercase tracking-widest text-ink-soft px-2 py-0.5 bg-cream border border-line/40">
+                <span className="text-[10px] uppercase tracking-widest text-ink-soft px-2.5 py-0.5 border border-line/60 rounded-[2px]">
                   {service.category}
                 </span>
               </div>
@@ -126,7 +124,7 @@ export default function Services() {
                 <ul className="space-y-1 list-none p-0 m-0">
                   {service.deliverables.map((item, idx) => (
                     <li key={idx} className="text-[11px] text-ink flex items-center gap-2">
-                      <span className="w-1 h-1 rounded-full bg-amber flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber flex-shrink-0" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -148,7 +146,7 @@ export default function Services() {
               <Button
                 variant="outline"
                 onClick={() => handleEnquireService(service)}
-                className="text-[11px] py-1.5 px-3 border-line/80 hover:border-sand"
+                className="text-[11px] py-1.5 px-3.5 border-line/80 hover:border-amber"
               >
                 Start Brief →
               </Button>

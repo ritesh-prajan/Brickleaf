@@ -73,8 +73,8 @@ export default function FaqAccordion() {
               onClick={() => setActiveCategory(cat)}
               className={`px-4 py-2 text-xs uppercase tracking-[0.16em] transition-all duration-200 border ${
                 isActive
-                  ? 'bg-ink text-cream border-ink font-semibold'
-                  : 'bg-cream/50 text-ink-soft border-line/60 hover:border-sand hover:text-ink'
+                  ? 'bg-ink text-cream border-ink font-semibold shadow-md'
+                  : 'bg-cream/40 text-ink-soft border-line/70 hover:border-amber hover:text-ink'
               }`}
             >
               {cat}
@@ -89,7 +89,7 @@ export default function FaqAccordion() {
           return (
             <div
               key={item.id}
-              className="faq-item border border-line/60 bg-cream/40 transition-colors duration-200 hover:border-sand will-change-transform"
+              className="faq-item border border-line/70 bg-cream/30 backdrop-blur-[2px] transition-all duration-200 hover:border-amber will-change-transform"
             >
               <button
                 type="button"
@@ -99,12 +99,12 @@ export default function FaqAccordion() {
                 className="w-full px-6 py-5 flex items-center justify-between gap-4 text-left font-display text-lg sm:text-xl text-ink font-normal"
               >
                 <span>{item.question}</span>
-                <span className={`text-sand text-lg transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-45' : 'rotate-0'}`}>
+                <span className={`text-sand text-lg transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-45 text-amber' : 'rotate-0'}`}>
                   +
                 </span>
               </button>
               {isOpen && (
-                <div id={`faq-answer-${item.id}`} className="px-6 pb-6 pt-1 text-sm text-ink-soft leading-relaxed border-t border-line/30 font-body">
+                <div id={`faq-answer-${item.id}`} className="px-6 pb-6 pt-1 text-sm text-ink-soft leading-relaxed border-t border-line/40 font-body">
                   <p>{item.answer}</p>
                 </div>
               )}
@@ -113,7 +113,7 @@ export default function FaqAccordion() {
         })}
       </div>
 
-      <div className="max-w-4xl mx-auto p-8 bg-ink text-cream border border-sand/30 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div className="max-w-4xl mx-auto p-8 bg-ink text-cream border border-sand/30 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xl">
         <div className="space-y-1 text-center sm:text-left">
           <Eyebrow className="text-sand">Have a unique inquiry?</Eyebrow>
           <h3 className="font-display text-2xl font-light text-cream">

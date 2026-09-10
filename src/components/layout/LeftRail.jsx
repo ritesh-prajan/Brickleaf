@@ -1,12 +1,11 @@
 /**
- * LeftRail — Global architectural brand emblem and social hub.
+ * LeftRail — Global architectural brand emblem & Contact social pill.
  *
- * Appears fixed on the left rail across all pages (desktop).
- * Features:
- * 1. Rotating circular text seal ("• BRICKLEAF • BRICKLEAF • BRICKLEAF")
- *    with botanical leaf emblem in the center (scroll-to-top interaction).
- * 2. Vertical pill with clean vector SVG social links (Instagram, LinkedIn, Pinterest).
- * 3. Page breadcrumb / studio indicator.
+ * Appears fixed on the left rail (desktop).
+ * - Circular rotating seal ("• BRICKLEAF • BRICKLEAF • BRICKLEAF") with botanical leaf:
+ *   Present on ALL pages with scroll-to-top interaction.
+ * - Social icons floating pill (Instagram, LinkedIn, Pinterest) + vertical indicator:
+ *   Displayed ONLY on the Contact page.
  */
 import { Link, useLocation } from 'react-router-dom'
 
@@ -48,8 +47,7 @@ const SOCIAL_LINKS = [
 
 export default function LeftRail() {
   const location = useLocation()
-  const path = location.pathname
-  const pageLabel = path === '/' ? 'STUDIO' : path.replace('/', '').toUpperCase()
+  const isContactPage = location.pathname === '/contact'
 
   const handleScrollTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -57,10 +55,10 @@ export default function LeftRail() {
 
   return (
     <aside
-      aria-label="Studio links and emblem"
+      aria-label="Studio brand seal"
       className="hidden lg:flex flex-col justify-between fixed left-6 xl:left-8 top-24 bottom-10 z-30 pointer-events-none select-none transition-all duration-300"
     >
-      {/* ── 1. Circular Rotating Seal with Leaf Logo ── */}
+      {/* ── 1. Circular Rotating Seal (On ALL Pages) ── */}
       <div className="pointer-events-auto">
         <button
           type="button"
@@ -106,29 +104,33 @@ export default function LeftRail() {
         </button>
       </div>
 
-      {/* ── 2. Vertical Social Icons Floating Pill ── */}
-      <div className="pointer-events-auto flex flex-col items-center gap-3.5 py-3.5 px-2.5 bg-cream/85 backdrop-blur-md border border-line/80 rounded-full text-ink-soft shadow-lg">
-        {SOCIAL_LINKS.map(({ name, href, icon }) => (
-          <a
-            key={name}
-            href={href}
-            target="_blank"
-            rel="noreferrer"
-            aria-label={name}
-            title={name}
-            className="p-1 text-ink-soft hover:text-amber hover:scale-110 transition-all duration-200"
-          >
-            {icon}
-          </a>
-        ))}
-      </div>
+      {/* ── 2. Social Icons Floating Pill (ONLY ON CONTACT PAGE) ── */}
+      {isContactPage && (
+        <div className="pointer-events-auto flex flex-col items-center gap-3.5 py-3.5 px-2.5 bg-cream/85 backdrop-blur-md border border-line/80 rounded-full text-ink-soft shadow-lg animate-in fade-in duration-500">
+          {SOCIAL_LINKS.map(({ name, href, icon }) => (
+            <a
+              key={name}
+              href={href}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={name}
+              title={name}
+              className="p-1 text-ink-soft hover:text-amber hover:scale-110 transition-all duration-200"
+            >
+              {icon}
+            </a>
+          ))}
+        </div>
+      )}
 
-      {/* ── 3. Vertical Page Indicator ── */}
-      <div className="pointer-events-auto -rotate-90 origin-bottom-left translate-y-6 text-[9.5px] tracking-[0.3em] uppercase text-ink-soft font-semibold">
-        <Link to="/" className="hover:text-ink transition-colors">BRICKLEAF</Link>
-        <span className="mx-2 text-sand">/</span>
-        <span className="text-amber">{pageLabel}</span>
-      </div>
+      {/* ── 3. Page Indicator (ONLY ON CONTACT PAGE) ── */}
+      {isContactPage && (
+        <div className="pointer-events-auto -rotate-90 origin-bottom-left translate-y-6 text-[9.5px] tracking-[0.3em] uppercase text-ink-soft font-semibold animate-in fade-in duration-500">
+          <Link to="/" className="hover:text-ink transition-colors">BRICKLEAF</Link>
+          <span className="mx-2 text-sand">/</span>
+          <span className="text-amber">CONTACT</span>
+        </div>
+      )}
     </aside>
   )
 }

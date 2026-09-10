@@ -1,17 +1,17 @@
 import Eyebrow from '../ui/Eyebrow'
 import BeforeAfterComparison from './BeforeAfterComparison'
-import { HeadlineReveal, LineMaskRise, WordSpacingStretch } from '../ui/MotionText'
+import { HeadlineReveal, LineMaskRise } from '../ui/MotionText'
 
 /**
  * BeforeAfterSection — Editorial Before/After Transformation Section.
  *
- * Implements "Type as terrain" character reveals and reversible scroll transitions.
+ * Seamlessly transitions over the global warm flowing gradient background.
  */
 export default function BeforeAfterSection() {
   return (
     <section
       id="transformations"
-      className="relative z-10 w-full py-20 sm:py-28 md:py-36 px-4 sm:px-6 lg:px-12 bg-cream/95 text-ink border-t border-line/40"
+      className="relative z-10 w-full py-20 sm:py-28 md:py-36 px-4 sm:px-6 lg:px-12 text-ink border-t border-line/40"
       aria-label="Spatial Transformations"
     >
       <div className="max-w-6xl mx-auto space-y-10 sm:space-y-14">
@@ -38,40 +38,13 @@ export default function BeforeAfterSection() {
         </header>
 
         {/* ── Interactive Comparison Slider ──────────────────────── */}
-        <div className="w-full space-y-4">
-          <BeforeAfterComparison
-            beforeImage="/transformations/living-room-before.jpg"
-            afterImage="/transformations/living-room-after.jpg"
-            beforeLabel="Existing Space"
-            afterLabel="Brickleaf"
-            initialPosition={50}
-          />
-
-          {/* ── Metadata & Caption Bar ─────────────────────────────── */}
-          <footer className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 text-xs border-b border-line/30 pb-4 font-body">
-            <div className="flex items-center gap-3">
-              <span className="font-semibold tracking-wider text-ink uppercase">
-                Project 01: Grand Living Pavilion
-              </span>
-              <span className="text-line">•</span>
-              <span className="text-ink-soft">
-                Residential / Living Room
-              </span>
-            </div>
-
-            <div className="flex items-center gap-2 text-ink-soft text-[11px] tracking-wide">
-              <span className="text-sand">Scope:</span>
-              <span>Architectural Coving, Custom Media Joinery, Furnishing &amp; Finishes</span>
-            </div>
-          </footer>
-        </div>
-
-        {/* ── Word Spacing Pull Parallax Detail ─────────────────────── */}
-        <div className="pt-4 text-center">
-          <WordSpacingStretch className="font-display text-sm sm:text-base uppercase tracking-[0.2em] text-sand/80 font-light">
-            Crafted to Endure • Light &amp; Flow • Your Private Sanctuary
-          </WordSpacingStretch>
-        </div>
+        <BeforeAfterComparison
+          beforeImage="/transformations/living-room-before.jpg"
+          afterImage="/transformations/living-room-after.jpg"
+          beforeLabel="Original State"
+          afterLabel="Brickleaf Completed Living Room"
+          initialPosition={50}
+        />
 
       </div>
     </section>
