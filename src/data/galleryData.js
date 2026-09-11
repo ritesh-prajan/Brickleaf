@@ -11,10 +11,10 @@ export const GALLERY_PROJECTS = [
     year: '2025',
     area: '6,400 sq.ft',
     scope: 'Full Architecture, Custom Millwork & Furnishings',
-    coverImage: '/hero/stage-8-pendant-on.jpg',
+    coverImage: '/hero/stage-8-full-lighting.jpg',
     secondaryImages: [
-      '/hero/stage-7-pendant-off.jpg',
-      '/hero/stage-6-decor.jpg',
+      '/hero/stage-6-chandelier-off.jpg',
+      '/hero/stage-7-dusk-cove.jpg',
       '/hero/stage-4-sofa.jpg',
     ],
     tagline: 'Sculptural limestone minimalism grounded by organic walnut millwork.',
@@ -63,7 +63,7 @@ export const GALLERY_PROJECTS = [
     coverImage: '/hero/stage-5-chairs-table.jpg',
     secondaryImages: [
       '/hero/stage-3-rug.jpg',
-      '/hero/stage-8-pendant-on.jpg',
+      '/hero/stage-8-full-lighting.jpg',
     ],
     tagline: 'Japandi harmony combining Wabi-Sabi textures with modern precision.',
     description:
@@ -84,9 +84,9 @@ export const GALLERY_PROJECTS = [
     year: '2025',
     area: '3,800 sq.ft',
     scope: 'Commercial Executive Studio & Client Lounges',
-    coverImage: '/hero/stage-6-decor.jpg',
+    coverImage: '/hero/stage-7-dusk-cove.jpg',
     secondaryImages: [
-      '/hero/stage-7-pendant-off.jpg',
+      '/hero/stage-6-chandelier-off.jpg',
       '/transformations/living-room-after.jpg',
     ],
     tagline: 'Executive hospitality meets tactile residential comfort.',

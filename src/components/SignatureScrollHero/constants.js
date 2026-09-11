@@ -1,8 +1,8 @@
 /**
  * SignatureScrollHero — Constants
  *
- * 8 complete full-room photographs.
- * The entire homepage IS this scroll transformation.
+ * 8 complete full-room photorealistic transformation stages.
+ * The entire homepage IS this scroll-driven interior transformation.
  * Zero dark gaps. Each image plate fades in over the previous and stays opaque.
  */
 
@@ -10,66 +10,66 @@ export const STAGES = [
   {
     id: 'empty-dark',
     src: '/hero/stage-1-empty-dark.jpg',
-    alt: 'Empty architectural room in dim, moody light',
+    alt: 'Empty architectural shell in moody ambient light with Brickleaf wall emblem',
     tag: '01 / CANVAS',
     title: 'Raw Architectural Shell',
-    desc: 'The room before intention — dim, cold, waiting.',
+    desc: 'The room before intention — dim, quiet, waiting.',
   },
   {
     id: 'empty-bright',
     src: '/hero/stage-2-empty-bright.jpg',
-    alt: 'Empty room with warm natural daylight revealing plaster walls',
+    alt: 'Empty room with warm natural daylight streaming through floor-to-ceiling windows',
     tag: '02 / LIGHT',
-    title: 'Natural Light Reveals',
-    desc: 'Warm daylight enters. Plaster textures emerge.',
+    title: 'Natural Light Emerges',
+    desc: 'Warm sunlight enters through expansive glass, revealing plaster texture.',
   },
   {
     id: 'rug',
     src: '/hero/stage-3-rug.jpg',
-    alt: 'Room with a hand-woven jute area rug on the oak floor',
+    alt: 'Room with a hand-woven organic jute area rug on the oak floor',
     tag: '03 / FOUNDATION',
     title: 'Woven Textile Rug',
-    desc: 'Grounding the floor with organic textile warmth.',
+    desc: 'Hand-woven organic jute rug grounds the oak floor with tactile warmth.',
   },
   {
     id: 'sofa',
     src: '/hero/stage-4-sofa.jpg',
-    alt: 'Room with rug and bouclé modular sofa against the back wall',
+    alt: 'Room with rug and cream modular sectional sofa against the plaster wall',
     tag: '04 / ANCHOR',
-    title: 'Bouclé Sectional Sofa',
-    desc: 'The living composition finds its center.',
+    title: 'Modular Sectional Sofa',
+    desc: 'Cream modular sectional takes its place against the plaster wall.',
   },
   {
     id: 'chairs-table',
     src: '/hero/stage-5-chairs-table.jpg',
-    alt: 'Room with sofa, two lounge armchairs and travertine coffee table',
+    alt: 'Room with sofa, two walnut lounge armchairs, and solid travertine coffee table',
     tag: '05 / FORM',
-    title: 'Armchairs & Table',
-    desc: 'Walnut frames. Travertine stone. The room takes shape.',
+    title: 'Armchairs & Travertine Table',
+    desc: 'Curved lounge armchairs and solid travertine table center the composition.',
   },
   {
-    id: 'decor',
-    src: '/hero/stage-6-decor.jpg',
-    alt: 'Decorated room with olive tree, books, pottery on the coffee table',
-    tag: '06 / LIFE',
-    title: 'Botanicals & Artware',
-    desc: 'Olive tree. Ceramic vases. Dried stems. Books.',
+    id: 'chandelier-off',
+    src: '/hero/stage-6-chandelier-off.jpg',
+    alt: 'Room with sculptural multi-globe brass chandelier descending from recessed ceiling',
+    tag: '06 / FIXTURE',
+    title: 'Sculptural Brass Chandelier',
+    desc: 'Organic multi-globe brass pendant anchors the ceiling architecture.',
   },
   {
-    id: 'pendant-off',
-    src: '/hero/stage-7-pendant-off.jpg',
-    alt: 'Complete room with brass pendant chandelier, light off',
-    tag: '07 / FIXTURE',
-    title: 'Pendant Descends',
-    desc: 'Brass and glass chandelier finds its ceiling mark.',
+    id: 'dusk-cove',
+    src: '/hero/stage-7-dusk-cove.jpg',
+    alt: 'Room at twilight with 2700K warm indirect perimeter ceiling cove lighting',
+    tag: '07 / TWILIGHT',
+    title: 'Perimeter Cove Illumination',
+    desc: '2700K warm architectural cove lighting bathes the ceiling perimeter in amber tones.',
   },
   {
-    id: 'pendant-on',
-    src: '/hero/stage-8-pendant-on.jpg',
-    alt: 'Final room — pendant glowing warm, entire space bathed in golden light',
+    id: 'full-lighting',
+    src: '/hero/stage-8-full-lighting.jpg',
+    alt: 'Final room — glowing chandelier, potted olive tree, ceramic pottery, and botanicals',
     tag: '08 / ATMOSPHERE',
-    title: 'Light Activates',
-    desc: '2700K warmth fills the architectural space.',
+    title: 'Full Radiance & Botanicals',
+    desc: 'Lustrous chandelier activates alongside indoor olive botanicals and curated pottery.',
   },
 ]
 
@@ -82,12 +82,12 @@ export const STAGES = [
 export const REVEALS = [
   null,          // Stage 1: always visible (opacity 1)
   [0.06, 0.18],  // Stage 2: empty bright
-  [0.24, 0.36],  // Stage 3: rug
-  [0.40, 0.52],  // Stage 4: sofa
-  [0.56, 0.66],  // Stage 5: chairs + table
-  [0.70, 0.80],  // Stage 6: decor + plant
-  [0.83, 0.90],  // Stage 7: pendant off
-  [0.92, 1.00],  // Stage 8: pendant on (warm final payoff)
+  [0.22, 0.34],  // Stage 3: rug
+  [0.38, 0.50],  // Stage 4: sofa
+  [0.54, 0.64],  // Stage 5: chairs + table
+  [0.68, 0.77],  // Stage 6: chandelier off
+  [0.80, 0.89],  // Stage 7: dusk & cove glow
+  [0.91, 0.98],  // Stage 8: full lighting & styling
 ]
 
 /**
