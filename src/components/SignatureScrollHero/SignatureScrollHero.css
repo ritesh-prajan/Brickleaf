@@ -52,6 +52,10 @@
   display: block;
   user-select: none;
   -webkit-user-drag: none;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: high-quality;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 /* ── HUD Top Overlay (Floating below fixed translucent header) ──────────── */
