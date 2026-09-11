@@ -76,38 +76,38 @@ export default function Footer() {
   return (
     <footer
       data-bg="dark"
-      className="bg-ink text-cream/75 pt-16 pb-10 px-6 sm:px-10 lg:px-16 border-t border-sand/20 relative z-30 font-body select-none mt-auto"
+      className="bg-ink text-cream/75 pt-12 sm:pt-16 pb-8 sm:pb-10 px-4 sm:px-10 lg:px-16 border-t border-sand/20 relative z-30 font-body select-none mt-auto"
     >
       <div className="max-w-7xl mx-auto">
         {/* ── Top 3-Column Grid ──────────────────────────────────────── */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 sm:gap-14 mb-14">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 md:gap-14 mb-10 sm:mb-14">
 
           {/* 1. Brand & Studio Ethos */}
-          <div className="space-y-4 max-w-sm">
-            <span className="font-display text-2xl font-light text-cream tracking-tight block">
+          <div className="space-y-3 sm:space-y-4 max-w-sm">
+            <span className="font-display text-2xl sm:text-3xl font-light text-cream tracking-tight block">
               Brickleaf<span className="inline-block w-1.5 h-1.5 rounded-full bg-amber ml-1 mb-0.5" />
             </span>
             <p className="text-xs sm:text-sm leading-relaxed text-cream/70 font-light">
               A luxury interior architecture studio specializing in high-end residential new builds, spatial renovations, and bespoke material curation.
             </p>
-            <p className="text-[11px] uppercase tracking-[0.2em] text-sand font-semibold pt-1">
+            <p className="text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-sand font-semibold pt-1">
               Chennai • Hyderabad • Pan-India
             </p>
           </div>
 
           {/* 2. Navigation Directory */}
-          <nav aria-label="Footer navigation" className="space-y-4">
+          <nav aria-label="Footer navigation" className="space-y-3 sm:space-y-4">
             <p className="text-xs tracking-[0.2em] uppercase text-sand font-semibold">
               Navigation
             </p>
-            <ul className="space-y-2.5 list-none m-0 p-0">
+            <ul className="grid grid-cols-2 md:grid-cols-1 gap-1.5 sm:gap-2.5 list-none m-0 p-0">
               {NAV_LINKS.map(({ label, to }) => (
                 <li key={to}>
                   <NavLink
                     to={to}
                     end={to === '/'}
                     onClick={handleNavClick}
-                    className="text-xs sm:text-sm text-cream/70 hover:text-amber transition-colors duration-200 tracking-wide inline-block py-0.5"
+                    className="text-xs sm:text-sm text-cream/70 hover:text-amber transition-colors duration-200 tracking-wide inline-block py-1 sm:py-0.5"
                   >
                     {label}
                   </NavLink>
@@ -117,27 +117,27 @@ export default function Footer() {
           </nav>
 
           {/* 3. Studio Inquiries & Socials */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <p className="text-xs tracking-[0.2em] uppercase text-sand font-semibold">
               Studio Liaison
             </p>
-            <address className="not-italic text-xs sm:text-sm space-y-2 text-cream/80 font-light">
+            <address className="not-italic text-xs sm:text-sm space-y-1.5 sm:space-y-2 text-cream/80 font-light">
               <p>Kelambakkam Bypass Rd, Chennai</p>
               <p>Tamil Nadu, India</p>
               <p className="pt-1">
-                <a href="mailto:hello@brickleaf.co" className="hover:text-amber transition-colors duration-200 font-medium text-cream">
+                <a href="mailto:hello@brickleaf.co" className="hover:text-amber transition-colors duration-200 font-medium text-cream inline-block py-0.5">
                   hello@brickleaf.co
                 </a>
               </p>
               <p>
-                <a href="tel:+919876543210" className="hover:text-amber transition-colors duration-200 font-medium text-cream">
+                <a href="tel:+919876543210" className="hover:text-amber transition-colors duration-200 font-medium text-cream inline-block py-0.5">
                   +91 98765 43210
                 </a>
               </p>
             </address>
 
             {/* Social SVG Buttons */}
-            <div className="flex flex-wrap gap-2.5 pt-2">
+            <div className="flex flex-wrap gap-2 pt-2">
               {SOCIAL_LINKS.map(({ name, href, icon }) => (
                 <a
                   key={name}
@@ -146,7 +146,7 @@ export default function Footer() {
                   rel="noreferrer"
                   aria-label={name}
                   title={name}
-                  className="p-2 border border-line/40 text-cream/70 hover:border-amber hover:text-amber hover:scale-105 transition-all duration-200 rounded-[2px]"
+                  className="w-10 h-10 flex items-center justify-center border border-line/40 text-cream/70 hover:border-amber hover:text-amber hover:scale-105 active:scale-95 transition-all duration-200 rounded-[2px]"
                 >
                   {icon}
                 </a>
@@ -159,10 +159,10 @@ export default function Footer() {
         <SectionDivider className="border-line/20" />
 
         {/* ── Bottom Legal Bar ───────────────────────────────────────── */}
-        <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-cream/40 tracking-wider">
+        <div className="mt-6 sm:mt-8 flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4 text-[11px] text-cream/40 tracking-wider text-center md:text-left">
           <p>© {year} Brickleaf Interior Studio. All rights reserved.</p>
-          <div className="flex items-center gap-6">
-            <NavLink to="/terms" onClick={handleNavClick} className="hover:text-cream transition-colors">
+          <div className="flex items-center gap-4 sm:gap-6">
+            <NavLink to="/terms" onClick={handleNavClick} className="hover:text-cream transition-colors py-1">
               Terms &amp; Privacy
             </NavLink>
             <span className="hidden sm:inline">✦</span>

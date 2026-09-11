@@ -1,16 +1,13 @@
 /**
- * Navbar — Translucent luxury glass header.
+ * Navbar — Fixed translucent luxury glass header.
  *
- * Features:
- * - Translucent backdrop-blur glass effect allowing page texture and gradient to breathe through.
- * - Static architectural botanical leaf brand mark + "Brickleaf" typography.
- * - Clean editorial navigation links with active state indicators.
- * - Primary "Get in Touch" CTA button.
- * - Scroll-adaptive dark/light glass transitions over sections.
- * - Mobile slide-down drawer.
+ * Fully Responsive:
+ * - Desktop: Translucent glass bar with brand logo, inline navigation, and CTA.
+ * - Mobile: Minimalist animated hamburger triggering a luxury frosted drawer.
+ * - Mobile Drawer: Body scroll lock, ESC close, backdrop tap-to-close, 48px+ touch targets, active route indicator, full-width CTA.
  */
-import { useRef, useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { useRef, useState, useEffect } from 'react'
+import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import Button from '../ui/Button'
 import { useScrollTheme } from '../../hooks/useScrollTheme'
 
@@ -24,11 +21,40 @@ const NAV_LINKS = [
 
 export default function Navbar() {
   const navigate = useNavigate()
+  const location = useLocation()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const headerRef = useRef(null)
 
   // Adapts navbar translucent glass color as user scrolls past dark/light sections
   useScrollTheme(headerRef)
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [mobileMenuOpen])
+
+  // Close menu on ESC key
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && mobileMenuOpen) {
+        setMobileMenuOpen(false)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [mobileMenuOpen])
+
+  // Close menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false)
+  }, [location.pathname])
 
   return (
     <header
@@ -37,14 +63,14 @@ export default function Navbar() {
       className="site-navbar fixed top-0 left-0 right-0 z-50 backdrop-blur-lg transition-all duration-500"
     >
       <nav
-        className="max-w-7xl mx-auto px-6 sm:px-8 h-16 flex items-center justify-between gap-6"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4"
         aria-label="Main navigation"
       >
         {/* ── Static Brand Logo ── */}
         <NavLink
           to="/"
           aria-label="Brickleaf Studio — Home"
-          className="flex items-center gap-2.5 group flex-shrink-0"
+          className="flex items-center gap-2.5 group flex-shrink-0 py-1"
         >
           <svg
             viewBox="0 0 24 24"
@@ -57,14 +83,14 @@ export default function Navbar() {
             <path d="M12 2C13 8 14 14 15.5 22" strokeWidth="1.2" />
           </svg>
 
-          <span className="nav-brand-text font-display text-xl font-medium text-ink tracking-tight transition-colors duration-500 flex items-center">
+          <span className="nav-brand-text font-display text-lg sm:text-xl font-medium text-ink tracking-tight transition-colors duration-500 flex items-center">
             Brickleaf
             <span className="nav-dot inline-block w-1.5 h-1.5 rounded-full bg-amber ml-1 mb-0.5 transition-colors duration-500" />
           </span>
         </NavLink>
 
         {/* ── Desktop Navigation Links ─────────────────────────── */}
-        <ul className="hidden md:flex items-center gap-8 list-none m-0 p-0">
+        <ul className="hidden md:flex items-center gap-7 lg:gap-9 list-none m-0 p-0">
           {NAV_LINKS.map(({ label, to }) => (
             <li key={to}>
               <NavLink
@@ -84,7 +110,7 @@ export default function Navbar() {
           ))}
         </ul>
 
-        {/* ── Right Cluster: Primary CTA ───────────────────────── */}
+        {/* ── Right Cluster: Primary CTA (Desktop) ─────────────── */}
         <div className="hidden md:flex items-center gap-4">
           <Button
             variant="primary"
@@ -99,13 +125,15 @@ export default function Navbar() {
         <div className="flex md:hidden items-center">
           <button
             type="button"
-            aria-label="Toggle navigation menu"
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation-drawer"
+            aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="flex flex-col gap-1.5 p-2 text-ink focus:outline-none"
+            className="p-2.5 -mr-1.5 text-ink focus:outline-none min-w-[44px] min-h-[44px] flex items-center justify-center flex-col gap-1.5 cursor-pointer"
           >
             <span
-              className={`block w-6 h-0.5 bg-ink transition-transform duration-300 ${
-                mobileMenuOpen ? 'rotate-45 translate-y-2' : ''
+              className={`block w-6 h-0.5 bg-ink transition-all duration-300 ${
+                mobileMenuOpen ? 'rotate-45 translate-y-2 bg-ink' : ''
               }`}
             />
             <span
@@ -114,42 +142,70 @@ export default function Navbar() {
               }`}
             />
             <span
-              className={`block w-6 h-0.5 bg-ink transition-transform duration-300 ${
-                mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''
+              className={`block w-6 h-0.5 bg-ink transition-all duration-300 ${
+                mobileMenuOpen ? '-rotate-45 -translate-y-2 bg-ink' : ''
               }`}
             />
           </button>
         </div>
       </nav>
 
-      {/* ── Mobile Dropdown Menu ──────────────────────────────── */}
+      {/* ── Mobile Dropdown & Full Drawer ─────────────────────── */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-cream/90 backdrop-blur-xl border-b border-line/60 px-6 py-6 space-y-5 shadow-2xl animate-in slide-in-from-top duration-300">
-          <ul className="space-y-3.5 list-none p-0 m-0">
-            {NAV_LINKS.map(({ label, to }) => (
-              <li key={to}>
-                <NavLink
-                  to={to}
-                  end={to === '/'}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block text-sm uppercase tracking-[0.2em] text-ink hover:text-amber py-1 font-medium"
-                >
-                  {label}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-          <div className="pt-2">
+        <div
+          id="mobile-navigation-drawer"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mobile navigation menu"
+          className="md:hidden fixed inset-x-0 top-16 bg-cream/95 backdrop-blur-2xl border-b border-line shadow-2xl h-[calc(100vh-4rem)] h-[calc(100dvh-4rem)] flex flex-col justify-between p-6 sm:p-8 animate-in slide-in-from-top-2 duration-300 overflow-y-auto"
+        >
+          {/* Main Mobile Navigation Links */}
+          <div className="space-y-6 pt-2">
+            <span className="text-[10px] uppercase tracking-[0.25em] text-sand font-semibold block">
+              [ Studio Directory ]
+            </span>
+            <ul className="space-y-4 list-none p-0 m-0">
+              {NAV_LINKS.map(({ label, to }) => (
+                <li key={to}>
+                  <NavLink
+                    to={to}
+                    end={to === '/'}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={({ isActive }) =>
+                      `flex items-center justify-between text-lg uppercase tracking-[0.18em] py-2 border-b border-line/40 transition-colors ${
+                        isActive
+                          ? 'text-amber font-semibold border-amber'
+                          : 'text-ink hover:text-amber'
+                      }`
+                    }
+                  >
+                    <span>{label}</span>
+                    <span className="text-sand text-xs font-mono">→</span>
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Bottom Drawer Actions */}
+          <div className="pt-6 space-y-4 border-t border-line/60">
             <Button
               variant="primary"
               onClick={() => {
                 setMobileMenuOpen(false)
                 navigate('/contact')
               }}
-              className="w-full text-xs justify-center uppercase tracking-wider py-3"
+              className="w-full text-xs justify-center uppercase tracking-wider py-3.5 shadow-md"
             >
-              Get in Touch
+              Get in Touch — Start Brief
             </Button>
+
+            <div className="flex items-center justify-between text-[11px] text-ink-soft/80 pt-1">
+              <span>Kelambakkam Bypass, Chennai</span>
+              <a href="tel:+919876543210" className="text-amber font-medium">
+                +91 98765 43210
+              </a>
+            </div>
           </div>
         </div>
       )}

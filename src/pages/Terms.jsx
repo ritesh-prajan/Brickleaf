@@ -3,24 +3,24 @@ import SectionDivider from '../components/ui/SectionDivider'
 
 export default function Terms() {
   return (
-    <div className="w-full py-12 md:py-20 px-6 max-w-4xl mx-auto space-y-12 text-ink font-body">
+    <div className="w-full py-10 sm:py-16 md:py-20 px-4 sm:px-6 max-w-4xl mx-auto space-y-8 sm:space-y-12 text-ink font-body">
       {/* ── Page Header ───────────────────────────────────────────── */}
-      <header className="text-center space-y-4">
+      <header className="text-center space-y-3 sm:space-y-4">
         <Eyebrow className="text-sand">[ Studio Policies ]</Eyebrow>
-        <h1 className="font-display text-4xl sm:text-5xl md:text-6xl text-ink font-light leading-tight">
+        <h1 className="font-display text-3xl sm:text-5xl md:text-6xl text-ink font-light leading-tight">
           Terms &amp; Conditions
         </h1>
-        <p className="text-ink-soft text-xs sm:text-sm tracking-widest uppercase">
+        <p className="text-ink-soft text-[11px] sm:text-sm tracking-wider sm:tracking-widest uppercase">
           Effective Date: January 2025 • Brickleaf Interior Studio
         </p>
         <SectionDivider className="w-16 mx-auto border-sand" />
       </header>
 
       {/* ── Policy Sections ───────────────────────────────────────── */}
-      <div className="space-y-10 text-sm leading-relaxed text-ink-soft border border-line/50 p-6 sm:p-10 bg-cream/30">
+      <div className="space-y-8 sm:space-y-10 text-xs sm:text-sm leading-relaxed text-ink-soft border border-line/50 p-5 sm:p-10 bg-cream/30">
 
-        <section className="space-y-3">
-          <h2 className="font-display text-xl sm:text-2xl text-ink font-medium">
+        <section className="space-y-2.5 sm:space-y-3">
+          <h2 className="font-display text-lg sm:text-2xl text-ink font-medium">
             01. Scope of Design Engagement
           </h2>
           <p>
@@ -28,8 +28,8 @@ export default function Terms() {
           </p>
         </section>
 
-        <section className="space-y-3">
-          <h2 className="font-display text-xl sm:text-2xl text-ink font-medium">
+        <section className="space-y-2.5 sm:space-y-3">
+          <h2 className="font-display text-lg sm:text-2xl text-ink font-medium">
             02. Intellectual Property &amp; Architectural Blueprints
           </h2>
           <p>
@@ -37,8 +37,8 @@ export default function Terms() {
           </p>
         </section>
 
-        <section className="space-y-3">
-          <h2 className="font-display text-xl sm:text-2xl text-ink font-medium">
+        <section className="space-y-2.5 sm:space-y-3">
+          <h2 className="font-display text-lg sm:text-2xl text-ink font-medium">
             03. Custom Millwork, Stone &amp; Natural Materiality
           </h2>
           <p>
@@ -46,8 +46,8 @@ export default function Terms() {
           </p>
         </section>
 
-        <section className="space-y-3">
-          <h2 className="font-display text-xl sm:text-2xl text-ink font-medium">
+        <section className="space-y-2.5 sm:space-y-3">
+          <h2 className="font-display text-lg sm:text-2xl text-ink font-medium">
             04. Procurement, Timelines &amp; Handover
           </h2>
           <p>
@@ -55,8 +55,8 @@ export default function Terms() {
           </p>
         </section>
 
-        <section className="space-y-3">
-          <h2 className="font-display text-xl sm:text-2xl text-ink font-medium">
+        <section className="space-y-2.5 sm:space-y-3">
+          <h2 className="font-display text-lg sm:text-2xl text-ink font-medium">
             05. Privacy &amp; Digital Intake Security
           </h2>
           <p>
@@ -64,8 +64,8 @@ export default function Terms() {
           </p>
         </section>
 
-        <section className="space-y-3">
-          <h2 className="font-display text-xl sm:text-2xl text-ink font-medium">
+        <section className="space-y-2.5 sm:space-y-3">
+          <h2 className="font-display text-lg sm:text-2xl text-ink font-medium">
             06. Studio Contact &amp; Governance
           </h2>
           <p>

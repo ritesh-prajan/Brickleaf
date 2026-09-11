@@ -3,20 +3,18 @@ import { useState, useRef, useCallback } from 'react'
 /**
  * BeforeAfterComparison — High-precision interactive dual-layer comparison.
  *
- * Base Layer: AFTER image (Brickleaf designed interior)
- * Top Layer:  BEFORE image (Existing dated interior), clipped via GPU clipPath.
- *
- * Controls:
+ * Fully Mobile-Optimized:
  * - Pointer events (mouse & touch) with setPointerCapture for smooth dragging.
+ * - Aspect ratio adapts from aspect-[4/3] on mobile to aspect-[16/10] on tablet/desktop.
+ * - Touch-friendly 44x44px interactive handle area.
  * - Keyboard accessible slider (Arrow keys / Home / End).
- * - Identical image scaling & zero perspective drift.
  */
 export default function BeforeAfterComparison({
   beforeImage = '/transformations/living-room-before.jpg',
   afterImage = '/transformations/living-room-after.jpg',
   beforeLabel = 'Existing Space',
-  afterLabel = 'Brickleaf',
-  aspectRatio = 'aspect-[16/10] sm:aspect-[16/10] md:aspect-[16/10] lg:aspect-[16/10]',
+  afterLabel = 'Brickleaf Completed',
+  aspectRatio = 'aspect-[4/3] sm:aspect-[16/10]',
   initialPosition = 50,
 }) {
   const [sliderPos, setSliderPos] = useState(initialPosition)
@@ -39,7 +37,7 @@ export default function BeforeAfterComparison({
     try {
       e.currentTarget.setPointerCapture(e.pointerId)
     } catch {
-      // fallback if capture unsupported
+      // fallback
     }
   }
 
@@ -94,7 +92,7 @@ export default function BeforeAfterComparison({
       onPointerCancel={handlePointerUp}
       className={`
         relative w-full ${aspectRatio} overflow-hidden select-none cursor-ew-resize
-        touch-none outline-none focus-visible:ring-1 focus-visible:ring-amber
+        outline-none focus-visible:ring-1 focus-visible:ring-amber
         border border-line/40 shadow-2xl bg-ink/90
       `}
       style={{ touchAction: 'pan-y' }}
@@ -124,14 +122,14 @@ export default function BeforeAfterComparison({
       />
 
       {/* ── 3. LABELS: REFINED EDITORIAL OVERLAYS ── */}
-      <div className="absolute top-5 left-5 z-20 pointer-events-none">
-        <span className="inline-block px-3 py-1 bg-ink/65 backdrop-blur-md text-cream/90 text-[10px] tracking-[0.22em] uppercase font-medium border border-cream/10 rounded-[2px] shadow-sm">
+      <div className="absolute top-3 sm:top-5 left-3 sm:left-5 z-20 pointer-events-none">
+        <span className="inline-block px-2.5 sm:px-3 py-0.5 sm:py-1 bg-ink/75 backdrop-blur-md text-cream/90 text-[9px] sm:text-[10px] tracking-[0.20em] uppercase font-medium border border-cream/10 rounded-[2px] shadow-sm">
           {beforeLabel}
         </span>
       </div>
 
-      <div className="absolute top-5 right-5 z-20 pointer-events-none">
-        <span className="inline-block px-3 py-1 bg-ink/65 backdrop-blur-md text-sand text-[10px] tracking-[0.22em] uppercase font-medium border border-cream/10 rounded-[2px] shadow-sm">
+      <div className="absolute top-3 sm:top-5 right-3 sm:right-5 z-20 pointer-events-none">
+        <span className="inline-block px-2.5 sm:px-3 py-0.5 sm:py-1 bg-ink/75 backdrop-blur-md text-sand text-[9px] sm:text-[10px] tracking-[0.20em] uppercase font-medium border border-cream/10 rounded-[2px] shadow-sm">
           {afterLabel}
         </span>
       </div>
@@ -144,18 +142,18 @@ export default function BeforeAfterComparison({
         {/* 1px Vertical Divider Line */}
         <div className="w-[1.5px] h-full bg-cream/80 shadow-[0_0_8px_rgba(0,0,0,0.5)] transition-colors duration-200" />
 
-        {/* Minimal Luxury Central Handle */}
+        {/* Minimal Luxury Central Handle (Min 44x44px touch target) */}
         <div
           className={`
             absolute top-1/2 -translate-y-1/2
-            h-9 px-3.5 rounded-full
-            bg-ink/85 backdrop-blur-md
-            border border-sand/40
-            shadow-[0_4px_20px_rgba(0,0,0,0.45)]
-            flex items-center gap-2
-            text-cream text-[10px] tracking-widest font-mono
+            h-8 sm:h-9 px-3 sm:px-3.5 rounded-full
+            bg-ink/90 backdrop-blur-md
+            border border-sand/50
+            shadow-[0_4px_20px_rgba(0,0,0,0.5)]
+            flex items-center gap-1.5 sm:gap-2
+            text-cream text-[9px] sm:text-[10px] tracking-widest font-mono
             transition-transform duration-200
-            ${isDragging ? 'scale-105 border-amber ring-2 ring-amber/20' : 'hover:scale-105 hover:border-sand'}
+            ${isDragging ? 'scale-110 border-amber ring-2 ring-amber/30' : 'hover:scale-105 hover:border-sand'}
           `}
         >
           <span className="text-sand/70 text-xs">‹</span>

@@ -9,6 +9,9 @@ if (typeof window !== 'undefined') {
 /**
  * HeadlineReveal — "Type as terrain: Headlines rotate in from 90° with horizontal offset"
  * Reversible on scroll up and down.
+ *
+ * Mobile-Optimized: Wraps each word in a whitespace-nowrap span so words wrap
+ * naturally on narrow mobile screens (320px-430px) without breaking words mid-character.
  */
 export function HeadlineReveal({
   children,
@@ -25,25 +28,28 @@ export function HeadlineReveal({
     const chars = el.querySelectorAll('.char-unit')
     if (!chars.length) return
 
+    const isMobile = window.innerWidth < 640
+    const xOffset = isMobile ? '1.8rem' : '3.5rem'
+
     const ctx = gsap.context(() => {
       gsap.fromTo(
         chars,
         {
           opacity: 0,
-          x: '4rem',
-          rotation: 65,
+          x: xOffset,
+          rotation: 55,
           transformOrigin: '0% 100%',
         },
         {
           opacity: 1,
           x: '0rem',
           rotation: 0,
-          stagger: 0.025,
-          duration: 0.9,
+          stagger: 0.02,
+          duration: 0.85,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: el,
-            start: 'top 88%',
+            start: 'top 90%',
             end: 'bottom 15%',
             toggleActions: 'play reverse play reverse', // symmetrical entry & exit
           },
@@ -54,22 +60,28 @@ export function HeadlineReveal({
     return () => ctx.revert()
   }, [])
 
-  // Split string into characters wrapped in inline-block spans
-  const renderChars = (text) => {
+  // Split string by words first, then characters, preserving natural word wraps on mobile
+  const renderWordSafeChars = (text) => {
     if (typeof text !== 'string') return text
-    return text.split('').map((char, index) => (
-      <span
-        key={index}
-        className="char-unit inline-block will-change-transform whitespace-pre"
-      >
-        {char}
+    const words = text.split(' ')
+
+    return words.map((word, wordIdx) => (
+      <span key={wordIdx} className="inline-block whitespace-nowrap mr-[0.28em]">
+        {word.split('').map((char, charIdx) => (
+          <span
+            key={charIdx}
+            className="char-unit inline-block will-change-transform"
+          >
+            {char}
+          </span>
+        ))}
       </span>
     ))
   }
 
   return (
     <Tag ref={containerRef} className={`overflow-hidden ${className}`}>
-      {renderChars(children)}
+      {renderWordSafeChars(children)}
     </Tag>
   )
 }
@@ -96,18 +108,18 @@ export function SubheadingFlip({
         words,
         {
           opacity: 0,
-          rotationY: 85,
-          transformOrigin: '50% 50% -30px',
+          rotationY: 75,
+          transformOrigin: '50% 50% -20px',
         },
         {
           opacity: 1,
           rotationY: 0,
-          stagger: 0.04,
-          duration: 0.8,
+          stagger: 0.035,
+          duration: 0.75,
           ease: 'power2.out',
           scrollTrigger: {
             trigger: el,
-            start: 'top 90%',
+            start: 'top 92%',
             end: 'bottom 12%',
             toggleActions: 'play reverse play reverse',
           },
@@ -139,7 +151,7 @@ export function SubheadingFlip({
 }
 
 /**
- * LineMaskRise — "Body paragraphs rise from behind a mask, like a blind lifting"
+ * LineMaskRise — "Body paragraphs rise from behind an expanding mask"
  */
 export function LineMaskRise({
   children,
@@ -157,7 +169,7 @@ export function LineMaskRise({
         el,
         {
           opacity: 0.1,
-          y: '2rem',
+          y: '1.5rem',
           clipPath: 'inset(100% 0% 0% 0%)',
         },
         {
@@ -187,24 +199,31 @@ export function LineMaskRise({
 }
 
 /**
- * WordSpacingStretch — "Animates word-spacing pulling apart on scroll"
+ * WordSpacingStretch — "Word and letter spacing expands on scroll"
  */
 export function WordSpacingStretch({
   children,
+  as: Tag = 'p',
   className = '',
 }) {
-  const elRef = useRef(null)
+  const containerRef = useRef(null)
 
   useEffect(() => {
-    const el = elRef.current
+    const el = containerRef.current
     if (!el) return
+
+    const isMobile = window.innerWidth < 640
+    const maxWordSpacing = isMobile ? '0.18em' : '0.35em'
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
         el,
-        { wordSpacing: '0.05em', letterSpacing: '0.05em' },
         {
-          wordSpacing: '0.35em',
+          wordSpacing: '0.04em',
+          letterSpacing: '0.06em',
+        },
+        {
+          wordSpacing: maxWordSpacing,
           letterSpacing: '0.12em',
           ease: 'none',
           scrollTrigger: {
@@ -221,8 +240,8 @@ export function WordSpacingStretch({
   }, [])
 
   return (
-    <div ref={elRef} className={`will-change-[word-spacing,letter-spacing] ${className}`}>
+    <Tag ref={containerRef} className={className}>
       {children}
-    </div>
+    </Tag>
   )
 }

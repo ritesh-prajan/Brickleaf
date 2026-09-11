@@ -15,9 +15,8 @@ if (typeof window !== 'undefined') {
 /**
  * SignatureScrollHero — Fullscreen Homepage Experience
  *
- * The ENTIRE homepage is this scroll-driven interior transformation.
  * 8 full-bleed photorealistic room images stacked edge-to-edge.
- * Fixed header above, full-screen room filling the viewport.
+ * Fixed translucent header above, full-screen room filling the viewport.
  * Zero cards, zero outer borders, zero dark gaps.
  */
 export default function SignatureScrollHero() {
@@ -74,10 +73,9 @@ export default function SignatureScrollHero() {
           trigger: section,
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 0.8, // Smooth cinematic scrub
+          scrub: 0.8,
           onUpdate(self) {
             const p = self.progress
-            // Determine active stage for HUD
             let step = 0
             for (let i = REVEALS.length - 1; i >= 0; i--) {
               const reveal = REVEALS[i]
@@ -92,7 +90,7 @@ export default function SignatureScrollHero() {
 
       // ── Build progressive reveal tweens (0 → 1) ───────────────────────
       REVEALS.forEach((reveal, i) => {
-        if (reveal === null) return // Stage 1 is permanent base
+        if (reveal === null) return
         const plate = plates[i]
         if (!plate) return
 
@@ -142,7 +140,7 @@ export default function SignatureScrollHero() {
         <div className="ssh-hud-top">
           <div className="ssh-tag">
             <span className="ssh-tag-dot" />
-            {currentStage.tag}
+            <span>{currentStage.tag}</span>
           </div>
 
           <div className="ssh-dots" aria-label="Transformation progress">
@@ -181,19 +179,19 @@ export default function SignatureScrollHero() {
           <div ref={ctaRef} className="ssh-cta-overlay">
             <div className="ssh-cta-content">
               <Eyebrow className="text-sand">[ Brickleaf Interior Studio ]</Eyebrow>
-              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl text-cream font-light leading-tight">
+              <h1 className="font-display text-3xl sm:text-5xl md:text-6xl text-cream font-light leading-tight">
                 Crafting Timeless Architectural Sanctuary
               </h1>
-              <p className="text-cream/80 text-sm sm:text-base max-w-md leading-relaxed font-body">
+              <p className="text-cream/80 text-xs sm:text-base max-w-md leading-relaxed font-body">
                 From empty architectural canvas to bespoke material curation. Brickleaf designs spaces that resonate with warmth and permanence.
               </p>
-              <div className="flex flex-wrap gap-4 justify-center pt-2">
-                <Button variant="primary" onClick={() => navigate('/services')}>
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto justify-center pt-2">
+                <Button variant="primary" onClick={() => navigate('/services')} className="w-full sm:w-auto text-xs py-3.5 sm:py-3">
                   Explore Services
                 </Button>
                 <Button
                   variant="outline"
-                  className="border-cream/50 text-cream hover:bg-cream hover:text-ink"
+                  className="w-full sm:w-auto text-xs py-3.5 sm:py-3 border-cream/50 text-cream hover:bg-cream hover:text-ink"
                   onClick={() => navigate('/contact')}
                 >
                   Start Your Brief
@@ -211,7 +209,7 @@ export default function SignatureScrollHero() {
           </div>
 
           <div ref={hintRef} className="ssh-hint">
-            <span>Scroll to design the space</span>
+            <span>Scroll to design</span>
             <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
             </svg>

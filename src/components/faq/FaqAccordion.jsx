@@ -36,7 +36,8 @@ export default function FaqAccordion() {
         .filter(t => t.vars?.id?.startsWith('faq-item'))
         .forEach(t => t.kill())
 
-      gsap.set(items, { x: '-3rem', opacity: 0 })
+      const isMobile = window.innerWidth < 768
+      gsap.set(items, { x: isMobile ? '-1rem' : '-3rem', opacity: 0 })
 
       items.forEach((item, i) => {
         gsap.to(item, {
@@ -48,7 +49,7 @@ export default function FaqAccordion() {
           scrollTrigger: {
             id: 'faq-item-' + i,
             trigger: item,
-            start: 'top 90%',
+            start: 'top 92%',
             end: 'bottom 10%',
             toggleActions: 'play reverse play reverse',
           },
@@ -60,30 +61,33 @@ export default function FaqAccordion() {
   }, [filteredItems])
 
   return (
-    <div className="w-full space-y-12">
-      <div className="flex flex-wrap items-center justify-center gap-2" role="tablist">
-        {FAQ_CATEGORIES.map((cat) => {
-          const isActive = activeCategory === cat
-          return (
-            <button
-              key={cat}
-              role="tab"
-              aria-selected={isActive}
-              type="button"
-              onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 text-xs uppercase tracking-[0.16em] transition-all duration-200 border ${
-                isActive
-                  ? 'bg-ink text-cream border-ink font-semibold shadow-md'
-                  : 'bg-cream/40 text-ink-soft border-line/70 hover:border-amber hover:text-ink'
-              }`}
-            >
-              {cat}
-            </button>
-          )
-        })}
+    <div className="w-full space-y-8 sm:space-y-12">
+      {/* Category Tabs - Horizontal swipe on mobile, centered on desktop */}
+      <div className="w-full overflow-x-auto no-scrollbar py-1.5 -mx-4 px-4 sm:mx-0 sm:px-0">
+        <div className="flex items-center gap-2 sm:justify-center min-w-max sm:min-w-0" role="tablist">
+          {FAQ_CATEGORIES.map((cat) => {
+            const isActive = activeCategory === cat
+            return (
+              <button
+                key={cat}
+                role="tab"
+                aria-selected={isActive}
+                type="button"
+                onClick={() => setActiveCategory(cat)}
+                className={`shrink-0 px-4 py-2.5 sm:py-2 text-xs uppercase tracking-[0.16em] transition-all duration-200 border min-h-[44px] flex items-center justify-center ${
+                  isActive
+                    ? 'bg-ink text-cream border-ink font-semibold shadow-md'
+                    : 'bg-cream/40 text-ink-soft border-line/70 hover:border-amber hover:text-ink active:bg-sand/20'
+                }`}
+              >
+                {cat}
+              </button>
+            )
+          })}
+        </div>
       </div>
 
-      <div ref={listRef} className="space-y-4 max-w-4xl mx-auto">
+      <div ref={listRef} className="space-y-3 sm:space-y-4 max-w-4xl mx-auto">
         {filteredItems.map((item) => {
           const isOpen = !!openItems[item.id]
           return (
@@ -96,15 +100,15 @@ export default function FaqAccordion() {
                 onClick={() => toggleItem(item.id)}
                 aria-expanded={isOpen}
                 aria-controls={`faq-answer-${item.id}`}
-                className="w-full px-6 py-5 flex items-center justify-between gap-4 text-left font-display text-lg sm:text-xl text-ink font-normal"
+                className="w-full px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-3 sm:gap-4 text-left font-display text-base sm:text-xl text-ink font-normal min-h-[48px]"
               >
-                <span>{item.question}</span>
-                <span className={`text-sand text-lg transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-45 text-amber' : 'rotate-0'}`}>
+                <span className="leading-snug">{item.question}</span>
+                <span className={`text-sand text-lg transition-transform duration-300 flex-shrink-0 w-6 h-6 flex items-center justify-center ${isOpen ? 'rotate-45 text-amber' : 'rotate-0'}`}>
                   +
                 </span>
               </button>
               {isOpen && (
-                <div id={`faq-answer-${item.id}`} className="px-6 pb-6 pt-1 text-sm text-ink-soft leading-relaxed border-t border-line/40 font-body">
+                <div id={`faq-answer-${item.id}`} className="px-4 sm:px-6 pb-5 sm:pb-6 pt-1 text-xs sm:text-sm text-ink-soft leading-relaxed border-t border-line/40 font-body">
                   <p>{item.answer}</p>
                 </div>
               )}
@@ -113,17 +117,17 @@ export default function FaqAccordion() {
         })}
       </div>
 
-      <div className="max-w-4xl mx-auto p-8 bg-ink text-cream border border-sand/30 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xl">
-        <div className="space-y-1 text-center sm:text-left">
-          <Eyebrow className="text-sand">Have a unique inquiry?</Eyebrow>
-          <h3 className="font-display text-2xl font-light text-cream">
+      <div className="max-w-4xl mx-auto p-5 sm:p-8 bg-ink text-cream border border-sand/30 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-5 sm:gap-6 shadow-2xl">
+        <div className="space-y-1.5 text-center sm:text-left">
+          <Eyebrow className="text-sand">[ Bespoke Inquiries ]</Eyebrow>
+          <h3 className="font-display text-xl sm:text-2xl font-light text-cream leading-snug">
             Schedule an Architectural Discovery Session
           </h3>
-          <p className="text-cream/70 text-xs sm:text-sm">
+          <p className="text-cream/70 text-xs sm:text-sm leading-relaxed">
             Our team reviews blueprints, spatial parameters, and aesthetic direction.
           </p>
         </div>
-        <Button variant="primary" onClick={() => navigate('/contact')} className="flex-shrink-0 text-xs">
+        <Button variant="primary" onClick={() => navigate('/contact')} className="flex-shrink-0 text-xs w-full sm:w-auto min-h-[44px] justify-center">
           Start Project Brief →
         </Button>
       </div>

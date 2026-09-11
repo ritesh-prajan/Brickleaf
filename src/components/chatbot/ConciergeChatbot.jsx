@@ -239,22 +239,22 @@ export default function ConciergeChatbot() {
   return (
     <>
       {/* ── Floating Launcher Trigger ──────────────────────────────── */}
-      <div className="fixed bottom-6 right-6 z-40">
+      <div className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-40">
         {!isOpen ? (
           <button
             type="button"
             onClick={() => setIsOpen(true)}
             aria-label="Open Design Concierge"
-            className="group flex items-center gap-3 px-4 py-3 bg-ink/90 backdrop-blur-md text-cream border border-sand/50 shadow-2xl hover:border-amber transition-all duration-300 hover:scale-105"
+            className="group flex items-center gap-2.5 sm:gap-3 px-3.5 sm:px-4 py-2.5 sm:py-3 bg-ink/95 backdrop-blur-md text-cream border border-sand/50 shadow-2xl hover:border-amber transition-all duration-300 hover:scale-105 min-h-[48px]"
           >
             {/* Avatar Pill Headshot */}
-            <div className="relative w-8 h-8 rounded-full overflow-hidden bg-sand/30 border border-sand/60 flex-shrink-0 flex items-center justify-center font-display text-xs text-cream font-bold">
+            <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-full overflow-hidden bg-sand/30 border border-sand/60 flex-shrink-0 flex items-center justify-center font-display text-xs text-cream font-bold">
               <span>A</span>
-              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border border-ink" />
+              <span className="absolute bottom-0 right-0 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-emerald-500 rounded-full border border-ink" />
             </div>
 
             <div className="text-left font-body">
-              <span className="text-[10px] text-sand uppercase tracking-widest font-semibold block leading-tight">
+              <span className="text-[9px] sm:text-[10px] text-sand uppercase tracking-widest font-semibold block leading-tight">
                 Design Concierge
               </span>
               <span className="text-xs font-display text-cream block leading-tight group-hover:text-amber">
@@ -270,33 +270,33 @@ export default function ConciergeChatbot() {
         <div
           role="dialog"
           aria-label="Aria — Design Concierge"
-          className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[420px] max-h-[85vh] h-[640px] bg-cream border border-line/70 shadow-2xl flex flex-col overflow-hidden font-body text-ink"
+          className="fixed bottom-2 sm:bottom-6 right-2 sm:right-6 z-50 w-[calc(100vw-1rem)] sm:w-[420px] max-h-[90vh] h-[580px] sm:h-[640px] bg-cream border border-line/70 shadow-2xl flex flex-col overflow-hidden font-body text-ink"
         >
           {/* Chat Header */}
-          <div className="px-5 py-4 bg-ink text-cream flex items-center justify-between border-b border-sand/30 flex-shrink-0">
+          <div className="px-4 sm:px-5 py-3.5 sm:py-4 bg-ink text-cream flex items-center justify-between border-b border-sand/30 flex-shrink-0">
             <div className="flex items-center gap-3">
-              <div className="relative w-9 h-9 rounded-full bg-sand/30 border border-sand/60 flex items-center justify-center font-display font-bold text-cream text-sm">
+              <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-sand/30 border border-sand/60 flex items-center justify-center font-display font-bold text-cream text-sm">
                 <span>A</span>
-                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border border-ink" />
+                <span className="absolute bottom-0 right-0 w-2 sm:w-2.5 h-2 sm:h-2.5 bg-emerald-500 rounded-full border border-ink" />
               </div>
 
               <div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 sm:gap-2">
                   <h3 className="font-display text-sm font-medium text-cream">Aria</h3>
                   <span className="text-[9px] px-1.5 py-0.2 bg-amber/30 text-sand border border-amber/40 uppercase tracking-widest rounded">
                     Concierge
                   </span>
                 </div>
-                <p className="text-[11px] text-cream/70">Brickleaf Studio Assistant</p>
+                <p className="text-[10px] sm:text-[11px] text-cream/70">Brickleaf Studio Assistant</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2">
               <button
                 type="button"
                 onClick={handleRestart}
                 title="Restart chat"
-                className="text-xs text-cream/60 hover:text-cream px-2 py-1 transition-colors"
+                className="w-8 h-8 flex items-center justify-center text-xs text-cream/60 hover:text-cream rounded-full hover:bg-cream/10 transition-colors"
               >
                 ↺
               </button>
@@ -304,7 +304,7 @@ export default function ConciergeChatbot() {
                 type="button"
                 onClick={() => setIsOpen(false)}
                 aria-label="Close Chat"
-                className="text-sm text-cream/60 hover:text-cream px-2 py-1 transition-colors"
+                className="w-8 h-8 flex items-center justify-center text-sm text-cream/60 hover:text-cream rounded-full hover:bg-cream/10 transition-colors"
               >
                 ✕
               </button>
@@ -312,11 +312,11 @@ export default function ConciergeChatbot() {
           </div>
 
           {/* Chat Conversation Scroll Area */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4 bg-cream/50">
+          <div className="flex-1 overflow-y-auto p-3.5 sm:p-5 space-y-3.5 sm:space-y-4 bg-cream/50 overscroll-contain">
             {messages.map((msg, idx) => (
               <div
                 key={idx}
-                className={`flex gap-2.5 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={`flex gap-2 sm:gap-2.5 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 {msg.sender === 'avatar' && (
                   <div className="w-6 h-6 rounded-full bg-ink text-cream flex-shrink-0 flex items-center justify-center text-[10px] font-display font-bold mt-1">
@@ -325,7 +325,7 @@ export default function ConciergeChatbot() {
                 )}
 
                 <div
-                  className={`max-w-[82%] px-4 py-2.5 text-xs sm:text-sm leading-relaxed ${
+                  className={`max-w-[85%] sm:max-w-[82%] px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm leading-relaxed ${
                     msg.sender === 'user'
                       ? 'bg-ink text-cream border border-line'
                       : 'bg-cream border border-line/60 text-ink shadow-sm'
@@ -350,7 +350,7 @@ export default function ConciergeChatbot() {
                       key={opt.id}
                       type="button"
                       onClick={() => handleSelectInterest(opt)}
-                      className="text-left px-3.5 py-2.5 text-xs bg-cream hover:bg-ink hover:text-cream border border-line hover:border-sand transition-all duration-150"
+                      className="text-left px-3.5 py-2.5 text-xs bg-cream hover:bg-ink hover:text-cream border border-line hover:border-sand transition-all duration-150 min-h-[42px] flex items-center"
                     >
                       {opt.label}
                     </button>
@@ -371,7 +371,7 @@ export default function ConciergeChatbot() {
                       key={service}
                       type="button"
                       onClick={() => handleSelectService(service)}
-                      className="text-left px-3.5 py-2.5 text-xs bg-cream hover:bg-ink hover:text-cream border border-line hover:border-sand transition-all duration-150"
+                      className="text-left px-3.5 py-2.5 text-xs bg-cream hover:bg-ink hover:text-cream border border-line hover:border-sand transition-all duration-150 min-h-[42px] flex items-center"
                     >
                       {service}
                     </button>
@@ -392,7 +392,7 @@ export default function ConciergeChatbot() {
                       key={time}
                       type="button"
                       onClick={() => handleSelectTimeline(time)}
-                      className="text-left px-3.5 py-2.5 text-xs bg-cream hover:bg-ink hover:text-cream border border-line hover:border-sand transition-all duration-150"
+                      className="text-left px-3.5 py-2.5 text-xs bg-cream hover:bg-ink hover:text-cream border border-line hover:border-sand transition-all duration-150 min-h-[42px] flex items-center"
                     >
                       {time}
                     </button>
@@ -413,7 +413,7 @@ export default function ConciergeChatbot() {
                       key={budget}
                       type="button"
                       onClick={() => handleSelectBudget(budget)}
-                      className="text-left px-3.5 py-2.5 text-xs bg-cream hover:bg-ink hover:text-cream border border-line hover:border-sand transition-all duration-150"
+                      className="text-left px-3.5 py-2.5 text-xs bg-cream hover:bg-ink hover:text-cream border border-line hover:border-sand transition-all duration-150 min-h-[42px] flex items-center"
                     >
                       {budget}
                     </button>
@@ -424,17 +424,17 @@ export default function ConciergeChatbot() {
 
             {/* Step 5: Name Input Form */}
             {currentStep === CONCIERGE_STEPS.NAME && (
-              <form onSubmit={handleSubmitName} className="pt-2 space-y-2">
+              <form onSubmit={handleSubmitName} className="pt-2 space-y-2.5">
                 <input
                   type="text"
                   required
                   placeholder="Your Full Name..."
                   value={inputName}
                   onChange={(e) => setInputName(e.target.value)}
-                  className="w-full px-3.5 py-2.5 text-xs bg-cream border border-line focus:outline-none focus:border-amber"
+                  className="w-full px-3.5 py-3 text-sm bg-cream border border-line focus:outline-none focus:border-amber"
                   autoFocus
                 />
-                <Button variant="primary" type="submit" className="w-full text-xs py-2">
+                <Button variant="primary" type="submit" className="w-full text-xs py-3 min-h-[44px] justify-center">
                   Continue →
                 </Button>
               </form>
@@ -449,7 +449,7 @@ export default function ConciergeChatbot() {
                   placeholder="WhatsApp Phone Number..."
                   value={inputPhone}
                   onChange={(e) => setInputPhone(e.target.value)}
-                  className="w-full px-3.5 py-2.5 text-xs bg-cream border border-line focus:outline-none focus:border-amber"
+                  className="w-full px-3.5 py-3 text-sm bg-cream border border-line focus:outline-none focus:border-amber"
                   autoFocus
                 />
                 <input
@@ -457,9 +457,9 @@ export default function ConciergeChatbot() {
                   placeholder="Email Address (Optional)..."
                   value={inputEmail}
                   onChange={(e) => setInputEmail(e.target.value)}
-                  className="w-full px-3.5 py-2.5 text-xs bg-cream border border-line focus:outline-none focus:border-amber"
+                  className="w-full px-3.5 py-3 text-sm bg-cream border border-line focus:outline-none focus:border-amber"
                 />
-                <Button variant="primary" type="submit" className="w-full text-xs py-2">
+                <Button variant="primary" type="submit" className="w-full text-xs py-3 min-h-[44px] justify-center">
                   Finalize Brief →
                 </Button>
               </form>
@@ -490,7 +490,7 @@ export default function ConciergeChatbot() {
                   <Button
                     variant="primary"
                     onClick={handleTransferToContact}
-                    className="w-full text-xs py-2.5 justify-center"
+                    className="w-full text-xs py-3 min-h-[44px] justify-center"
                   >
                     Transfer to Contact Page (Pre-Filled) →
                   </Button>
@@ -498,7 +498,7 @@ export default function ConciergeChatbot() {
                   <Button
                     variant="outline"
                     onClick={handleSendWhatsApp}
-                    className="w-full text-xs py-2 justify-center"
+                    className="w-full text-xs py-3 min-h-[44px] justify-center"
                   >
                     💬 Send to WhatsApp Instantly
                   </Button>

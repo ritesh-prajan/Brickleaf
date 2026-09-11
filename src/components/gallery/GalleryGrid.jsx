@@ -70,35 +70,38 @@ export default function GalleryGrid() {
   }, [filteredProjects])
 
   return (
-    <div className="w-full space-y-10">
-      <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3" role="tablist">
-        {GALLERY_CATEGORIES.map((cat) => {
-          const isActive = activeCategory === cat
-          return (
-            <button
-              key={cat}
-              role="tab"
-              aria-selected={isActive}
-              type="button"
-              onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 text-xs uppercase tracking-[0.18em] transition-all duration-200 border ${
-                isActive
-                  ? 'bg-ink text-cream border-ink font-semibold shadow-md'
-                  : 'bg-cream/40 text-ink-soft border-line/70 hover:border-amber hover:text-ink'
-              }`}
-            >
-              {cat}
-            </button>
-          )
-        })}
+    <div className="w-full space-y-8 sm:space-y-10">
+      {/* Category Filter Bar - Horizontal swipe on mobile, centered on desktop */}
+      <div className="w-full overflow-x-auto no-scrollbar py-1.5 -mx-4 px-4 sm:mx-0 sm:px-0">
+        <div className="flex items-center gap-2 sm:gap-3 sm:justify-center min-w-max sm:min-w-0" role="tablist">
+          {GALLERY_CATEGORIES.map((cat) => {
+            const isActive = activeCategory === cat
+            return (
+              <button
+                key={cat}
+                role="tab"
+                aria-selected={isActive}
+                type="button"
+                onClick={() => setActiveCategory(cat)}
+                className={`shrink-0 px-4 py-2.5 sm:py-2 text-xs uppercase tracking-[0.18em] transition-all duration-200 border min-h-[44px] flex items-center justify-center ${
+                  isActive
+                    ? 'bg-ink text-cream border-ink font-semibold shadow-md'
+                    : 'bg-cream/40 text-ink-soft border-line/70 hover:border-amber hover:text-ink active:bg-sand/20'
+                }`}
+              >
+                {cat}
+              </button>
+            )
+          })}
+        </div>
       </div>
 
-      <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
+      <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-10">
         {filteredProjects.map((project) => (
           <article
             key={project.id}
             onClick={() => setSelectedProject(project)}
-            className="gallery-card group cursor-pointer border border-line/70 bg-cream/30 backdrop-blur-[2px] overflow-hidden flex flex-col transition-all duration-300 hover:border-amber hover:bg-cream/60 hover:shadow-xl"
+            className="gallery-card group cursor-pointer border border-line/70 bg-cream/30 backdrop-blur-[2px] overflow-hidden flex flex-col transition-all duration-300 hover:border-amber hover:bg-cream/60 hover:shadow-xl active:scale-[0.99]"
           >
             <div className="relative aspect-[16/10] w-full overflow-hidden bg-ink/10">
               <img
@@ -108,7 +111,7 @@ export default function GalleryGrid() {
                 loading="lazy"
                 decoding="async"
               />
-              <span className="absolute top-4 left-4 px-3 py-1 bg-ink/75 backdrop-blur-md text-cream text-[10px] uppercase tracking-widest font-medium border border-cream/10">
+              <span className="absolute top-3.5 left-3.5 sm:top-4 sm:left-4 px-2.5 sm:px-3 py-1 bg-ink/75 backdrop-blur-md text-cream text-[10px] uppercase tracking-widest font-medium border border-cream/10">
                 {project.category}
               </span>
               <div className="absolute inset-0 bg-ink/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
@@ -117,13 +120,13 @@ export default function GalleryGrid() {
                 </span>
               </div>
             </div>
-            <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between space-y-4">
+            <div className="p-5 sm:p-6 md:p-8 flex-1 flex flex-col justify-between space-y-4">
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs text-sand">
                   <span className="tracking-widest uppercase">{project.location}</span>
                   <span>{project.year}</span>
                 </div>
-                <h3 className="font-display text-2xl sm:text-3xl text-ink font-light group-hover:text-amber transition-colors">
+                <h3 className="font-display text-xl sm:text-2xl lg:text-3xl text-ink font-light group-hover:text-amber transition-colors">
                   {project.title}
                 </h3>
                 <p className="text-ink-soft text-xs sm:text-sm leading-relaxed line-clamp-2">

@@ -25,7 +25,7 @@ const PROJECT_TYPES = [
 
 /* ── Shared input class ─────────────────────────────────── */
 const inputClass = [
-  'w-full px-4 py-3.5',
+  'w-full px-3.5 sm:px-4 py-3 sm:py-3.5',
   'bg-transparent border border-line',
   'text-ink text-sm placeholder:text-ink-soft/40',
   'transition-colors duration-150',
@@ -47,7 +47,7 @@ function FieldLabel({ htmlFor, children }) {
   return (
     <label
       htmlFor={htmlFor}
-      className="block mb-1.5 text-xs tracking-[0.18em] uppercase text-ink-soft font-medium"
+      className="block mb-1.5 text-xs tracking-[0.16em] sm:tracking-[0.18em] uppercase text-ink-soft font-medium"
     >
       {children}
     </label>
@@ -67,14 +67,14 @@ export default function RightPanel({ form, errors, handleField, toggleType, hand
   }
 
   return (
-    <div className="flex flex-col bg-cream/60 backdrop-blur-md w-full lg:w-[58%] px-8 py-12 md:px-12 lg:px-16 xl:px-20 lg:py-16">
+    <div className="flex flex-col bg-cream/60 backdrop-blur-md w-full px-3 sm:px-8 md:px-12 py-6 sm:py-10">
 
       {/* ── Section heading ──────────────────────────────── */}
-      <header className="mb-10 space-y-2">
+      <header className="mb-6 sm:mb-10 space-y-1.5 sm:space-y-2">
         <p className="text-xs tracking-[0.22em] uppercase text-sand font-medium">
           [ Project Intake ]
         </p>
-        <h2 className="font-display text-3xl md:text-4xl text-ink font-light leading-snug">
+        <h2 className="font-display text-2xl sm:text-3xl md:text-4xl text-ink font-light leading-snug">
           Tell us about your project
         </h2>
       </header>
@@ -85,11 +85,11 @@ export default function RightPanel({ form, errors, handleField, toggleType, hand
         aria-label="Project intake form"
         onSubmit={handleSubmit}
         noValidate
-        className="flex flex-col gap-6"
+        className="flex flex-col gap-5 sm:gap-6"
       >
 
         {/* ── Row 1: Name, Email & Phone ─────────── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
           <div>
             <FieldLabel htmlFor="if-name">Name *</FieldLabel>
             <input
@@ -158,13 +158,13 @@ export default function RightPanel({ form, errors, handleField, toggleType, hand
 
         {/* ── Checkbox grid ────────────────────────────────── */}
         <fieldset>
-          <legend className="mb-4 text-xs tracking-[0.18em] uppercase text-ink-soft font-medium">
+          <legend className="mb-3 sm:mb-4 text-xs tracking-[0.16em] sm:tracking-[0.18em] uppercase text-ink-soft font-medium">
             I&rsquo;m interested in&hellip;
           </legend>
           <div
             role="group"
             aria-label="Project type selection"
-            className="grid grid-cols-2 md:grid-cols-3 gap-2.5"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-2.5"
           >
             {PROJECT_TYPES.map(({ id, label }) => {
               const isChecked = form.projectTypes.includes(label) || form.projectTypes.includes(id)
@@ -182,7 +182,7 @@ export default function RightPanel({ form, errors, handleField, toggleType, hand
         </fieldset>
 
         {/* ── Divider before submit ─────────────────────────── */}
-        <hr className="border-0 border-t border-line my-2" aria-hidden="true" />
+        <hr className="border-0 border-t border-line my-1 sm:my-2" aria-hidden="true" />
 
         {/* ── Submit Options ───────────────────────────────── */}
         <div className="flex flex-col sm:flex-row gap-3">
@@ -190,14 +190,15 @@ export default function RightPanel({ form, errors, handleField, toggleType, hand
             id="intake-submit"
             type="submit"
             className="
-              flex-1 py-4 px-6
+              flex-1 py-3.5 sm:py-4 px-6 min-h-[44px]
               bg-amber text-cream
-              text-xs tracking-[0.2em] uppercase font-semibold
+              text-xs tracking-[0.18em] sm:tracking-[0.2em] uppercase font-semibold
               border border-amber
               transition-colors duration-200
               hover:bg-ink hover:border-ink
               focus-visible:outline-none focus-visible:ring-2
               focus-visible:ring-amber
+              flex items-center justify-center
             "
           >
             Submit Project Brief
@@ -207,9 +208,9 @@ export default function RightPanel({ form, errors, handleField, toggleType, hand
             type="button"
             onClick={handleDirectWhatsApp}
             className="
-              flex-1 py-4 px-6
+              flex-1 py-3.5 sm:py-4 px-6 min-h-[44px]
               bg-cream border border-sand text-ink
-              text-xs tracking-[0.2em] uppercase font-semibold
+              text-xs tracking-[0.18em] sm:tracking-[0.2em] uppercase font-semibold
               transition-all duration-200
               hover:bg-emerald-700 hover:text-white hover:border-emerald-700
               flex items-center justify-center gap-2
