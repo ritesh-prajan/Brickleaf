@@ -1,6 +1,6 @@
 /**
  * Curated Gallery Projects & Architectural Specs for Brickleaf
- * Built from actual client renders: Clement Residence & Solarium Estate
+ * Sourced directly from high-resolution render projects
  */
 
 export const GALLERY_PROJECTS = [
@@ -59,7 +59,7 @@ export const GALLERY_PROJECTS = [
     ],
     tagline: 'Warm Mediterranean minimalism celebrating organic light dynamics and artisanal materiality.',
     description:
-      'Conceived as a tranquil coastal retreat, this estate embraces double-height light-wells and floor-to-ceiling glass fenestrations. The layout features curved modular seating grounded by hand-knotted organic jute rugs, solid travertine low-slung tables, a bespoke open culinary pantry with seamless quartz waterfall edges, a dedicated formal dining room with sculptural brass luminaire fixtures, and minimalist Japandi-inspired fluted room dividers.',
+      'Conceived as a tranquil coastal retreat, this estate embraces double-height light-wells and floor-to-ceiling glass fenestrations. The layout features curved modular seating grounded by hand-knotted organic jute rugs, solid travertine low-slung tables, an open culinary pantry with seamless quartz waterfall edges, a dedicated formal dining room with sculptural brass luminaire fixtures, and minimalist Japandi-inspired fluted room dividers.',
     materials: [
       { name: 'Navona Travertine', detail: 'Honed Matte Coffee Tables & Display Plinths' },
       { name: 'Smoked White Oak', detail: 'Wide-Plank Engineered Hardwood Floors' },
@@ -70,6 +70,70 @@ export const GALLERY_PROJECTS = [
     ],
     palette: ['#ECE7E1', '#D4C9BC', '#B8956A', '#1E1B18'],
   },
+  {
+    id: 'the-lumina-pavilion',
+    title: 'The Lumina Living Pavilion',
+    category: 'Renovation',
+    location: 'Bandra West, Mumbai',
+    year: '2025',
+    area: '4,600 sq.ft',
+    scope: 'Structural Renovation, Floating Credenzas & Bespoke Lighting',
+    coverImage: '/gallery/lumina-pavilion/photo-01.jpg',
+    secondaryImages: [
+      '/gallery/lumina-pavilion/photo-02.jpg',
+      '/gallery/lumina-pavilion/photo-03.jpg',
+      '/gallery/lumina-pavilion/photo-04.jpg',
+      '/gallery/lumina-pavilion/photo-05.jpg',
+      '/gallery/lumina-pavilion/photo-06.jpg',
+      '/gallery/lumina-pavilion/photo-07.jpg',
+      '/gallery/lumina-pavilion/photo-08.jpg',
+      '/gallery/lumina-pavilion/photo-09.jpg',
+      '/gallery/lumina-pavilion/photo-10.jpg',
+    ],
+    tagline: 'Architectural transformation merging sculpted plaster with monolithic marble media alcoves.',
+    description:
+      'Reimagining a high-rise residence into an airy, sculptural sanctuary. The renovation introduced curved ceiling coves, seamless microcement transitions, a backlit cantilevered TV feature wall, bespoke velvet accent lounge seating, and an integrated dry pantry with fluted glass cabinetry.',
+    materials: [
+      { name: 'Statuario Marble', detail: 'Backlit Bookmatched Media Wall' },
+      { name: 'Acoustic Microcement', detail: 'Seamless Plaster Flooring & Wall Transitions' },
+      { name: 'Fluted Fluted Glass', detail: 'Custom Display Cabinetry & Partitions' },
+      { name: 'Forest Green Velvet', detail: 'Sculptural Lounge Armchairs' },
+      { name: 'Anodized Dark Bronze', detail: 'Slimline Fenestration & Framing' },
+      { name: 'Warm 2700K Coves', detail: 'Recessed Indirect Ceiling Lighting' },
+    ],
+    palette: ['#ECE7E1', '#D4C9BC', '#8C9A86', '#1E1B18'],
+  },
+  {
+    id: 'the-clement-master-suite',
+    title: 'The Clement Master Sanctuaries',
+    category: 'Residential',
+    location: 'Jubilee Hills, Hyderabad',
+    year: '2025',
+    area: '2,800 sq.ft',
+    scope: 'Master Bedroom Suite, Walk-in Closet & Spa Ensuite',
+    coverImage: '/gallery/clement-residence/photo-05.jpg',
+    secondaryImages: [
+      '/gallery/clement-residence/photo-06.jpg',
+      '/gallery/clement-residence/photo-07.jpg',
+      '/gallery/clement-residence/photo-08.jpg',
+      '/gallery/clement-residence/photo-09.jpg',
+      '/gallery/clement-residence/photo-10.jpg',
+      '/gallery/clement-residence/photo-01.jpg',
+      '/gallery/clement-residence/photo-02.jpg',
+      '/gallery/clement-residence/photo-03.jpg',
+      '/gallery/clement-residence/photo-04.jpg',
+    ],
+    tagline: 'An intimate sanctuary featuring tactile wall fabrics, bespoke walk-in wardrobes, and spa vanities.',
+    description:
+      'A dedicated showcase of the private quarters within the Clement Residence. Tailored for absolute serenity, featuring custom upholstered headboard paneling, floating bedside plinths, illuminated glass wardrobe systems with leather-lined drawers, and a monolithic ensuite bath with integrated recessed niches.',
+    materials: [
+      { name: 'Textured Oatmeal Fabric', detail: 'Full-Height Acoustic Headboard Wall' },
+      { name: 'Smoked Glass & Bronze', detail: 'Illuminated Wardrobe Systems' },
+      { name: 'Honed Silver Travertine', detail: 'Custom Vanity Countertops' },
+      { name: 'Brushed Gold Fixtures', detail: 'Thermostatic Spa Fittings' },
+    ],
+    palette: ['#E6DFD5', '#B5A593', '#685D54', '#1F1B18'],
+  },
 ]
 
-export const GALLERY_CATEGORIES = ['All', 'Residential', 'Renovation', 'Commercial']
+export const GALLERY_CATEGORIES = ['All', 'Residential', 'Renovation']

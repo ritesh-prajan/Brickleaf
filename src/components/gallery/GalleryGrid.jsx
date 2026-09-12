@@ -30,39 +30,23 @@ export default function GalleryGrid() {
         .forEach(t => t.kill())
 
       cards.forEach((card, i) => {
-        gsap.set(card, { clipPath: 'inset(0% 100% 0% 0%)', opacity: 1 })
-        const img = card.querySelector('.gallery-card-img')
-        if (img) gsap.set(img, { scale: 1.08 })
-
-        gsap.to(card, {
-          clipPath: 'inset(0% 0% 0% 0%)',
-          duration: 0.9,
-          ease: 'power3.out',
-          delay: (i % 2) * 0.12,
-          scrollTrigger: {
-            id: 'gallery-card-' + i,
-            trigger: card,
-            start: 'top 88%',
-            end: 'bottom 10%',
-            toggleActions: 'play reverse play reverse',
-          },
-        })
-
-        if (img) {
-          gsap.to(img, {
-            scale: 1,
-            duration: 1.2,
-            ease: 'power2.out',
-            delay: (i % 2) * 0.12,
+        gsap.fromTo(
+          card,
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            ease: 'power3.out',
+            delay: (i % 2) * 0.08,
             scrollTrigger: {
-              id: 'gallery-img-' + i,
+              id: 'gallery-card-' + i,
               trigger: card,
-              start: 'top 88%',
-              end: 'bottom 10%',
-              toggleActions: 'play reverse play reverse',
+              start: 'top 95%',
+              toggleActions: 'play none none none',
             },
-          })
-        }
+          }
+        )
       })
     }, grid)
 
@@ -116,7 +100,7 @@ export default function GalleryGrid() {
               </span>
               <div className="absolute inset-0 bg-ink/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                 <span className="px-4 py-2 bg-cream/90 text-ink text-xs uppercase tracking-widest font-medium backdrop-blur-sm border border-sand">
-                  View Blueprint ↗
+                  View 10 Perspectives ↗
                 </span>
               </div>
             </div>
