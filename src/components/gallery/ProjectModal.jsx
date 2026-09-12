@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Button from '../ui/Button'
 import Eyebrow from '../ui/Eyebrow'
@@ -6,6 +6,17 @@ import { sendViaWhatsApp } from '../../utils/whatsapp'
 
 export default function ProjectModal({ project, onClose }) {
   const navigate = useNavigate()
+  const allImages = project ? [project.coverImage, ...(project.secondaryImages || [])] : []
+  const [activeImage, setActiveImage] = useState(project?.coverImage || '')
+  const [activeIndex, setActiveIndex] = useState(0)
+
+  // Reset active image when project changes
+  useEffect(() => {
+    if (project) {
+      setActiveImage(project.coverImage)
+      setActiveIndex(0)
+    }
+  }, [project])
 
   // Close on Escape key
   useEffect(() => {
@@ -23,11 +34,16 @@ export default function ProjectModal({ project, onClose }) {
 
   if (!project) return null
 
+  const handleSelectImage = (imgSrc, idx) => {
+    setActiveImage(imgSrc)
+    setActiveIndex(idx)
+  }
+
   const handleEnquire = () => {
     onClose()
     navigate('/contact', {
       state: {
-        message: `I would like to enquire about a design project similar to "${project.title}" (${project.category}, ${project.location}).`,
+        message: `I would like to enquire about an architectural interior project similar to "${project.title}" (${project.category}, ${project.location}).`,
         projectTypes: [project.category === 'Residential' ? 'pt-new-build' : 'pt-renovation'],
       },
     })
@@ -50,7 +66,7 @@ export default function ProjectModal({ project, onClose }) {
       onClick={onClose}
     >
       <div
-        className="relative w-full sm:max-w-5xl bg-cream border-t sm:border border-line/60 shadow-2xl overflow-hidden h-[92vh] sm:h-auto sm:max-h-[90vh] flex flex-col rounded-t-2xl sm:rounded-none"
+        className="relative w-full sm:max-w-5xl bg-cream border-t sm:border border-line/60 shadow-2xl overflow-hidden h-[94vh] sm:h-auto sm:max-h-[92vh] flex flex-col rounded-t-2xl sm:rounded-none"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Mobile drag handle cue */}
@@ -62,7 +78,9 @@ export default function ProjectModal({ project, onClose }) {
         <div className="flex items-center justify-between px-5 sm:px-6 py-3 sm:py-4 border-b border-line bg-cream/95 backdrop-blur-sm sticky top-0 z-20 shrink-0">
           <div className="flex items-center gap-2.5 sm:gap-3">
             <span className="w-2 h-2 rounded-full bg-amber animate-pulse shrink-0" />
-            <Eyebrow className="text-sand text-[11px] sm:text-xs">Project Blueprint / {project.category}</Eyebrow>
+            <Eyebrow className="text-sand text-[11px] sm:text-xs">
+              Project Blueprint / {project.category}
+            </Eyebrow>
           </div>
 
           <button
@@ -78,14 +96,60 @@ export default function ProjectModal({ project, onClose }) {
         {/* ── Scrollable Body ───────────────────────────────────────── */}
         <div className="overflow-y-auto p-5 sm:p-8 lg:p-10 space-y-6 sm:space-y-8 text-ink font-body overscroll-contain flex-1">
 
-          {/* Hero Photography */}
-          <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden border border-line/40 bg-ink/10">
+          {/* Active Main Photography Showcase */}
+          <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden border border-line/40 bg-ink/10 shadow-lg">
             <img
-              src={project.coverImage}
-              alt={project.title}
-              className="w-full h-full object-cover object-center"
+              src={activeImage || project.coverImage}
+              alt={`${project.title} perspective ${activeIndex + 1}`}
+              className="w-full h-full object-cover object-center transition-all duration-300"
             />
+            <div className="absolute bottom-3 right-3 px-3 py-1 bg-ink/80 backdrop-blur-md text-cream text-[10px] uppercase tracking-widest border border-cream/20">
+              Perspective {activeIndex + 1} of {allImages.length}
+            </div>
           </div>
+
+          {/* 10-Photo Atmospheric Gallery Strip */}
+          {allImages.length > 1 && (
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between text-xs">
+                <h4 className="text-[11px] sm:text-xs uppercase tracking-widest text-ink font-semibold">
+                  Curated Perspectives ({allImages.length} Photographs)
+                </h4>
+                <span className="text-[10px] text-sand uppercase tracking-wider">
+                  Click to inspect
+                </span>
+              </div>
+
+              <div className="grid grid-cols-5 sm:grid-cols-5 md:grid-cols-10 gap-1.5 sm:gap-2">
+                {allImages.map((imgSrc, idx) => {
+                  const isCurrent = activeImage === imgSrc
+                  return (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => handleSelectImage(imgSrc, idx)}
+                      aria-label={`View perspective ${idx + 1}`}
+                      className={`relative aspect-square overflow-hidden border transition-all duration-200 cursor-pointer ${
+                        isCurrent
+                          ? 'border-amber ring-2 ring-amber/50 scale-[1.02]'
+                          : 'border-line/60 opacity-70 hover:opacity-100 hover:border-sand'
+                      }`}
+                    >
+                      <img
+                        src={imgSrc}
+                        alt={`${project.title} thumbnail ${idx + 1}`}
+                        className="w-full h-full object-cover object-center"
+                        loading="lazy"
+                      />
+                      <span className="absolute bottom-0.5 right-0.5 text-[8px] bg-ink/80 text-cream px-1 font-mono leading-none">
+                        {idx + 1}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          )}
 
           {/* Project Title & Metadata Grid */}
           <div className="space-y-3 sm:space-y-4 border-b border-line/40 pb-5 sm:pb-6">
@@ -157,26 +221,6 @@ export default function ProjectModal({ project, onClose }) {
                       <span className="text-xs font-semibold text-ink block">{mat.name}</span>
                       <span className="text-[11px] text-ink-soft block">{mat.detail}</span>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Secondary Photo Strip */}
-          {project.secondaryImages && project.secondaryImages.length > 0 && (
-            <div className="space-y-2.5 sm:space-y-3">
-              <h4 className="text-[11px] sm:text-xs uppercase tracking-widest text-ink font-semibold">
-                Atmospheric Perspectives
-              </h4>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
-                {project.secondaryImages.map((imgSrc, idx) => (
-                  <div key={idx} className="aspect-[4/3] overflow-hidden border border-line/40 bg-ink/10">
-                    <img
-                      src={imgSrc}
-                      alt={`${project.title} perspective ${idx + 1}`}
-                      className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-500"
-                    />
                   </div>
                 ))}
               </div>
