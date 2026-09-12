@@ -11,11 +11,11 @@ export const GALLERY_PROJECTS = [
     year: '2025',
     area: '6,400 sq.ft',
     scope: 'Full Architecture, Custom Millwork & Furnishings',
-    coverImage: '/hero/stage-8-full-lighting.jpg',
+    coverImage: '/hero/stage-8-full-lighting.png',
     secondaryImages: [
-      '/hero/stage-6-chandelier-off.jpg',
-      '/hero/stage-7-dusk-cove.jpg',
-      '/hero/stage-4-sofa.jpg',
+      '/hero/stage-6-chandelier-off.png',
+      '/hero/stage-7-dusk-cove.png',
+      '/hero/stage-4-sofa.png',
     ],
     tagline: 'Sculptural limestone minimalism grounded by organic walnut millwork.',
     description:
@@ -39,7 +39,7 @@ export const GALLERY_PROJECTS = [
     coverImage: '/transformations/living-room-after.jpg',
     secondaryImages: [
       '/transformations/living-room-before.jpg',
-      '/hero/stage-5-chairs-table.jpg',
+      '/hero/stage-5-chairs-table.png',
     ],
     tagline: 'Reimagining a dated 90s footprint into a light-filled contemporary haven.',
     description:
@@ -60,10 +60,10 @@ export const GALLERY_PROJECTS = [
     year: '2024',
     area: '5,200 sq.ft',
     scope: 'Interior Blueprint, Custom Millwork, Lighting Design',
-    coverImage: '/hero/stage-5-chairs-table.jpg',
+    coverImage: '/hero/stage-5-chairs-table.png',
     secondaryImages: [
-      '/hero/stage-3-rug.jpg',
-      '/hero/stage-8-full-lighting.jpg',
+      '/hero/stage-3-rug.png',
+      '/hero/stage-8-full-lighting.png',
     ],
     tagline: 'Japandi harmony combining Wabi-Sabi textures with modern precision.',
     description:
@@ -84,9 +84,9 @@ export const GALLERY_PROJECTS = [
     year: '2025',
     area: '3,800 sq.ft',
     scope: 'Commercial Executive Studio & Client Lounges',
-    coverImage: '/hero/stage-7-dusk-cove.jpg',
+    coverImage: '/hero/stage-7-dusk-cove.png',
     secondaryImages: [
-      '/hero/stage-6-chandelier-off.jpg',
+      '/hero/stage-6-chandelier-off.png',
       '/transformations/living-room-after.jpg',
     ],
     tagline: 'Executive hospitality meets tactile residential comfort.',

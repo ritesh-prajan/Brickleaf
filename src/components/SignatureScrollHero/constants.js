@@ -9,7 +9,7 @@
 export const STAGES = [
   {
     id: 'empty-dark',
-    src: '/hero/stage-1-empty-dark.jpg',
+    src: '/hero/stage-1-empty-dark.png',
     alt: 'Empty architectural shell in moody ambient light with Brickleaf wall emblem',
     tag: '01 / CANVAS',
     title: 'Raw Architectural Shell',
@@ -17,7 +17,7 @@ export const STAGES = [
   },
   {
     id: 'empty-bright',
-    src: '/hero/stage-2-empty-bright.jpg',
+    src: '/hero/stage-2-empty-bright.png',
     alt: 'Empty room with warm natural daylight streaming through floor-to-ceiling windows',
     tag: '02 / LIGHT',
     title: 'Natural Light Emerges',
@@ -25,7 +25,7 @@ export const STAGES = [
   },
   {
     id: 'rug',
-    src: '/hero/stage-3-rug.jpg',
+    src: '/hero/stage-3-rug.png',
     alt: 'Room with a hand-woven organic jute area rug on the oak floor',
     tag: '03 / FOUNDATION',
     title: 'Woven Textile Rug',
@@ -33,7 +33,7 @@ export const STAGES = [
   },
   {
     id: 'sofa',
-    src: '/hero/stage-4-sofa.jpg',
+    src: '/hero/stage-4-sofa.png',
     alt: 'Room with rug and cream modular sectional sofa against the plaster wall',
     tag: '04 / ANCHOR',
     title: 'Modular Sectional Sofa',
@@ -41,7 +41,7 @@ export const STAGES = [
   },
   {
     id: 'chairs-table',
-    src: '/hero/stage-5-chairs-table.jpg',
+    src: '/hero/stage-5-chairs-table.png',
     alt: 'Room with sofa, two walnut lounge armchairs, and solid travertine coffee table',
     tag: '05 / FORM',
     title: 'Armchairs & Travertine Table',
@@ -49,7 +49,7 @@ export const STAGES = [
   },
   {
     id: 'chandelier-off',
-    src: '/hero/stage-6-chandelier-off.jpg',
+    src: '/hero/stage-6-chandelier-off.png',
     alt: 'Room with sculptural multi-globe brass chandelier descending from recessed ceiling',
     tag: '06 / FIXTURE',
     title: 'Sculptural Brass Chandelier',
@@ -57,7 +57,7 @@ export const STAGES = [
   },
   {
     id: 'dusk-cove',
-    src: '/hero/stage-7-dusk-cove.jpg',
+    src: '/hero/stage-7-dusk-cove.png',
     alt: 'Room at twilight with 2700K warm indirect perimeter ceiling cove lighting',
     tag: '07 / TWILIGHT',
     title: 'Perimeter Cove Illumination',
@@ -65,7 +65,7 @@ export const STAGES = [
   },
   {
     id: 'full-lighting',
-    src: '/hero/stage-8-full-lighting.jpg',
+    src: '/hero/stage-8-full-lighting.png',
     alt: 'Final room — glowing chandelier, potted olive tree, ceramic pottery, and botanicals',
     tag: '08 / ATMOSPHERE',
     title: 'Full Radiance & Botanicals',
