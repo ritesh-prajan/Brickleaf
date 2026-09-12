@@ -69,7 +69,7 @@ export default function Terms() {
             06. Studio Contact &amp; Governance
           </h2>
           <p>
-            For legal inquiries, contract review, or questions regarding our studio terms, please contact our administrative team at <a href="mailto:legal@brickleaf.co" className="text-amber underline">legal@brickleaf.co</a> or via our official studio liaison desk.
+            For legal inquiries, contract review, or questions regarding our studio terms, please contact our administrative team at <a href="mailto:Info@brickleaf.com" className="text-amber underline">Info@brickleaf.com</a> or via our official studio liaison desk.
           </p>
         </section>
 

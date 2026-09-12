@@ -37,7 +37,7 @@ export default function Services() {
 
       {/* ── Page Header with Split Character Reveal ───────────────── */}
       <header className="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4">
-        <Eyebrow className="text-sand">[ Comprehensive Studio Practice ]</Eyebrow>
+        <Eyebrow className="text-sand">[ What We Do ]</Eyebrow>
 
         <HeadlineReveal
           as="h1"

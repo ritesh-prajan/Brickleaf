@@ -180,7 +180,7 @@ export default function SignatureScrollHero() {
             <div className="ssh-cta-content">
               <Eyebrow className="text-sand">[ Brickleaf Interior Studio ]</Eyebrow>
               <h1 className="font-display text-3xl sm:text-5xl md:text-6xl text-cream font-light leading-tight">
-                Crafting Timeless Architectural Sanctuary
+                Design spaces , elevate life
               </h1>
               <p className="text-cream/80 text-xs sm:text-base max-w-md leading-relaxed font-body">
                 From empty architectural canvas to bespoke material curation. Brickleaf designs spaces that resonate with warmth and permanence.

@@ -201,7 +201,7 @@ export default function Navbar() {
             </Button>
 
             <div className="flex items-center justify-between text-[11px] text-ink-soft/80 pt-1">
-              <span>Kelambakkam Bypass, Chennai</span>
+              <span>1/85 OMR Kelambakkam Chennai</span>
               <a href="tel:+919876543210" className="text-amber font-medium">
                 +91 98765 43210
               </a>

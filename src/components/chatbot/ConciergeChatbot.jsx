@@ -41,10 +41,12 @@ const TIMELINE_OPTIONS = [
 ]
 
 const BUDGET_OPTIONS = [
-  '₹15L – ₹30L (Curated Living Revamp)',
-  '₹30L – ₹60L (Signature Bespoke Interior)',
-  '₹60L+ (Luxury Estate Architecture)',
-  'Consultation / Concept Package Only',
+  '₹3L – ₹5L (Essential Architectural Refresh)',
+  '₹5L – ₹10L (Curated Living Revamp)',
+  '₹10L – ₹25L (Complete Interior Architecture)',
+  '₹25L – ₹50L (Signature Bespoke Interior)',
+  '₹50L+ (Luxury Estate Architecture)',
+  'Consultation / Blueprint Package Only',
 ]
 
 export default function ConciergeChatbot() {

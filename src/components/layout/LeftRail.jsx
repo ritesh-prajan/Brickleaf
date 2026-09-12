@@ -88,7 +88,7 @@ export default function LeftRail() {
     <aside
       ref={railRef}
       aria-label="Studio brand seal"
-      className="hidden lg:flex flex-col justify-between fixed left-6 xl:left-8 top-24 bottom-10 z-20 pointer-events-none select-none transition-opacity duration-300"
+      className="hidden lg:flex flex-col justify-between fixed left-4 xl:left-6 top-24 bottom-10 z-20 pointer-events-none select-none transition-opacity duration-300"
     >
       {/* ── 1. Circular Rotating Seal (On ALL Pages) ── */}
       <div className="pointer-events-auto">
@@ -97,7 +97,7 @@ export default function LeftRail() {
           onClick={handleScrollTop}
           title="Brickleaf Studio — Back to Top"
           aria-label="Back to top"
-          className="relative w-20 h-20 xl:w-24 xl:h-24 flex items-center justify-center group cursor-pointer focus:outline-none"
+          className="relative w-28 h-28 xl:w-36 xl:h-36 flex items-center justify-center group cursor-pointer focus:outline-none"
         >
           {/* SVG Circular Rotating Text */}
           <svg
@@ -109,7 +109,7 @@ export default function LeftRail() {
               d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0"
               fill="none"
             />
-            <text className="text-[7.5px] uppercase tracking-[0.24em] fill-ink-soft group-hover:fill-amber transition-colors font-medium">
+            <text className="text-[8.5px] uppercase tracking-[0.24em] fill-ink-soft group-hover:fill-amber transition-colors font-medium">
               <textPath href="#globalLeafPath" startOffset="0%">
                 • BRICKLEAF • BRICKLEAF • BRICKLEAF
               </textPath>
@@ -120,7 +120,7 @@ export default function LeftRail() {
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <svg
               viewBox="0 0 24 24"
-              className="w-6 h-6 xl:w-7 xl:h-7 text-amber fill-amber/20 stroke-amber transition-transform duration-500 group-hover:scale-115 group-hover:fill-amber/35"
+              className="w-9 h-9 xl:w-11 xl:h-11 text-amber fill-amber/20 stroke-amber transition-transform duration-500 group-hover:scale-115 group-hover:fill-amber/35"
               strokeWidth="1.6"
               strokeLinecap="round"
               strokeLinejoin="round"

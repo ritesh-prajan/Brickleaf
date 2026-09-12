@@ -135,13 +135,13 @@ export default function EditorialContact({ onSubmit }) {
               Write Us
             </p>
             <p className="text-sm sm:text-base font-display font-medium text-ink">
-              <a href="mailto:hello@brickleaf.co" className="hover:text-amber transition-colors">
-                hello@brickleaf.co
+              <a href="mailto:Info@brickleaf.com" className="hover:text-amber transition-colors">
+                Info@brickleaf.com
               </a>
             </p>
             <p className="text-xs text-ink-soft">
-              <a href="mailto:press@brickleaf.co" className="hover:text-amber transition-colors">
-                press@brickleaf.co
+              <a href="mailto:help.brickleaf@gmail.com" className="hover:text-amber transition-colors">
+                help.brickleaf@gmail.com
               </a>
             </p>
           </div>
@@ -151,11 +151,7 @@ export default function EditorialContact({ onSubmit }) {
               Studio Headquarters
             </p>
             <p className="text-xs sm:text-sm text-ink leading-relaxed font-medium">
-              Kelambakkam Bypass Rd, Chennai<br />
-              Tamil Nadu, India
-            </p>
-            <p className="text-[10px] sm:text-[11px] text-ink-soft/80 uppercase tracking-wider">
-              Secondary Atelier: Jubilee Hills, Hyderabad
+              1/85 OMR Kelambakkam Chennai
             </p>
           </div>
 
@@ -188,7 +184,7 @@ export default function EditorialContact({ onSubmit }) {
         >
           <img
             src="/images/studio-map.jpg"
-            alt="Brickleaf Studio architectural location map near Kelambakkam Bypass"
+            alt="Brickleaf Studio architectural location map at 1/85 OMR Kelambakkam Chennai"
             className="w-full h-full object-cover object-center filter contrast-[1.02] brightness-[0.98] transition-transform duration-700 ease-out group-hover:scale-[1.01]"
           />
 
