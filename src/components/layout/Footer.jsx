@@ -80,7 +80,12 @@ export default function Footer() {
               Studio Liaison
             </p>
             <address className="not-italic text-xs sm:text-sm space-y-1.5 sm:space-y-2 text-cream/80 font-light">
-              <p>1/85 OMR Kelambakkam Chennai</p>
+              <div>
+                <p>1/85 OMR Kelambakkam Chennai</p>
+                <p className="text-[11px] text-cream/60 font-light pt-0.5">
+                  [ above Shri SHakthi tvs showroom , 4th floor ]
+                </p>
+              </div>
               <p className="pt-1">
                 <a href="mailto:Info@brickleaf.com" className="hover:text-amber transition-colors duration-200 font-medium text-cream inline-block py-0.5">
                   Info@brickleaf.com

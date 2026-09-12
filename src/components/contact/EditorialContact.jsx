@@ -153,6 +153,9 @@ export default function EditorialContact({ onSubmit }) {
             <p className="text-xs sm:text-sm text-ink leading-relaxed font-medium">
               1/85 OMR Kelambakkam Chennai
             </p>
+            <p className="text-[10px] sm:text-[11px] text-ink-soft/80 font-normal">
+              [ above Shri SHakthi tvs showroom , 4th floor ]
+            </p>
           </div>
 
           <div className="info-col space-y-1.5 sm:space-y-2 text-center md:text-right">
