@@ -207,7 +207,7 @@ export default function Navbar() {
                   +91 98765 43210
                 </a>
               </div>
-              <span className="text-[10px] text-sand">[ above Shri SHakthi tvs showroom , 4th floor ]</span>
+              <span className="text-[10px] text-sand">Above Shari Shakthi TVS , 4th Floor</span>
             </div>
           </div>
         </div>

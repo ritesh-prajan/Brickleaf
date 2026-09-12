@@ -83,7 +83,7 @@ export default function Footer() {
               <div>
                 <p>1/85 OMR Kelambakkam Chennai</p>
                 <p className="text-[11px] text-cream/60 font-light pt-0.5">
-                  [ above Shri SHakthi tvs showroom , 4th floor ]
+                  Above Shari Shakthi TVS , 4th Floor
                 </p>
               </div>
               <p className="pt-1">
