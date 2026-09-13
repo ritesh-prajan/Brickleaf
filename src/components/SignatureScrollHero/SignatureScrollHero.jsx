@@ -166,30 +166,14 @@ export default function SignatureScrollHero() {
               className="ssh-plate"
               style={{ zIndex: i + 1 }}
             >
-              {/* Blur-up placeholder for instant perception */}
               <img
-                src={stage.blurSrc}
-                alt=""
-                aria-hidden="true"
-                className="ssh-plate-blur"
+                src={stage.src}
+                alt={stage.alt}
+                loading={i < 3 ? 'eager' : 'lazy'}
+                decoding="async"
+                fetchPriority={i === 0 ? 'high' : 'auto'}
+                className="ssh-plate-img"
               />
-
-              {/* Responsive picture element with small screen variant */}
-              <picture className="ssh-picture">
-                <source
-                  media="(max-width: 640px)"
-                  srcSet={stage.mobileSrc}
-                  type="image/webp"
-                />
-                <img
-                  src={stage.src}
-                  alt={stage.alt}
-                  loading={i < 3 ? 'eager' : 'lazy'}
-                  decoding="async"
-                  fetchPriority={i === 0 ? 'high' : 'auto'}
-                  className="ssh-plate-img"
-                />
-              </picture>
             </div>
           ))}
 
