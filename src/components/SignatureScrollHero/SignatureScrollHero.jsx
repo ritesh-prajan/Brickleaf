@@ -16,7 +16,7 @@ if (typeof window !== 'undefined') {
  * SignatureScrollHero — Fullscreen Homepage Experience
  *
  * 8 full-bleed photorealistic room images stacked edge-to-edge.
- * Fixed translucent header above, full-screen room filling the viewport.
+ * Features responsive picture sources, blur-up placeholders, and GSAP scrub timeline.
  * Zero cards, zero outer borders, zero dark gaps.
  */
 export default function SignatureScrollHero() {
@@ -34,7 +34,7 @@ export default function SignatureScrollHero() {
   useEffect(() => {
     let loaded = 0
     const total = STAGES.length
-    const fallback = setTimeout(() => setIsLoaded(true), 4000)
+    const fallback = setTimeout(() => setIsLoaded(true), 3500)
 
     STAGES.forEach((stage, i) => {
       const img = new Image()
@@ -166,12 +166,30 @@ export default function SignatureScrollHero() {
               className="ssh-plate"
               style={{ zIndex: i + 1 }}
             >
+              {/* Blur-up placeholder for instant perception */}
               <img
-                src={stage.src}
-                alt={stage.alt}
-                loading={i < 3 ? 'eager' : 'lazy'}
-                decoding="async"
+                src={stage.blurSrc}
+                alt=""
+                aria-hidden="true"
+                className="ssh-plate-blur"
               />
+
+              {/* Responsive picture element with small screen variant */}
+              <picture className="ssh-picture">
+                <source
+                  media="(max-width: 640px)"
+                  srcSet={stage.mobileSrc}
+                  type="image/webp"
+                />
+                <img
+                  src={stage.src}
+                  alt={stage.alt}
+                  loading={i < 3 ? 'eager' : 'lazy'}
+                  decoding="async"
+                  fetchPriority={i === 0 ? 'high' : 'auto'}
+                  className="ssh-plate-img"
+                />
+              </picture>
             </div>
           ))}
 

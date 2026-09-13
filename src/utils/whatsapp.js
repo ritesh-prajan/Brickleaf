@@ -4,6 +4,8 @@
  */
 
 export const STUDIO_WHATSAPP_NUMBER = '919876543210' // Default studio contact number
+export const STUDIO_PHONE_DISPLAY = '+91 98765 43210'
+export const STUDIO_PHONE_TEL = `+${STUDIO_WHATSAPP_NUMBER}`
 
 /**
  * Builds a structured WhatsApp message string from intake form or chatbot data.

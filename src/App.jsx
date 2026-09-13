@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
@@ -6,12 +6,25 @@ import LeftRail from './components/layout/LeftRail'
 import FlowBackground from './components/ui/FlowBackground'
 import ArchPreloader from './components/ui/ArchPreloader'
 import ConciergeChatbot from './components/chatbot/ConciergeChatbot'
-import Home from './pages/Home'
-import Services from './pages/Services'
-import Gallery from './pages/Gallery'
-import Faq from './pages/Faq'
-import Contact from './pages/Contact'
-import Terms from './pages/Terms'
+
+// Route-level code splitting
+const Home = lazy(() => import('./pages/Home'))
+const Services = lazy(() => import('./pages/Services'))
+const Gallery = lazy(() => import('./pages/Gallery'))
+const Faq = lazy(() => import('./pages/Faq'))
+const Contact = lazy(() => import('./pages/Contact'))
+const Terms = lazy(() => import('./pages/Terms'))
+
+/**
+ * Minimalist luxury loading fallback for lazy-loaded route transitions.
+ */
+function PageFallback() {
+  return (
+    <div className="w-full min-h-[60vh] flex items-center justify-center" aria-busy="true">
+      <div className="w-5 h-5 rounded-full border border-sand/40 border-t-amber animate-spin" />
+    </div>
+  )
+}
 
 /**
  * ScrollToTop — Automatically scrolls window to top (0,0) on any route change.
@@ -45,14 +58,16 @@ function AppContent() {
       <Navbar />
 
       <main className={`flex-1 w-full ${!isHome ? 'pt-16' : ''}`}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/gallery" element={<Gallery />} />
-          <Route path="/faq" element={<Faq />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/terms" element={<Terms />} />
-        </Routes>
+        <Suspense fallback={<PageFallback />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/gallery" element={<Gallery />} />
+            <Route path="/faq" element={<Faq />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/terms" element={<Terms />} />
+          </Routes>
+        </Suspense>
       </main>
 
       {/* Global Interactive Avatar Design Concierge */}

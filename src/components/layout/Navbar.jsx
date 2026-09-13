@@ -10,6 +10,7 @@ import { useRef, useState, useEffect } from 'react'
 import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import Button from '../ui/Button'
 import { useScrollTheme } from '../../hooks/useScrollTheme'
+import { STUDIO_PHONE_DISPLAY, STUDIO_PHONE_TEL } from '../../utils/whatsapp'
 
 const NAV_LINKS = [
   { label: 'Home',     to: '/' },
@@ -203,8 +204,8 @@ export default function Navbar() {
             <div className="flex flex-col text-[11px] text-ink-soft/80 pt-1 space-y-0.5">
               <div className="flex items-center justify-between">
                 <span>1/85 OMR Kelambakkam Chennai</span>
-                <a href="tel:+919876543210" className="text-amber font-medium">
-                  +91 98765 43210
+                <a href={`tel:${STUDIO_PHONE_TEL}`} className="text-amber font-medium">
+                  {STUDIO_PHONE_DISPLAY}
                 </a>
               </div>
               <span className="text-[10px] text-sand">Above Shari Shakthi TVS , 4th Floor</span>

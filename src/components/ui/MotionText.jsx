@@ -46,6 +46,7 @@ export function HeadlineReveal({
           rotation: 0,
           stagger: 0.02,
           duration: 0.85,
+          delay: delay,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: el,
@@ -58,7 +59,7 @@ export function HeadlineReveal({
     }, el)
 
     return () => ctx.revert()
-  }, [])
+  }, [delay])
 
   // Split string by words first, then characters, preserving natural word wraps on mobile
   const renderWordSafeChars = (text) => {

@@ -35,7 +35,7 @@
   background: #14120f;
 }
 
-/* ── Photographic Plates ─────────────────────────────────────────────────── */
+/* ── Photographic Plates & Responsive Picture ──────────────────────────── */
 .ssh-plate {
   position: absolute;
   inset: 0;
@@ -44,7 +44,29 @@
   will-change: opacity;
 }
 
-.ssh-plate img {
+.ssh-picture {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.ssh-plate-blur {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(10px);
+  transform: scale(1.04);
+  pointer-events: none;
+}
+
+.ssh-plate img,
+.ssh-plate-img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;

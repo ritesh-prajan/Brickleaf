@@ -39,8 +39,8 @@ export default function BeforeAfterSection() {
 
         {/* ── Interactive Comparison Slider ──────────────────────── */}
         <BeforeAfterComparison
-          beforeImage="/transformations/living-room-before.jpg"
-          afterImage="/transformations/living-room-after.jpg"
+          beforeImage="/transformations/living-room-before.webp"
+          afterImage="/transformations/living-room-after.webp"
           beforeLabel="Original State"
           afterLabel="Brickleaf Completed Living Room"
           aspectRatio="aspect-[4/3] sm:aspect-[16/10]"

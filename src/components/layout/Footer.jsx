@@ -9,6 +9,7 @@
  */
 import { NavLink } from 'react-router-dom'
 import SectionDivider from '../ui/SectionDivider'
+import { STUDIO_PHONE_DISPLAY, STUDIO_PHONE_TEL } from '../../utils/whatsapp'
 
 const NAV_LINKS = [
   { label: 'Home', to: '/' },
@@ -97,8 +98,8 @@ export default function Footer() {
                 </a>
               </p>
               <p>
-                <a href="tel:+919876543210" className="hover:text-amber transition-colors duration-200 font-medium text-cream inline-block py-0.5">
-                  +91 98765 43210
+                <a href={`tel:${STUDIO_PHONE_TEL}`} className="hover:text-amber transition-colors duration-200 font-medium text-cream inline-block py-0.5">
+                  {STUDIO_PHONE_DISPLAY}
                 </a>
               </p>
             </address>

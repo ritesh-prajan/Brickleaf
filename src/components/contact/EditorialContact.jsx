@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { sendViaWhatsApp } from '../../utils/whatsapp'
+import { sendViaWhatsApp, STUDIO_PHONE_DISPLAY, STUDIO_PHONE_TEL } from '../../utils/whatsapp'
 import RightPanel from './RightPanel'
 import { useContactForm } from '../../hooks/useContactForm'
 import { HeadlineReveal } from '../ui/MotionText'
@@ -163,8 +163,8 @@ export default function EditorialContact({ onSubmit }) {
               Talk to Us
             </p>
             <p className="text-sm sm:text-base font-display font-medium text-ink">
-              <a href="tel:+919876543210" className="hover:text-amber transition-colors">
-                +91 98765 43210
+              <a href={`tel:${STUDIO_PHONE_TEL}`} className="hover:text-amber transition-colors">
+                {STUDIO_PHONE_DISPLAY}
               </a>
             </p>
             <p className="text-xs">
@@ -186,9 +186,11 @@ export default function EditorialContact({ onSubmit }) {
           className="relative w-full aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/10] overflow-hidden border border-line/60 bg-cream/60 shadow-2xl group"
         >
           <img
-            src="/images/studio-map.jpg"
+            src="/images/studio-map.webp"
             alt="Brickleaf Studio architectural location map at 1/85 OMR Kelambakkam Chennai"
             className="w-full h-full object-cover object-center filter contrast-[1.02] brightness-[0.98] transition-transform duration-700 ease-out group-hover:scale-[1.01]"
+            loading="lazy"
+            decoding="async"
           />
 
           <div className="absolute top-[38%] sm:top-[42%] left-[50%] sm:left-[58%] -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none">

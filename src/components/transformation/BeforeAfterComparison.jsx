@@ -10,8 +10,8 @@ import { useState, useRef, useCallback } from 'react'
  * - Keyboard accessible slider (Arrow keys / Home / End).
  */
 export default function BeforeAfterComparison({
-  beforeImage = '/transformations/living-room-before.jpg',
-  afterImage = '/transformations/living-room-after.jpg',
+  beforeImage = '/transformations/living-room-before.webp',
+  afterImage = '/transformations/living-room-after.webp',
   beforeLabel = 'Existing Space',
   afterLabel = 'Brickleaf Completed',
   aspectRatio = 'aspect-[4/3] sm:aspect-[16/10]',
