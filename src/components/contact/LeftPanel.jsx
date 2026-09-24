@@ -51,13 +51,13 @@ export default function LeftPanel() {
 
           {/* Email */}
           <a
-            href="mailto:Info@brickleaf.com"
+            href="mailto:contact@brickleaf.com"
             className="
               block text-sm text-sand/80 hover:text-cream
               transition-colors duration-200 tracking-wide
             "
           >
-            Info@brickleaf.com
+            contact@brickleaf.com
           </a>
 
           {/* Social links */}

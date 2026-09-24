@@ -67,22 +67,21 @@ export default function Navbar() {
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4"
         aria-label="Main navigation"
       >
-        {/* ── Static Brand Logo ── */}
+        {/* ── Brand Logo — uses actual favicon for precision ── */}
         <NavLink
           to="/"
           aria-label="Brickleaf Studio — Home"
           className="flex items-center gap-2.5 group flex-shrink-0 py-1"
         >
-          <svg
-            viewBox="0 0 24 24"
-            className="w-5 h-5 text-amber fill-amber/20 stroke-amber transition-transform duration-300 group-hover:scale-105"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M12 2C8.5 7 7.5 12 10.5 16.5C12 18.8 14 20.5 15.5 22C16.5 20.5 17.5 18 17.5 14.5C17.5 9 15 4 12 2Z" />
-            <path d="M12 2C13 8 14 14 15.5 22" strokeWidth="1.2" />
-          </svg>
+          <img
+            src="/favicon.png"
+            alt=""
+            aria-hidden="true"
+            width="22"
+            height="22"
+            className="w-[22px] h-[22px] object-contain flex-shrink-0 transition-transform duration-300 group-hover:scale-105"
+            style={{ imageRendering: 'crisp-edges' }}
+          />
 
           <span className="nav-brand-text font-display text-lg sm:text-xl font-medium text-ink tracking-tight transition-colors duration-500 flex items-center">
             Brickleaf
@@ -130,21 +129,21 @@ export default function Navbar() {
             aria-controls="mobile-navigation-drawer"
             aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2.5 -mr-1.5 text-ink focus:outline-none min-w-[44px] min-h-[44px] flex items-center justify-center flex-col gap-1.5 cursor-pointer"
+            className="p-2.5 -mr-1.5 focus:outline-none min-w-[44px] min-h-[44px] flex items-center justify-center flex-col gap-1.5 cursor-pointer"
           >
             <span
-              className={`block w-6 h-0.5 bg-ink transition-all duration-300 ${
-                mobileMenuOpen ? 'rotate-45 translate-y-2 bg-ink' : ''
+              className={`nav-hamburger-bar block w-6 h-0.5 transition-all duration-300 ${
+                mobileMenuOpen ? 'rotate-45 translate-y-2' : ''
               }`}
             />
             <span
-              className={`block w-6 h-0.5 bg-ink transition-opacity duration-300 ${
+              className={`nav-hamburger-bar block w-6 h-0.5 transition-opacity duration-300 ${
                 mobileMenuOpen ? 'opacity-0' : ''
               }`}
             />
             <span
-              className={`block w-6 h-0.5 bg-ink transition-all duration-300 ${
-                mobileMenuOpen ? '-rotate-45 -translate-y-2 bg-ink' : ''
+              className={`nav-hamburger-bar block w-6 h-0.5 transition-all duration-300 ${
+                mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''
               }`}
             />
           </button>
@@ -203,7 +202,7 @@ export default function Navbar() {
 
             <div className="flex flex-col text-[11px] text-ink-soft/80 pt-1 space-y-0.5">
               <div className="flex items-center justify-between">
-                <span>1/85 OMR Kelambakkam Chennai</span>
+                <span>1C1A And B, 22, 1/85, OMR Rd, Rajiv Gandhi Nagar</span>
                 <a href={`tel:${STUDIO_PHONE_TEL}`} className="text-amber font-medium">
                   {STUDIO_PHONE_DISPLAY}
                 </a>

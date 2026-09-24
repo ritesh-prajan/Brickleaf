@@ -232,12 +232,12 @@ body {
   color: var(--color-amber);
 }
 
-/* Dark section behind nav: moody translucent smoked glass */
+/* Dark section behind nav: fully transparent so hero images show unobstructed */
 .site-navbar.nav-dark {
-  background-color: rgba(34, 27, 22, 0.40);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .site-navbar.nav-dark .nav-brand-text {
@@ -245,7 +245,7 @@ body {
 }
 
 .site-navbar.nav-dark .nav-link {
-  color: rgba(236, 228, 218, 0.75);
+  color: rgba(236, 228, 218, 0.80);
 }
 
 .site-navbar.nav-dark .nav-link:hover {
@@ -259,4 +259,18 @@ body {
 
 .site-navbar.nav-dark .nav-dot {
   background-color: var(--color-amber);
+}
+
+/* Hamburger bars in dark mode are cream-colored */
+.site-navbar.nav-dark .bg-ink {
+  background-color: #ECE4DA;
+}
+
+/* Hamburger bar default (light nav) and dark override */
+.nav-hamburger-bar {
+  background-color: var(--color-ink);
+}
+
+.site-navbar.nav-dark .nav-hamburger-bar {
+  background-color: #ECE4DA;
 }

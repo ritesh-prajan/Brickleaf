@@ -82,14 +82,14 @@ export default function Footer() {
             </p>
             <address className="not-italic text-xs sm:text-sm space-y-1.5 sm:space-y-2 text-cream/80 font-light">
               <div>
-                <p>1/85 OMR Kelambakkam Chennai</p>
+                <p>1C1A And B, 22, 1/85, OMR Rd, Rajiv Gandhi Nagar</p>
                 <p className="text-[11px] text-cream/60 font-light pt-0.5">
                   Above Shari Shakthi TVS , 4th Floor
                 </p>
               </div>
               <p className="pt-1">
-                <a href="mailto:Info@brickleaf.com" className="hover:text-amber transition-colors duration-200 font-medium text-cream inline-block py-0.5">
-                  Info@brickleaf.com
+                <a href="mailto:contact@brickleaf.com" className="hover:text-amber transition-colors duration-200 font-medium text-cream inline-block py-0.5">
+                  contact@brickleaf.com
                 </a>
               </p>
               <p>

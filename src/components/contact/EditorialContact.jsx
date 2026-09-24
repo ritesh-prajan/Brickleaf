@@ -135,8 +135,8 @@ export default function EditorialContact({ onSubmit }) {
               Write Us
             </p>
             <p className="text-sm sm:text-base font-display font-medium text-ink">
-              <a href="mailto:Info@brickleaf.com" className="hover:text-amber transition-colors">
-                Info@brickleaf.com
+              <a href="mailto:contact@brickleaf.com" className="hover:text-amber transition-colors">
+                contact@brickleaf.com
               </a>
             </p>
             <p className="text-xs text-ink-soft">
@@ -151,7 +151,7 @@ export default function EditorialContact({ onSubmit }) {
               Studio Headquarters
             </p>
             <p className="text-xs sm:text-sm text-ink leading-relaxed font-medium">
-              1/85 OMR Kelambakkam Chennai
+              1C1A And B, 22, 1/85, OMR Rd, Rajiv Gandhi Nagar
             </p>
             <p className="text-[10px] sm:text-[11px] text-ink-soft/80 font-normal">
               Above Shari Shakthi TVS , 4th Floor
@@ -187,7 +187,7 @@ export default function EditorialContact({ onSubmit }) {
         >
           <img
             src="/images/studio-map.webp"
-            alt="Brickleaf Studio architectural location map at 1/85 OMR Kelambakkam Chennai"
+            alt="Brickleaf Studio architectural location map at 1C1A And B, 22, 1/85, OMR Rd, Rajiv Gandhi Nagar"
             className="w-full h-full object-cover object-center filter contrast-[1.02] brightness-[0.98] transition-transform duration-700 ease-out group-hover:scale-[1.01]"
             loading="lazy"
             decoding="async"
