@@ -67,20 +67,19 @@ export default function Navbar() {
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4"
         aria-label="Main navigation"
       >
-        {/* ── Brand Logo — uses actual favicon for precision ── */}
+        {/* ── Brand Logo — brushed-gold leaf mark ── */}
         <NavLink
           to="/"
           aria-label="Brickleaf Studio — Home"
           className="flex items-center gap-2.5 group flex-shrink-0 py-1"
         >
           <img
-            src="/favicon.png"
+            src="/logo.png"
             alt=""
             aria-hidden="true"
-            width="22"
-            height="22"
-            className="w-[22px] h-[22px] object-contain flex-shrink-0 transition-transform duration-300 group-hover:scale-105"
-            style={{ imageRendering: 'crisp-edges' }}
+            width="26"
+            height="30"
+            className="w-[26px] h-[30px] object-contain flex-shrink-0 transition-transform duration-300 group-hover:scale-105 drop-shadow-sm"
           />
 
           <span className="nav-brand-text font-display text-lg sm:text-xl font-medium text-ink tracking-tight transition-colors duration-500 flex items-center">
