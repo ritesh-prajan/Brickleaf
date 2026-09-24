@@ -2,20 +2,14 @@
  * LeftRail — Global architectural brand emblem & Contact social pill.
  *
  * Appears fixed on the left rail (desktop).
- * - Circular rotating seal ("• BRICKLEAF • BRICKLEAF • BRICKLEAF") with botanical leaf:
- *   Present on ALL pages with scroll-to-top interaction.
+ * - Circular rotating seal ("• BRICKLEAF • BRICKLEAF • BRICKLEAF") with logo:
+ *   Present on ALL pages with scroll-to-top interaction. Always visible.
  * - Social icons floating pill (Instagram, LinkedIn, Pinterest) + vertical indicator:
  *   Displayed ONLY on the Contact page.
- * - Automatically fades out when scrolling into the footer so footer links are never obstructed.
  */
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger)
-}
 
 const SOCIAL_LINKS = [
   {
@@ -62,27 +56,7 @@ export default function LeftRail() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  // Fade out left rail when footer enters viewport to prevent any overlap
-  useEffect(() => {
-    const rail = railRef.current
-    if (!rail) return
-
-    const timer = setTimeout(() => {
-      const footer = document.querySelector('footer')
-      if (!footer) return
-
-      const trigger = ScrollTrigger.create({
-        trigger: footer,
-        start: 'top 85%',
-        onEnter: () => gsap.to(rail, { opacity: 0, duration: 0.25, pointerEvents: 'none' }),
-        onLeaveBack: () => gsap.to(rail, { opacity: 1, duration: 0.25, pointerEvents: 'auto' }),
-      })
-
-      return () => trigger.kill()
-    }, 200)
-
-    return () => clearTimeout(timer)
-  }, [location.pathname])
+  // (scroll fade-out removed — seal stays visible at all times)
 
   return (
     <aside
@@ -116,22 +90,14 @@ export default function LeftRail() {
             </text>
           </svg>
 
-          {/* Center Botanical Leaf Emblem */}
+          {/* Center Logo Image */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <svg
-              viewBox="0 0 24 24"
-              className="w-9 h-9 xl:w-11 xl:h-11 text-amber fill-amber/20 stroke-amber transition-transform duration-500 group-hover:scale-115 group-hover:fill-amber/35"
-              strokeWidth="1.6"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M12 2C8.5 7 7.5 12 10.5 16.5C12 18.8 14 20.5 15.5 22C16.5 20.5 17.5 18 17.5 14.5C17.5 9 15 4 12 2Z" />
-              <path d="M12 2C13 8 14 14 15.5 22" strokeWidth="1.2" />
-              <path d="M12.5 7.5L15 9" strokeWidth="1.2" />
-              <path d="M13 11.5L16 13" strokeWidth="1.2" />
-              <path d="M10.8 11.5L13.2 13.5" strokeWidth="1.2" />
-              <path d="M11.5 15L14 16.8" strokeWidth="1.2" />
-            </svg>
+            <img
+              src="/logo.png"
+              alt=""
+              aria-hidden="true"
+              className="w-9 h-9 xl:w-11 xl:h-11 object-contain transition-transform duration-500 group-hover:scale-110 drop-shadow-sm"
+            />
           </div>
         </button>
       </div>
